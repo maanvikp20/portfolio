@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
+  <script src="https://kit.fontawesome.com/your-fontawesome-kit.js" crossorigin="anonymous"></script> <!-- Replace with your kit -->
+
+  <script>
+    (function () {
+      emailjs.init("lXn7rcLgesHFtdMFs"); // your public key
+    })();
+  </script>
+
+  <title>Contact Maanvik</title>
+  <style>
+    body {
+      font-family: 'Cousine', monospace;
+    }
+
+    .typewriter h1, .typewriter-text {
+      overflow: hidden;
+      white-space: nowrap;
+      border-right: 2px solid white;
+      width: 0;
+      animation: typing 2s steps(12, end) forwards, blink 0.7s infinite;
+    }
+
+    @keyframes typing {
+      from { width: 0; }
+      to { width: 100%; }
+    }
+
+    @keyframes blink {
+      50% { border-color: transparent; }
+    }
+
+    @media (max-width: 425px) {
+      nav {
+        font-size: 0.875rem;
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+        flex-wrap: nowrap;
+        overflow-x: auto;
+      }
+
+      nav a {
+        white-space: nowrap;
+        padding: 0.5rem;
+      }
+
+      .typewriter h1, .typewriter-text {
+        font-size: 1.5rem;
+      }
+
+      .flex {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .gap-4 {
+        gap: 2rem;
+      }
+    }
+  </style>
+
+
+</head>
+
+<body class="bg-black text-white m-6">
+  <div class="container mx-auto">
+    <!-- Navbar -->
+    <header class="py-4">
+      <div class="flex flex-col items-center sm:flex-row sm:justify-between sm:items-center gap-4">
+        <div class="flex items-center gap-4 typewriter">
+          <img class="rounded-full h-16" src="./assets/cat.png" alt="Profile Logo">
+          <h1 class="text-3xl font-bold">Maanvik Poddar</h1>
+        </div>
+        <nav class="space-x-6 text-purple-500 mt-4 sm:mt-0">
+          <a href="index.html">Home</a>
+          <a href="#">Education</a>
+          <a href="#">Work</a>
+          <a href="contact.html">Contact</a>
+        </nav>
+      </div>
+    </header>
+
+    <!-- Contact Form -->
+    <main class="mt-10 flex justify-center">
+      <div class="w-full max-w-lg bg-gray-900 p-8 rounded-lg shadow-lg">
+        <h1 class="text-3xl font-bold mb-6 text-purple-500 text-center">Contact Me</h1>
+        <form id="contact-form" class="space-y-4">
+          <div>
+            <label for="name" class="block text-white">Name</label>
+            <input type="text" id="name" name="from_name" required class="w-full p-2 rounded bg-gray-800 border border-gray-700 text-white" />
+          </div>
+          <div>
+            <label for="email" class="block text-white">Email</label>
+            <input type="email" id="email" name="from_email" required class="w-full p-2 rounded bg-gray-800 border border-gray-700 text-white" />
+          </div>
+          <div>
+            <label for="subject" class="block text-white">Subject</label>
+            <input type="text" id="subject" name="subject" required class="w-full p-2 rounded bg-gray-800 border border-gray-700 text-white" />
+          </div>
+          <div>
+            <label for="message" class="block text-white">Message</label>
+            <textarea id="message" name="message" rows="5" required class="w-full p-2 rounded bg-gray-800 border border-gray-700 text-white"></textarea>
+          </div>
+          <button type="submit" class="w-full bg-purple-600 hover:bg-purple-700 p-2 rounded text-white font-bold">Send Message</button>
+        </form>
+        <p id="form-status" class="text-center mt-4"></p>
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="mt-16 text-center">
+      <p class="text-white">Made with 💜 - Maanvik Poddar</p>
+    </footer>
+  </div>
+
+  <script>
+    document.getElementById('contact-form').addEventListener('submit', function (e) {
+      e.preventDefault();
+
+      emailjs.sendForm('service_qgrwsdi', 'template_xtl4hv6', this)
+        .then(function (response) {
+          document.getElementById('form-status').textContent = "✅ Message sent successfully!";
+          document.getElementById('form-status').classList.remove('text-red-400');
+          document.getElementById('form-status').classList.add('text-green-400');
+          document.getElementById('contact-form').reset();
+        }, function (error) {
+          document.getElementById('form-status').textContent = "❌ Failed to send message. Try again.";
+          document.getElementById('form-status').classList.remove('text-green-400');
+          document.getElementById('form-status').classList.add('text-red-400');
+        });
+    });
+  </script>
+</body>
+</html>
