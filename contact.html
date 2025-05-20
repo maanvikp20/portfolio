@@ -1,43 +1,71 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <!-- Meta tags for character encoding and responsive viewport -->
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <!-- External libraries: Tailwind CSS and EmailJS -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
+  
+  <!-- Google Fonts and Font Awesome for icons -->
   <link href="https://fonts.googleapis.com/css2?family=Cousine:wght@400;700&display=swap" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+  
+  <!-- Favicon -->
+  <link rel="shortcut icon" href="assets/cat.png" type="image/x-icon">
+  
+  <!-- First title tag (note: duplicate title tag exists below) -->
+  <title>Contact Me - Maanvik Poddar</title>
+  
+  <!-- Custom stylesheet -->
+  <link rel="stylesheet" href="styles/css/styles.css">
 
+  <!-- EmailJS initialization - This runs immediately when page loads -->
   <script>
     (function () {
       emailjs.init("lXn7rcLgesHFtdMFs"); // your public key
     })();
   </script>
 
+  <!-- Duplicate title tag (should be removed) -->
   <title>Contact Maanvik</title>
+  
+  <!-- Inline styles for navigation and responsive design -->
   <style>
-    body {
-      font-family: 'Cousine', monospace;
+    /* Navigation link hover effects with scaling and color change */
+    .nav-link {
+      position: relative;
+      transition: transform 0.3s ease, color 0.3s ease;
+      display: inline-block;
     }
 
-    .typewriter h1, .typewriter-text {
-      overflow: hidden;
-      white-space: nowrap;
-      border-right: 2px solid white;
-      width: 0;
-      animation: typing 2s steps(12, end) forwards, blink 0.7s infinite;
+    .nav-link:hover {
+      transform: scale(1.15);
+      color: #d8b4fe; /* Lighter purple on hover */
     }
 
-    @keyframes typing {
-      from { width: 0; }
-      to { width: 100%; }
+    /* Styling for active navigation link */
+    .nav-link.active {
+      border-bottom: 2px solid #a855f7;
     }
 
-    @keyframes blink {
-      50% { border-color: transparent; }
+    /* Glow effect for navigation links on hover */
+    .nav-link:hover::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background-color: #d8b4fe;
+      box-shadow: 0 0 8px #d8b4fe;
     }
 
+    /* Mobile responsive styles for screens smaller than 425px */
     @media (max-width: 425px) {
+      /* Mobile navigation adjustments */
       nav {
         font-size: 0.875rem;
         display: flex;
@@ -52,15 +80,18 @@
         padding: 0.5rem;
       }
 
+      /* Adjust font size for typewriter effect on mobile */
       .typewriter h1, .typewriter-text {
         font-size: 1.5rem;
       }
 
+      /* Stack elements vertically on mobile */
       .flex {
         flex-direction: column;
         align-items: center;
       }
 
+      /* Increase gap between stacked elements */
       .gap-4 {
         gap: 2rem;
       }
@@ -69,93 +100,120 @@
 </head>
 
 <body class="bg-black text-white m-6">
+  <!-- Main container for all content -->
   <div class="container mx-auto">
-    <!-- Navbar -->
+    <!-- Header section with logo and navigation -->
     <header class="py-4">
       <div class="flex flex-col items-center sm:flex-row sm:justify-between sm:items-center gap-4">
+        <!-- Logo and name section -->
         <div class="flex items-center gap-4 typewriter">
           <img class="rounded-full h-16" src="./assets/cat.png" alt="Profile Logo">
           <h1 class="text-3xl font-bold">Maanvik Poddar</h1>
         </div>
+        <!-- Navigation menu - Notice the 'active' class on the Contact link -->
         <nav class="space-x-6 text-purple-500 mt-4 sm:mt-0">
-          <a href="index.html">Home</a>
-          <a href="aboutme.html">About Me</a>
-          <a href="projects.html">Projects</a>
-          <a href="contact.html" class="border-b-2 border-purple-500">Contact</a>
+          <a href="index.html" class="nav-link">Home</a>
+          <a href="aboutme.html" class="nav-link">About Me</a>
+          <a href="projects.html" class="nav-link">Projects</a>
+          <a href="contact.html" class="nav-link active">Contact</a>
         </nav>
       </div>
     </header>
 
-    <!-- Contact Form -->
+    <!-- Main content area with contact form -->
     <main class="mt-10 flex justify-center">
+      <!-- Contact form card with dark background -->
       <div class="w-full max-w-lg bg-gray-900 p-8 rounded-lg shadow-lg">
         <h1 class="text-3xl font-bold mb-6 text-purple-500 text-center">Contact Me</h1>
+        <!-- Form with EmailJS integration - Note the id='contact-form' used by JavaScript -->
         <form id="contact-form" class="space-y-4">
+          <!-- Name input field -->
           <div>
             <label for="name" class="block text-white">Name</label>
             <input type="text" id="name" name="from_name" required class="w-full p-2 rounded bg-gray-800 border border-gray-700 text-white" />
           </div>
+          <!-- Email input field -->
           <div>
             <label for="email" class="block text-white">Email</label>
             <input type="email" id="email" name="from_email" required class="w-full p-2 rounded bg-gray-800 border border-gray-700 text-white" />
           </div>
+          <!-- Subject input field -->
           <div>
             <label for="subject" class="block text-white">Subject</label>
             <input type="text" id="subject" name="subject" required class="w-full p-2 rounded bg-gray-800 border border-gray-700 text-white" />
           </div>
+          <!-- Message textarea -->
           <div>
             <label for="message" class="block text-white">Message</label>
             <textarea id="message" name="message" rows="5" required class="w-full p-2 rounded bg-gray-800 border border-gray-700 text-white"></textarea>
           </div>
+          <!-- Submit button -->
           <button type="submit" class="w-full bg-purple-600 hover:bg-purple-700 p-2 rounded text-white font-bold">Send Message</button>
         </form>
+        <!-- Status message container - Updated by JavaScript after form submission -->
         <p id="form-status" class="text-center mt-4"></p>
       </div>
     </main>
 
-    <!-- Social Media -->
+    <!-- Social Media links section -->
     <section class="mt-16 text-center">
       <h4 class="text-2xl font-bold text-white">Connect with Me</h4>
       <div class="flex justify-center gap-6 mt-4">
+        <!-- LinkedIn link with icon -->
         <a href="https://www.linkedin.com" class="text-blue-600 hover:text-blue-400 text-2xl transition-colors" target="_blank">
           <i class="fab fa-linkedin"></i>
         </a>
+        <!-- Instagram link with icon -->
         <a href="https://www.instagram.com" class="text-purple-600 hover:text-purple-400 text-2xl transition-colors" target="_blank">
           <i class="fab fa-instagram"></i>
         </a>
+        <!-- Twitter/X link with icon -->
         <a href="https://x.com" class="text-blue-400 hover:text-blue-300 text-2xl transition-colors" target="_blank">
           <i class="fab fa-twitter"></i>
         </a>
+        <!-- GitHub link with icon -->
         <a href="https://github.com/maanvikp20" class="text-white hover:text-gray-300 text-2xl transition-colors" target="_blank">
           <i class="fab fa-github"></i>
         </a>
+        <!-- YouTube link with icon -->
         <a href="https://www.youtube.com" class="text-red-600 hover:text-red-400 text-2xl transition-colors" target="_blank">
           <i class="fab fa-youtube"></i>
         </a>
       </div>
     </section>
 
+    <!-- Footer section -->
     <footer class="mt-16 pb-8 text-center border-t border-gray-800 pt-8">
       <p class="text-white">Made with <span class="text-purple-500">💜</span> by Maanvik Poddar &copy; 2025</p>
     </footer>
   </div>
 
+  <!-- EmailJS form submission script -->
   <script>
+    // Add event listener to the form submission
     document.getElementById('contact-form').addEventListener('submit', function (e) {
+      // Prevent the default form submission behavior
       e.preventDefault();
-
+  
+      // Send the form data to EmailJS using the specified service and template IDs
       emailjs.sendForm('service_qgrwsdi', 'template_xtl4hv6', this)
         .then(function (response) {
+          // Success handler - Update status message with success text
           document.getElementById('form-status').textContent = "✅ Message sent successfully!";
           document.getElementById('form-status').classList.remove('text-red-400');
           document.getElementById('form-status').classList.add('text-green-400');
+  
+          // Reset the form fields after successful submission
           document.getElementById('contact-form').reset();
         }, function (error) {
+          // Error handler - Update status message with error text
           document.getElementById('form-status').textContent = "❌ Failed to send message. Try again.";
           document.getElementById('form-status').classList.remove('text-green-400');
           document.getElementById('form-status').classList.add('text-red-400');
+  
+          // Do not reset the form on error so user can try again without re-entering data
         });
     });
-  </script>
+  </script>  
 </body>
 </html>

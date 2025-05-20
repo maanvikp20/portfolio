@@ -1,31 +1,54 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Character encoding and responsive viewport meta tags -->
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <!-- Import Tailwind CSS for utility classes -->
   <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Cousine:wght@400;700&display=swap" rel="stylesheet">
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
-  <title>Work - Maanvik Poddar</title>
+  
+  <!-- Import Cousine font family from Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Cousine:wght@400;700&display=swap" rel="stylesheet" />
+  
+  <!-- Import Font Awesome for icons -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet" />
+  
+  <!-- Page title and favicon -->
+  <title>Projects - Maanvik Poddar</title>
+  <link rel="shortcut icon" href="assets/cat.png" type="image/x-icon">
+  
+  <!-- External stylesheet reference (not included in this file) -->
+  <link rel="stylesheet" href="styles/css/styles.css">
+  
   <style>
+    /* Base font and color settings */
     body {
       font-family: 'Cousine', monospace;
+      background-color: #000;
+      color: white;
     }
-
+    
+    /* Typewriter effect styling for headings */
     .typewriter h1, .typewriter-text {
       overflow: hidden;
       white-space: nowrap;
-      border-right: 2px solid white;
+      border-right: 2px solid white; /* Creates blinking cursor effect */
       width: 0;
       animation: typing 2s steps(12, end) forwards, blink 0.7s infinite;
     }
-
+    
+    /* Project card base styling */
     .project-card {
       transition: all 0.3s ease;
       position: relative;
       overflow: hidden;
+      height: 200px;
+      background-color: #121A2B; /* Dark blue background */
+      border-radius: 0.5rem;
     }
-
+    
+    /* Creates an overlay effect on hover with pseudo-element */
     .project-card::before {
       content: "";
       position: absolute;
@@ -37,12 +60,21 @@
       transition: all 0.3s ease;
       z-index: 1;
     }
-
+    
+    /* Hover effect adds a subtle blur to the background image */
     .project-card:hover::before {
       backdrop-filter: blur(3px);
       background-color: rgba(0, 0, 0, 0.1);
     }
-
+    
+    /* Project image sizing and cover positioning */
+    .project-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    
+    /* Project info overlay that appears on hover */
     .project-info {
       position: absolute;
       top: 0;
@@ -53,377 +85,302 @@
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      opacity: 0;
+      opacity: 0; /* Hidden by default */
       transition: opacity 0.3s ease;
-      background-color: rgba(0, 0, 0, 0.7);
+      background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent black */
       color: white;
       padding: 1rem;
-      z-index: 10; /* Increased z-index to appear above the title */
+      z-index: 10;
+      text-align: center;
     }
-
+    
+    /* Shows project info on hover */
     .project-card:hover .project-info {
       opacity: 1;
     }
-
+    
+    /* Project title styling */
+    .project-title {
+      color: #A17BF3; /* Light purple */
+      font-weight: bold;
+      font-size: 1.25rem;
+    }
+    
+    /* Project description styling */
+    .project-description {
+      color: #E5E7EB; /* Light gray */
+      font-size: 0.95rem;
+      line-height: 1.5;
+      margin-top: 0.5rem;
+    }
+    
+    /* GitHub icon styling */
+    .github-icon {
+      color: #A0AEC0; /* Muted blue-gray */
+      margin-top: 0.5rem;
+    }
+    
+    /* GitHub icon hover color */
+    .github-icon:hover {
+      color: white;
+    }
+    
+    /* Selection dots for highlighting active projects (not currently used in this view) */
     .selection-dot {
       width: 12px;
       height: 12px;
-      background-color: #9333ea;
+      background-color: #9333ea; /* Purple */
       border-radius: 50%;
       position: absolute;
+      z-index: 20;
+    }
+    
+    /* Positioning for top selection dot */
+    .dot-top { 
+      top: -6px; 
+      left: 50%; 
+      transform: translateX(-50%); 
+    }
+    
+    /* Positioning for right selection dot */
+    .dot-right { 
+      right: -6px; 
+      top: 50%; 
+      transform: translateY(-50%); 
+    }
+    
+    /* Positioning for bottom selection dot */
+    .dot-bottom { 
+      bottom: -6px; 
+      left: 50%; 
+      transform: translateX(-50%); 
+    }
+    
+    /* Positioning for left selection dot */
+    .dot-left { 
+      left: -6px; 
+      top: 50%; 
+      transform: translateY(-50%); 
     }
 
-    .dot-top {
-      top: -6px;
-      left: 50%;
-      transform: translateX(-50%);
+    /* Animation definitions */
+    /* Typing animation to reveal text character by character */
+    @keyframes typing { 
+      from { width: 0; } 
+      to { width: 100%; } 
+    }
+    
+    /* Blinking cursor animation */
+    @keyframes blink { 
+      50% { border-color: transparent; } 
     }
 
-    .dot-right {
-      right: -6px;
-      top: 50%;
-      transform: translateY(-50%);
+    /* Navigation link hover effects */
+    .nav-link {
+      position: relative;
+      transition: transform 0.3s ease, color 0.3s ease;
+      display: inline-block;
     }
 
-    .dot-bottom {
-      bottom: -6px;
-      left: 50%;
-      transform: translateX(-50%);
+    /* Scale up and color change on hover */
+    .nav-link:hover {
+      transform: scale(1.15);
+      color: #d8b4fe; /* Lighter purple on hover */
     }
 
-    .dot-left {
-      left: -6px;
-      top: 50%;
-      transform: translateY(-50%);
+    /* Active link indicator */
+    .nav-link.active {
+      border-bottom: 2px solid #a855f7;
     }
 
-    @keyframes typing {
-      from { width: 0; }
-      to { width: 100%; }
+    /* Glowing underline effect on hover */
+    .nav-link:hover::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background-color: #d8b4fe;
+      box-shadow: 0 0 8px #d8b4fe; /* Purple glow effect */
     }
 
-    @keyframes blink {
-      50% { border-color: transparent; }
-    }
-
+    /* Mobile responsive adjustments */
     @media (max-width: 425px) {
+      /* Navigation adjustments for small screens */
       nav {
         font-size: 0.875rem;
         display: flex;
         justify-content: space-between;
         width: 100%;
         flex-wrap: nowrap;
-        overflow-x: auto;
+        overflow-x: auto; /* Allow horizontal scrolling for nav items */
       }
 
       nav a {
-        white-space: nowrap;
+        white-space: nowrap; /* Prevent wrapping of nav text */
         padding: 0.5rem;
       }
 
+      /* Smaller typewriter text on mobile */
       .typewriter h1, .typewriter-text {
         font-size: 1.5rem;
       }
 
+      /* Convert horizontal layouts to vertical on mobile */
       .flex {
         flex-direction: column;
         align-items: center;
       }
 
+      /* Increase spacing for mobile layouts */
       .gap-4 {
         gap: 2rem;
       }
     }
-    
-    /* Loading spinner */
-    .loader {
-      border: 4px solid rgba(255, 255, 255, 0.3);
-      border-radius: 50%;
-      border-top: 4px solid #9333ea;
-      width: 30px;
-      height: 30px;
-      animation: spin 1s linear infinite;
-      margin: 0 auto;
-    }
-    
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
-    
-    /* Color coding for different programming languages */
-    .lang-JavaScript, .lang-js { background-color: #f7df1e !important; color: black !important; }
-    .lang-Python, .lang-py { background-color: #3572A5 !important; }
-    .lang-HTML { background-color: #e34c26 !important; }
-    .lang-CSS { background-color: #563d7c !important; }
-    .lang-Java { background-color: #b07219 !important; }
-    .lang-C { background-color: #555555 !important; }
-    .lang-CPP, .lang-C\+\+ { background-color: #f34b7d !important; }
-    .lang-PHP { background-color: #4F5D95 !important; }
-    .lang-Ruby { background-color: #701516 !important; }
-    .lang-TypeScript, .lang-ts { background-color: #2b7489 !important; }
-    .lang-Swift { background-color: #ffac45 !important; }
-    .lang-Go { background-color: #00ADD8 !important; }
-    .lang-Rust { background-color: #dea584 !important; }
   </style>
 </head>
 <body class="bg-black text-white m-6">
-
   <div class="container mx-auto">
+    <!-- Header section with logo and navigation -->
     <header class="py-4">
       <div class="flex flex-col items-center sm:flex-row sm:justify-between sm:items-center gap-4">
+        <!-- Logo and name with typewriter effect -->
         <div class="flex items-center gap-4 typewriter">
           <img class="rounded-full h-16" src="./assets/cat.png" alt="Profile Logo">
           <h1 class="text-3xl font-bold">Maanvik Poddar</h1>
         </div>
+        
+        <!-- Main navigation - notice 'active' class on the Projects link -->
         <nav class="space-x-6 text-purple-500 mt-4 sm:mt-0">
-          <a href="index.html">Home</a>
-          <a href="aboutme.html">About Me</a>
-          <a href="projects.html" class="border-b-2 border-purple-500">Projects</a>
-          <a href="contact.html">Contact</a>
+          <a href="index.html" class="nav-link">Home</a>
+          <a href="aboutme.html" class="nav-link">About Me</a>
+          <a href="projects.html" class="nav-link active">Projects</a>
+          <a href="contact.html" class="nav-link">Contact</a>
         </nav>
       </div>
     </header>
-    
+
     <main class="mt-10">
-      <section>
-        <h2 class="text-4xl font-bold typewriter-text">My Projects</h2>
-        <p class="mt-4">Hover over a project to view more details. All data is fetched live from GitHub API.</p>
-        <!-- Loading indicator -->
-        <div id="loading" class="mt-8 text-center">
-          <div class="loader"></div>
-          <p class="mt-2">Loading projects from GitHub...</p>
-        </div>
-        <!-- Error message container (initially hidden) -->
-        <div id="error-message" class="bg-red-600 text-white p-4 rounded-lg mt-6" style="display: none;">
+      <!-- Projects section with hover effects -->
+      <section id="projects" class="mt-16">
+        <!-- Section title with typewriter effect -->
+        <h3 class="text-3xl font-bold text-center sm:text-left typewriter-text">My Projects</h3>
+        
+        <!-- Projects grid layout - 1 column on mobile, 2 columns on larger screens -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mt-10">
+          <!-- Note: Original comment indicated this was a template for each project -->
+          
+          <!-- FBLA Web Competition project card -->
+          <div class="project-card">
+            <!-- Project background image -->
+            <img src="/assets/nec.png" alt="FBLA Web Competition" class="project-image" />
+            
+            <!-- Overlay content that appears on hover -->
+            <div class="project-info">
+              <div class="project-title">FBLA Web Competition</div>
+              <p class="project-description">A collaborative web project for the FBLA competition featuring responsive design and modern web technologies.</p>
+              <a href="https://github.com/justin-swenson111/fbla_web_competition" class="github-icon" target="_blank">
+                <i class="fab fa-github text-xl"></i>
+              </a>
+            </div>
+          </div>
+
+          <!-- Mandelbrot Generator project card -->
+          <div class="project-card">
+            <img src="/assets/mandelbrot.jfif" alt="Mandelbrot Generator" class="project-image" />
+            <div class="project-info">
+              <div class="project-title">Mandelbrot Generator</div>
+              <p class="project-description">An interactive Mandelbrot set generator that visualizes complex mathematical patterns with zoom functionality.</p>
+              <a href="https://github.com/maanvikp20/mandelbrot-generator" class="github-icon" target="_blank">
+                <i class="fab fa-github text-xl"></i>
+              </a>
+            </div>
+          </div>
+
+          <!-- Stopwatch project card -->
+          <div class="project-card">
+            <img src="/assets/stopwatch.png" alt="Stopwatch" class="project-image" />
+            <div class="project-info">
+              <div class="project-title">Stopwatch</div>
+              <p class="project-description">A precise digital stopwatch application with lap timing functionality and customizable interface.</p>
+              <a href="https://github.com/maanvikp20/stopwatch" class="github-icon" target="_blank">
+                <i class="fab fa-github text-xl"></i>
+              </a>
+            </div>
+          </div>
+
+          <!-- jQuery Game project card -->
+          <div class="project-card">
+            <img src="/assets/jquerygame.png" alt="jQuery Game" class="project-image" />
+            <div class="project-info">
+              <div class="project-title">jQuery Game</div>
+              <p class="project-description">An interactive browser-based game built with jQuery, featuring animations and dynamic gameplay.</p>
+              <a href="https://github.com/justin-swenson111/jQuery-Game" class="github-icon" target="_blank">
+                <i class="fab fa-github text-xl"></i>
+              </a>
+            </div>
+          </div>
+
+          <!-- Deepracer project card -->
+          <div class="project-card">
+            <img src="/assets/deepracer.png" alt="Deepracer" class="project-image" />
+            <div class="project-info">
+              <div class="project-title">Deepracer</div>
+              <p class="project-description">My code for the DeepRacer Machine Learning Project</p>
+              <a href="https://github.com/maanvikp20/portfolio" class="github-icon" target="_blank">
+                <i class="fab fa-github text-xl"></i>
+              </a>
+            </div>
+          </div>
+
+          <!-- Python Projects project card -->
+          <div class="project-card">
+            <img src="/assets/pythonprojects.png" alt="Python Projects" class="project-image" />
+            <div class="project-info">
+              <div class="project-title">Python Projects</div>
+              <p class="project-description">Some python projects and algorithms I have developed for practice and fun</p>
+              <a href="https://github.com/maanvikp20/portfolio" class="github-icon" target="_blank">
+                <i class="fab fa-github text-xl"></i>
+              </a>
+            </div>
+          </div>
+
         </div>
       </section>
 
-      <!-- Projects Grid -->
-      <section class="mt-12">
-        <div id="projects-grid" class="grid grid-cols-1 md:grid-cols-2 gap-8">
-          <!-- Projects will be loaded dynamically -->
+      <!-- Social media links section -->
+      <section class="mt-16 text-center">
+        <h4 class="text-2xl font-bold text-white">Connect with Me</h4>
+        <div class="flex justify-center gap-6 mt-4">
+          <!-- LinkedIn link with brand color -->
+          <a href="https://www.linkedin.com" class="text-blue-600 hover:text-blue-400 text-2xl transition-colors" target="_blank">
+            <i class="fab fa-linkedin"></i>
+          </a>
+          <!-- Instagram link with brand color -->
+          <a href="https://www.instagram.com" class="text-purple-600 hover:text-purple-400 text-2xl transition-colors" target="_blank">
+            <i class="fab fa-instagram"></i>
+          </a>
+          <!-- Twitter/X link with brand color -->
+          <a href="https://x.com" class="text-blue-400 hover:text-blue-300 text-2xl transition-colors" target="_blank">
+            <i class="fab fa-twitter"></i>
+          </a>
+          <!-- GitHub link -->
+          <a href="https://github.com/maanvikp20" class="text-white hover:text-gray-300 text-2xl transition-colors" target="_blank">
+            <i class="fab fa-github"></i>
+          </a>
+          <!-- YouTube link with brand color -->
+          <a href="https://www.youtube.com" class="text-red-600 hover:text-red-400 text-2xl transition-colors" target="_blank">
+            <i class="fab fa-youtube"></i>
+          </a>
         </div>
       </section>
-
-      <!-- GitHub Stats Section -->
-      <section class="mt-16">
-        <h3 class="text-3xl font-bold typewriter-text">GitHub Stats</h3>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
-          <div class="bg-gray-900 p-6 rounded-lg text-center">
-            <div class="text-5xl text-purple-500 mb-2">
-              <i class="fas fa-code"></i>
-            </div>
-            <h4 class="text-xl font-bold">-</h4>
-            <p class="text-gray-400">Repositories</p>
-          </div>
-          <div class="bg-gray-900 p-6 rounded-lg text-center">
-            <div class="text-5xl text-purple-500 mb-2">
-              <i class="fas fa-star"></i>
-            </div>
-            <h4 class="text-xl font-bold">-</h4>
-            <p class="text-gray-400">Total Stars</p>
-          </div>
-          <div class="bg-gray-900 p-6 rounded-lg text-center">
-            <div class="text-5xl text-purple-500 mb-2">
-              <i class="fas fa-code-branch"></i>
-            </div>
-            <h4 class="text-xl font-bold">-</h4>
-            <p class="text-gray-400">Total Forks</p>
-          </div>
-        </div>
-      </section>
-
-      <!-- JavaScript for GitHub API -->
-      <script>
-        document.addEventListener('DOMContentLoaded', function() {
-          // Your GitHub username - REPLACE THIS
-          const username = 'maanvikp20';
-          
-          // Get containers
-          const projectsGrid = document.getElementById('projects-grid');
-          const loadingElement = document.getElementById('loading');
-          const errorElement = document.getElementById('error-message');
-          
-          // Fetch repositories from GitHub API
-          fetch(`https://api.github.com/users/${username}/repos?sort=stars&per_page=100`)
-            .then(response => {
-              if (!response.ok) {
-                throw new Error(`GitHub API request failed with status ${response.status}`);
-              }
-              return response.json();
-            })
-            .then(repos => {
-              // Hide loading indicator
-              loadingElement.style.display = 'none';
-              
-              // Update stats counters
-              updateGitHubStats(repos);
-              
-              // Sort by stars (most stars first)
-              repos.sort((a, b) => b.stargazers_count - a.stargazers_count);
-              
-              // Show only non-forked repos
-              const ownRepos = repos.filter(repo => !repo.fork);
-              
-              // Take top 6 repos
-              const topRepos = ownRepos.slice(0, 6);
-              
-              // Clear projects grid and add new project cards
-              projectsGrid.innerHTML = '';
-              
-              // If no repos found, show message
-              if (topRepos.length === 0) {
-                projectsGrid.innerHTML = `
-                  <div class="col-span-full text-center p-8 bg-gray-900 rounded-lg">
-                    <i class="fas fa-exclamation-circle text-yellow-500 text-4xl mb-4"></i>
-                    <p>No repositories found. Make sure your GitHub username is correct.</p>
-                  </div>
-                `;
-                return;
-              }
-              
-              // Create cards for each repo
-              topRepos.forEach(repo => {
-                const card = createProjectCard(repo);
-                projectsGrid.appendChild(card);
-              });
-              
-              // Fetch languages for each repo
-              topRepos.forEach(repo => {
-                fetchRepoLanguages(repo.name, username);
-              });
-            })
-            .catch(error => {
-              console.error('Error fetching GitHub data:', error);
-              loadingElement.style.display = 'none';
-              errorElement.textContent = `Failed to load GitHub repositories: ${error.message}`;
-              errorElement.style.display = 'block';
-            });
-        });
-        
-        // Function to create a project card element
-        function createProjectCard(repo) {
-          const card = document.createElement('div');
-          card.className = 'project-card bg-white text-black p-6 rounded-lg relative h-64';
-          card.id = `repo-${repo.id}`;
-          
-          card.innerHTML = `
-            <div class="relative z-1">
-              <h3 class="font-bold text-xl">${repo.name}</h3>
-              <p class="mt-2">${repo.description || 'No description available'}</p>
-            </div>
-            <div class="project-info rounded-lg">
-              <h3 class="text-xl font-bold text-purple-400">${repo.name}</h3>
-              <p class="mt-2 text-center">${repo.description || 'No description available'}</p>
-              <div class="mt-4 flex items-center gap-2">
-                <i class="fas fa-star text-yellow-400"></i>
-                <span>${repo.stargazers_count} Stars</span>
-              </div>
-              <div class="mt-2 flex items-center gap-2">
-                <i class="fas fa-code-branch text-blue-400"></i>
-                <span>${repo.forks_count} Forks</span>
-              </div>
-              <div class="mt-2 language-tags">
-                ${repo.language ? 
-                  `<span class="bg-blue-600 text-white text-xs px-2 py-1 rounded lang-${repo.language}">${repo.language}</span>` : 
-                  ''}
-              </div>
-              <a href="${repo.html_url}" target="_blank" class="mt-4 text-purple-400 hover:text-purple-300 underline">View on GitHub</a>
-            </div>
-          `;
-          
-          return card;
-        }
-        
-        // Function to fetch languages for a repo
-        function fetchRepoLanguages(repoName, username) {
-          fetch(`https://api.github.com/repos/${username}/${repoName}/languages`)
-            .then(response => {
-              if (!response.ok) return null;
-              return response.json();
-            })
-            .then(languages => {
-              if (!languages) return;
-              
-              // Get all repos with this name (should be just one)
-              const repos = document.querySelectorAll(`[id^="repo-"]`);
-              
-              repos.forEach(repo => {
-                if (repo.querySelector('.relative.z-1 h3').textContent === repoName) {
-                  const langTagsContainer = repo.querySelector('.language-tags');
-                  
-                  // Clear existing tags
-                  langTagsContainer.innerHTML = '';
-                  
-                  // Get language names and sort by byte count (descending)
-                  const languageNames = Object.keys(languages);
-                  languageNames.sort((a, b) => languages[b] - languages[a]);
-                  
-                  // Take top 3 languages
-                  const topLanguages = languageNames.slice(0, 3);
-                  
-                  // Add language tags
-                  topLanguages.forEach((lang, index) => {
-                    const span = document.createElement('span');
-                    span.className = `${index > 0 ? 'ml-2 ' : ''}bg-blue-600 text-white text-xs px-2 py-1 rounded lang-${lang}`;
-                    span.textContent = lang;
-                    langTagsContainer.appendChild(span);
-                  });
-                }
-              });
-            })
-            .catch(error => {
-              console.error(`Error fetching languages for ${repoName}:`, error);
-            });
-        }
-        
-        // Function to update GitHub stats section
-        function updateGitHubStats(repos) {
-          // Filter out forked repos for more accurate stats
-          const ownRepos = repos.filter(repo => !repo.fork);
-          
-          // Calculate totals
-          const totalRepos = ownRepos.length;
-          const totalStars = ownRepos.reduce((sum, repo) => sum + repo.stargazers_count, 0);
-          const totalForks = ownRepos.reduce((sum, repo) => sum + repo.forks_count, 0);
-          
-          // Update the stats display
-          const statElements = document.querySelectorAll('.bg-gray-900 h4');
-          
-          if (statElements[0]) statElements[0].textContent = `${totalRepos}`;
-          if (statElements[1]) statElements[1].textContent = `${totalStars}`;
-          if (statElements[2]) statElements[2].textContent = `${totalForks}`;
-        }
-      </script>
-    </main>
-    
-    <!-- Social Media -->
-    <section class="mt-16 text-center">
-      <h4 class="text-2xl font-bold text-white">Connect with Me</h4>
-      <div class="flex justify-center gap-6 mt-4">
-        <a href="https://www.linkedin.com" class="text-blue-600 hover:text-blue-400 text-2xl transition-colors" target="_blank">
-          <i class="fab fa-linkedin"></i>
-        </a>
-        <a href="https://www.instagram.com" class="text-purple-600 hover:text-purple-400 text-2xl transition-colors" target="_blank">
-          <i class="fab fa-instagram"></i>
-        </a>
-        <a href="https://x.com" class="text-blue-400 hover:text-blue-300 text-2xl transition-colors" target="_blank">
-          <i class="fab fa-twitter"></i>
-        </a>
-        <a href="https://github.com/maanvikp20" class="text-white hover:text-gray-300 text-2xl transition-colors" target="_blank">
-          <i class="fab fa-github"></i>
-        </a>
-        <a href="https://www.youtube.com" class="text-red-600 hover:text-red-400 text-2xl transition-colors" target="_blank">
-          <i class="fab fa-youtube"></i>
-        </a>
-      </div>
-    </section>
-
-    <footer class="mt-16 pb-8 text-center border-t border-gray-800 pt-8">
-      <p class="text-white">Made with <span class="text-purple-500">💜</span> by Maanvik Poddar &copy; 2025</p>
-    </footer>
-  </div>
   
+      <!-- Footer with copyright information -->
+      <footer class="mt-16 pb-8 text-center border-t border-gray-800 pt-8">
+        <p class="text-white">Made with <span class="text-purple-500">💜</span> by Maanvik Poddar &copy; 2025</p>
+      </footer>
+    </main>
+  </div>
 </body>
 </html>

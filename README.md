@@ -1,26 +1,35 @@
-# Maanvik Poddar's Personal Website 🌐
+# 🌐 Maanvik Poddar's Personal Website
 
-Hey there! 👋 This is my personal website built with HTML, CSS, and Tailwind CSS. It's a place where you can check out my portfolio, projects, and find my social media links. 🚀
+Hey there! 👋 Welcome to my personal website built using **HTML**, **CSS**, and **Tailwind CSS**.  
+This site serves as a digital hub for my portfolio, projects, and social media — all in one place.
 
-## Features ✨
+---
 
-- **Typewriter Effect**: Watch the text "I'm Maanvik" appear with a cool typewriter animation. ⌨️
-- **Responsive Navbar**: The navigation bar adjusts to look awesome on small screens. 📱
-- **Projects Section**: See some of the cool projects I’ve worked on. 💻
-- **Social Media Links**: Easily connect with me on LinkedIn, Instagram, X (formerly Twitter), and YouTube using Font Awesome icons. 💬
-- **Footer**: A simple footer with a message saying the website was made by yours truly! 💜
+## 🚀 Features
 
-## Technologies Used 🛠️
+- ⌨️ **Typewriter Effect**  
+  Watch the intro text “I’m Maanvik” appear with a sleek typewriter animation.
 
-- **HTML**: Used to build the structure of the site.
-- **CSS**: Custom styles to make things look nice.
-- **Tailwind CSS**: A utility-first framework to style the website quickly. 🎨
-- **Font Awesome**: Icons for my social media links. 👍
-- **Google Fonts**: I’m using the 'Cousine' font for that typewriter effect. ✨
+- 📱 **Responsive Navigation**  
+  The navbar adapts perfectly to both desktop and mobile screens.
 
-## How to Get It Up and Running 🏃‍♂️
+- 💻 **Projects Section**  
+  Showcases some of the projects I’ve worked on, complete with clean styling.
 
-1. Clone this repository to your local machine:
+- 💬 **Social Media Links**  
+  Easily connect with me via icons for LinkedIn, Instagram, X (formerly Twitter), and YouTube.
 
-```bash
-git clone https://github.com/yourusername/maanvik-poddar-website.git
+- 🦶 **Footer**  
+  A personal touch at the bottom letting you know who built the site 💜
+
+---
+
+## 🛠️ Built With
+
+- **HTML** – For structuring the website  
+- **CSS** – For basic styling and layout  
+- **Tailwind CSS** – Utility-first CSS framework for rapid UI design  
+- **Font Awesome** – For the social media icons  
+- **Google Fonts** – Using *Cousine* font to create that typewriter feel
+
+---

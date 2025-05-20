@@ -1,35 +1,56 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <!-- Meta tags for character encoding and responsive viewport -->
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <!-- External resources: Tailwind CSS, Google Fonts, and Font Awesome -->
   <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
   <link href="https://fonts.googleapis.com/css2?family=Cousine:wght@400;700&display=swap" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
-  <title>Education - Maanvik Poddar</title>
+  
+  <!-- Page title and favicon -->
+  <title>About Me - Maanvik Poddar</title>
+  <link rel="shortcut icon" href="assets/cat.png" type="image/x-icon">
+  
+  <!-- External stylesheet -->
+  <link rel="stylesheet" href="styles/css/styles.css">
+  
+  <!-- Inline styles for navigation and responsive design -->
   <style>
-    body {
-      font-family: 'Cousine', monospace;
+    /* Navigation link hover effects with scaling and color change */
+    .nav-link {
+      position: relative;
+      transition: transform 0.3s ease, color 0.3s ease;
+      display: inline-block;
     }
 
-    .typewriter h1, .typewriter-text {
-      overflow: hidden;
-      white-space: nowrap;
-      border-right: 2px solid white;
-      width: 0;
-      animation: typing 2s steps(12, end) forwards, blink 0.7s infinite;
+    .nav-link:hover {
+      transform: scale(1.15);
+      color: #d8b4fe; /* Lighter purple on hover */
     }
 
-    @keyframes typing {
-      from { width: 0; }
-      to { width: 100%; }
+    /* Styling for active navigation link */
+    .nav-link.active {
+      border-bottom: 2px solid #a855f7;
     }
 
-    @keyframes blink {
-      50% { border-color: transparent; }
+    /* Glow effect for navigation links on hover */
+    .nav-link:hover::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background-color: #d8b4fe;
+      box-shadow: 0 0 8px #d8b4fe;
     }
 
+    /* Mobile responsive styles for screens smaller than 425px */
     @media (max-width: 425px) {
+      /* Mobile navigation adjustments */
       nav {
         font-size: 0.875rem;
         display: flex;
@@ -44,15 +65,18 @@
         padding: 0.5rem;
       }
 
+      /* Adjust font size for typewriter effect on mobile */
       .typewriter h1, .typewriter-text {
         font-size: 1.5rem;
       }
 
+      /* Stack elements vertically on mobile */
       .flex {
         flex-direction: column;
         align-items: center;
       }
 
+      /* Increase gap between stacked elements */
       .gap-4 {
         gap: 2rem;
       }
@@ -61,33 +85,41 @@
 </head>
 <body class="bg-black text-white m-6">
 
+  <!-- Main container -->
   <div class="container mx-auto">
+    <!-- Header section with logo, name and navigation -->
     <header class="py-4">
       <div class="flex flex-col items-center sm:flex-row sm:justify-between sm:items-center gap-4">
+        <!-- Logo and name container -->
         <div class="flex items-center gap-4 typewriter">
           <img class="rounded-full h-16" src="./assets/cat.png" alt="Profile Logo">
           <h1 class="text-3xl font-bold">Maanvik Poddar</h1>
         </div>
+        <!-- Navigation menu -->
         <nav class="space-x-6 text-purple-500 mt-4 sm:mt-0">
-          <a href="index.html">Home</a>
-          <a href="about.html" class="border-b-2 border-purple-500">About Me</a>
-          <a href="projects.html">Projects</a>
-          <a href="contact.html">Contact</a>
+          <a href="index.html" class="nav-link">Home</a>
+          <a href="about.html" class="nav-link active">About Me</a>
+          <a href="projects.html" class="nav-link">Projects</a>
+          <a href="contact.html" class="nav-link">Contact</a>
         </nav>
       </div>
     </header>
     
+    <!-- Main content area -->
     <main class="mt-10">
+      <!-- Page introduction section -->
       <section>
         <h2 class="text-4xl font-bold typewriter-text">Education</h2>
         <p class="mt-4">My academic journey and skills that shape my path toward electrical engineering.</p>
       </section>
 
-      <!-- Education Section 1 -->
+      <!-- Education Section 1: High School -->
       <section class="mt-12 flex flex-col sm:flex-row gap-6 items-center sm:items-start">
+        <!-- Icon container -->
         <div class="rounded-full bg-gray-800 w-40 h-40 flex items-center justify-center">
           <i class="fas fa-school text-6xl text-purple-500"></i>
         </div>
+        <!-- Content container -->
         <div class="w-full sm:w-2/3 text-center sm:text-left">
           <h3 class="text-3xl font-bold text-purple-500">Mountain Ridge High School</h3>
           <p class="mt-2 text-gray-300">2022 - Present</p>
@@ -103,11 +135,13 @@
         </div>
       </section>
 
-      <!-- Education Section 2 -->
+      <!-- Education Section 2: West-MEC -->
       <section class="mt-16 flex flex-col sm:flex-row gap-6 items-center sm:items-start">
+        <!-- Icon container -->
         <div class="rounded-full bg-gray-800 w-40 h-40 flex items-center justify-center">
           <i class="fas fa-laptop-code text-6xl text-purple-500"></i>
         </div>
+        <!-- Content container -->
         <div class="w-full sm:w-2/3 text-center sm:text-left">
           <h3 class="text-3xl font-bold text-purple-500">West-MEC Northeast Campus</h3>
           <p class="mt-2 text-gray-300">2024 - Present</p>
@@ -124,11 +158,13 @@
         </div>
       </section>
 
-      <!-- Education Section 3 -->
+      <!-- Education Section 3: Future Plans -->
       <section class="mt-16 flex flex-col sm:flex-row gap-6 items-center sm:items-start">
+        <!-- Icon container -->
         <div class="rounded-full bg-gray-800 w-40 h-40 flex items-center justify-center">
           <i class="fas fa-university text-6xl text-purple-500"></i>
         </div>
+        <!-- Content container -->
         <div class="w-full sm:w-2/3 text-center sm:text-left">
           <h3 class="text-3xl font-bold text-purple-500">Future College Plans</h3>
           <p class="mt-2 text-gray-300">2026 - 2030</p>
@@ -146,32 +182,37 @@
         </div>
       </section>
 
-      <!-- Skills Section -->
+      <!-- Skills Section with progress bars -->
       <section class="mt-16">
         <h3 class="text-3xl font-bold typewriter-text">Technical Skills</h3>
+        <!-- Skills grid for different categories -->
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 mt-6">
-          <!-- Programming -->
+          <!-- Programming Skills Card -->
           <div class="bg-gray-900 p-6 rounded-lg">
             <h4 class="text-purple-500 font-bold text-xl mb-4">Programming</h4>
             <div class="space-y-3">
+              <!-- JavaScript skill with progress bar -->
               <div>
                 <p class="text-sm">JavaScript</p>
                 <div class="w-full bg-gray-700 rounded-full h-2.5">
                   <div class="bg-purple-500 h-2.5 rounded-full" style="width: 60%"></div>
                 </div>
               </div>
+              <!-- Python skill with progress bar -->
               <div>
                 <p class="text-sm">Python</p>
                 <div class="w-full bg-gray-700 rounded-full h-2.5">
                   <div class="bg-purple-500 h-2.5 rounded-full" style="width: 75%"></div>
                 </div>
               </div>
+              <!-- C++ skill with progress bar -->
               <div>
                 <p class="text-sm">C++</p>
                 <div class="w-full bg-gray-700 rounded-full h-2.5">
                   <div class="bg-purple-500 h-2.5 rounded-full" style="width: 50%"></div>
                 </div>
               </div>
+              <!-- HTML/CSS skill with progress bar -->
               <div>
                 <p class="text-sm">HTML/CSS</p>
                 <div class="w-full bg-gray-700 rounded-full h-2.5">
@@ -181,28 +222,32 @@
             </div>
           </div>
           
-          <!-- Engineering -->
+          <!-- Engineering Skills Card -->
           <div class="bg-gray-900 p-6 rounded-lg">
             <h4 class="text-purple-500 font-bold text-xl mb-4">Engineering</h4>
             <div class="space-y-3">
+              <!-- Circuit Design skill with progress bar -->
               <div>
                 <p class="text-sm">Circuit Design</p>
                 <div class="w-full bg-gray-700 rounded-full h-2.5">
                   <div class="bg-purple-500 h-2.5 rounded-full" style="width: 70%"></div>
                 </div>
               </div>
+              <!-- PCB Layout skill with progress bar -->
               <div>
                 <p class="text-sm">PCB Layout</p>
                 <div class="w-full bg-gray-700 rounded-full h-2.5">
                   <div class="bg-purple-500 h-2.5 rounded-full" style="width: 65%"></div>
                 </div>
               </div>
+              <!-- Microcontrollers skill with progress bar -->
               <div>
                 <p class="text-sm">Microcontrollers</p>
                 <div class="w-full bg-gray-700 rounded-full h-2.5">
                   <div class="bg-purple-500 h-2.5 rounded-full" style="width: 80%"></div>
                 </div>
               </div>
+              <!-- Digital Logic skill with progress bar -->
               <div>
                 <p class="text-sm">Digital Logic</p>
                 <div class="w-full bg-gray-700 rounded-full h-2.5">
@@ -212,28 +257,32 @@
             </div>
           </div>
           
-          <!-- Soft Skills -->
+          <!-- Soft Skills Card -->
           <div class="bg-gray-900 p-6 rounded-lg">
             <h4 class="text-purple-500 font-bold text-xl mb-4">Soft Skills</h4>
             <div class="space-y-3">
+              <!-- Problem Solving skill with progress bar -->
               <div>
                 <p class="text-sm">Problem Solving</p>
                 <div class="w-full bg-gray-700 rounded-full h-2.5">
                   <div class="bg-purple-500 h-2.5 rounded-full" style="width: 90%"></div>
                 </div>
               </div>
+              <!-- Team Collaboration skill with progress bar -->
               <div>
                 <p class="text-sm">Team Collaboration</p>
                 <div class="w-full bg-gray-700 rounded-full h-2.5">
                   <div class="bg-purple-500 h-2.5 rounded-full" style="width: 87%"></div>
                 </div>
               </div>
+              <!-- Project Management skill with progress bar -->
               <div>
                 <p class="text-sm">Project Management</p>
                 <div class="w-full bg-gray-700 rounded-full h-2.5">
                   <div class="bg-purple-500 h-2.5 rounded-full" style="width: 90%"></div>
                 </div>
               </div>
+              <!-- Technical Writing skill with progress bar -->
               <div>
                 <p class="text-sm">Technical Writing</p>
                 <div class="w-full bg-gray-700 rounded-full h-2.5">
@@ -245,10 +294,12 @@
         </div>
       </section>
 
-      <!-- Certifications -->
+      <!-- Certifications Section -->
       <section class="mt-16">
         <h3 class="text-3xl font-bold typewriter-text">Certifications</h3>
+        <!-- Certifications grid -->
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mt-6">
+          <!-- Active certification - HTML/CSS -->
           <div class="bg-gray-900 p-4 rounded-lg flex items-center">
             <div class="bg-purple-900 rounded-full w-18 h-18 flex items-center justify-center mr-4">
               <img src="assets/htmlcssbadge.png" alt="Certificate Icon" class="w-18 h-18 object-contain" />
@@ -258,7 +309,8 @@
               <p class="text-sm text-gray-400">Issued by West-MEC, 2025</p>
               <a class="text-sm text-gray-400 hover:text-purple-400 transition" href="assets/htmlcss.pdf" target="_blank">View Certification</a>
             </div>
-          </div>                  
+          </div>
+          <!-- Commented out certifications (placeholders for future) -->
           <!-- <div class="bg-gray-900 p-4 rounded-lg flex items-center">
             <div class="bg-purple-900 rounded-full p-4 mr-4">
               <i class="fas fa-microchip text-2xl text-purple-400"></i>
@@ -290,28 +342,34 @@
       </section>
     </main>
     
-    <!-- Social Media -->
+    <!-- Social Media links section -->
     <section class="mt-16 text-center">
       <h4 class="text-2xl font-bold text-white">Connect with Me</h4>
       <div class="flex justify-center gap-6 mt-4">
+        <!-- LinkedIn link with icon -->
         <a href="https://www.linkedin.com" class="text-blue-600 hover:text-blue-400 text-2xl transition-colors" target="_blank">
           <i class="fab fa-linkedin"></i>
         </a>
+        <!-- Instagram link with icon -->
         <a href="https://www.instagram.com" class="text-purple-600 hover:text-purple-400 text-2xl transition-colors" target="_blank">
           <i class="fab fa-instagram"></i>
         </a>
+        <!-- Twitter/X link with icon -->
         <a href="https://x.com" class="text-blue-400 hover:text-blue-300 text-2xl transition-colors" target="_blank">
           <i class="fab fa-twitter"></i>
         </a>
+        <!-- GitHub link with icon -->
         <a href="https://github.com/maanvikp20" class="text-white hover:text-gray-300 text-2xl transition-colors" target="_blank">
           <i class="fab fa-github"></i>
         </a>
+        <!-- YouTube link with icon -->
         <a href="https://www.youtube.com" class="text-red-600 hover:text-red-400 text-2xl transition-colors" target="_blank">
           <i class="fab fa-youtube"></i>
         </a>
       </div>
     </section>
 
+    <!-- Footer section -->
     <footer class="mt-16 pb-8 text-center border-t border-gray-800 pt-8">
       <p class="text-white">Made with <span class="text-purple-500">💜</span> by Maanvik Poddar &copy; 2025</p>
     </footer>

@@ -1,59 +1,107 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <!-- Set character encoding and responsive viewport -->
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <!-- Import Tailwind CSS from CDN -->
   <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
+  
+  <!-- Import Cousine font from Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Cousine:wght@400;700&display=swap" rel="stylesheet">
+  
+  <!-- Import Font Awesome icons -->
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+  
+  <!-- Page title and favicon -->
   <title>Maanvik Poddar</title>
+  <link rel="shortcut icon" href="assets/cat.png" type="image/x-icon">
+  
   <style>
+    /* Set base font family */
     body {
       font-family: 'Cousine', monospace;
     }
 
+    /* Typewriter animation for headings */
     .typewriter h1, .typewriter-text {
       overflow: hidden;
       white-space: nowrap;
-      border-right: 2px solid white;
+      border-right: 2px solid white; /* Cursor effect */
       width: 0;
       animation: typing 2s steps(12, end) forwards, blink 0.7s infinite;
     }
 
+    /* Typing animation keyframes */
     @keyframes typing {
       from { width: 0; }
       to { width: 100%; }
     }
 
+    /* Cursor blinking animation */
     @keyframes blink {
       50% { border-color: transparent; }
     }
 
+    /* Hover effects for project cards */
     .project-card {
       transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
 
     .project-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 10px 20px rgba(138, 43, 226, 0.3);
+      transform: translateY(-5px); /* Lift effect on hover */
+      box-shadow: 0 10px 20px rgba(138, 43, 226, 0.3); /* Purple glow shadow */
     }
 
+    /* GitHub icon hover effect */
     .github-icon {
       transition: transform 0.2s ease;
     }
 
     .github-icon:hover {
-      transform: scale(1.2);
+      transform: scale(1.2); /* Scale up on hover */
     }
 
+    /* Navigation link styling and effects */
+    .nav-link {
+      position: relative;
+      transition: transform 0.3s ease, color 0.3s ease;
+      display: inline-block;
+    }
+
+    .nav-link:hover {
+      transform: scale(1.15); /* Grow effect on hover */
+      color: #d8b4fe; /* Lighter purple on hover */
+    }
+
+    /* Underline for active navigation link */
+    .nav-link.active {
+      border-bottom: 2px solid #a855f7;
+    }
+
+    /* Glowing underline effect on navigation hover */
+    .nav-link:hover::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background-color: #d8b4fe;
+      box-shadow: 0 0 8px #d8b4fe; /* Glow effect */
+    }
+
+    /* Responsive design adjustments for mobile */
     @media (max-width: 425px) {
+      /* Mobile navigation adjustments */
       nav {
         font-size: 0.875rem;
         display: flex;
         justify-content: space-between;
         width: 100%;
         flex-wrap: nowrap;
-        overflow-x: auto;
+        overflow-x: auto; /* Allow horizontal scrolling for nav items */
       }
 
       nav a {
@@ -61,15 +109,18 @@
         padding: 0.5rem;
       }
 
+      /* Smaller typewriter text on mobile */
       .typewriter h1, .typewriter-text {
         font-size: 1.5rem;
       }
 
+      /* Stack elements vertically on mobile */
       .flex {
         flex-direction: column;
         align-items: center;
       }
 
+      /* Adjust spacing on mobile */
       .gap-4 {
         gap: 2rem;
       }
@@ -79,28 +130,38 @@
 <body class="bg-black text-white m-6">
 
   <div class="container mx-auto">
+    <!-- Header section with logo and navigation -->
     <header class="py-4">
       <div class="flex flex-col items-center sm:flex-row sm:justify-between sm:items-center gap-4">
+        <!-- Logo and name with typewriter effect -->
         <div class="flex items-center gap-4 typewriter">
           <img class="rounded-full h-16" src="/assets/cat.png" alt="Profile Logo">
           <h1 class="text-3xl font-bold">Maanvik Poddar</h1>
         </div>
+        
+        <!-- Main navigation -->
         <nav class="space-x-6 text-purple-500 mt-4 sm:mt-0">
-          <a href="index.html" class="border-b-2 border-purple-500">Home</a>
-          <a href="aboutme.html">About Me</a>
-          <a href="projects.html">Projects</a>
-          <a href="contact.html">Contact</a>
+          <a href="index.html" class="nav-link active">Home</a>
+          <a href="aboutme.html" class="nav-link">About Me</a>
+          <a href="projects.html" class="nav-link">Projects</a>
+          <a href="contact.html" class="nav-link">Contact</a>
         </nav>
       </div>
     </header>
     
     <main class="mt-10">
+      <!-- Hero section with image and introduction -->
       <section class="flex flex-col sm:flex-row gap-10 items-center sm:items-start">
+        <!-- Profile image - responsive width (full on mobile, 1/3 on desktop) -->
         <img class="rounded-lg w-full sm:w-1/3" src="/assets/maanvik.png" alt="Maanvik Poddar">
+        
+        <!-- Introduction text - centered on mobile, left-aligned on desktop -->
         <div class="w-full sm:w-2/3 text-center sm:text-left">
           <h2 class="text-4xl font-bold typewriter-text">I'm Maanvik</h2>
           <p class="mt-4">I'm a Junior at West-Mec Northeast Campus and Mountain Ridge High School who is passionate about coding and electrical engineering.</p>
           <p class="mt-2">In college, I hope to pursue an education in electrical engineering with a focus on Chip Design and Quantum Computing. In my free time, I like playing soccer, playing videogames, or weightlifting.</p>
+          
+          <!-- CTA buttons -->
           <div class="mt-6 flex gap-4 justify-center sm:justify-start">
             <a href="#projects" class="bg-purple-600 hover:bg-purple-700 text-white px-6 py-2 rounded-lg transition-colors">My Projects</a>
             <a href="contact.html" class="border border-purple-600 text-purple-600 hover:bg-purple-600 hover:text-white px-6 py-2 rounded-lg transition-colors">Contact Me</a>
@@ -108,18 +169,26 @@
         </div>
       </section>
       
+      <!-- Projects section with grid layout -->
       <section id="projects" class="mt-16"> 
         <h3 class="text-3xl font-bold text-center sm:text-left typewriter-text">My Projects</h3>
+        
+        <!-- Project cards grid - 1 column on mobile, 2 columns on desktop -->
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mt-6">
+          <!-- Project Card 1: FBLA Web Competition -->
           <div class="bg-gray-900 p-5 rounded-lg project-card">
             <div class="flex justify-between items-start">
               <h4 class="text-purple-500 font-bold text-xl">FBLA Web Competition</h4>
               <a href="https://github.com/justin-swenson111/fbla_web_competition" class="text-gray-400 hover:text-white github-icon" target="_blank"><i class="fab fa-github text-xl"></i></a>
             </div>
             <p class="mt-2">A collaborative web project for the FBLA competition featuring responsive design and modern web technologies.</p>
+            
+            <!-- Project thumbnail image -->
             <div class="mt-4 h-40 overflow-hidden rounded-md bg-gray-800 flex items-center justify-center">
               <img class="w-full object-cover" src="/assets/nec.png" alt="FBLA Web Competition">
             </div>
+            
+            <!-- Project metadata -->
             <div class="mt-4 flex justify-between items-center">
               <p><i class="fas fa-code"></i> HTML, CSS, JavaScript</p>
               <div class="flex items-center">
@@ -129,15 +198,20 @@
             </div>
           </div>
           
+          <!-- Project Card 2: Mandelbrot Generator -->
           <div class="bg-gray-900 p-5 rounded-lg project-card">
             <div class="flex justify-between items-start">
               <h4 class="text-purple-500 font-bold text-xl">Mandelbrot Generator</h4>
               <a href="https://github.com/maanvikp20/mandelbrot-generator" class="text-gray-400 hover:text-white github-icon" target="_blank"><i class="fab fa-github text-xl"></i></a>
             </div>
             <p class="mt-2">An interactive Mandelbrot set generator that visualizes complex mathematical patterns with zoom functionality.</p>
+            
+            <!-- Project thumbnail image -->
             <div class="mt-4 h-40 overflow-hidden rounded-md bg-gray-800 flex items-center justify-center">
               <img class="w-full object-cover" src="/assets/mandelbrot.jfif" alt="Mandelbrot Generator">
             </div>
+            
+            <!-- Project metadata -->
             <div class="mt-4 flex justify-between items-center">
               <p><i class="fas fa-code"></i> Python</p>
               <div class="flex items-center">
@@ -147,15 +221,20 @@
             </div>
           </div>
           
+          <!-- Project Card 3: Stopwatch -->
           <div class="bg-gray-900 p-5 rounded-lg project-card">
             <div class="flex justify-between items-start">
               <h4 class="text-purple-500 font-bold text-xl">Stopwatch</h4>
               <a href="https://github.com/maanvikp20/stopwatch" class="text-gray-400 hover:text-white github-icon" target="_blank"><i class="fab fa-github text-xl"></i></a>
             </div>
             <p class="mt-2">A precise digital stopwatch application with lap timing functionality and customizable interface.</p>
+            
+            <!-- Project thumbnail image -->
             <div class="mt-4 h-40 overflow-hidden rounded-md bg-gray-800 flex items-center justify-center">
               <img class="w-full object-cover" src="/assets/stopwatch.png" alt="Stopwatch">
             </div>
+            
+            <!-- Project metadata -->
             <div class="mt-4 flex justify-between items-center">
               <p><i class="fas fa-code"></i> JavaScript</p>
               <div class="flex items-center">
@@ -165,15 +244,20 @@
             </div>
           </div>
           
+          <!-- Project Card 4: jQuery Game -->
           <div class="bg-gray-900 p-5 rounded-lg project-card">
             <div class="flex justify-between items-start">
               <h4 class="text-purple-500 font-bold text-xl">jQuery Game</h4>
               <a href="https://github.com/justin-swenson111/jQuery-Game" class="text-gray-400 hover:text-white github-icon" target="_blank"><i class="fab fa-github text-xl"></i></a>
             </div>
             <p class="mt-2">An interactive browser-based game built with jQuery, featuring animations and dynamic gameplay.</p>
+            
+            <!-- Project thumbnail image -->
             <div class="mt-4 h-40 overflow-hidden rounded-md bg-gray-800 flex items-center justify-center">
               <img class="w-full object-cover" src="/assets/jquerygame.png" alt="jQuery Game">
             </div>
+            
+            <!-- Project metadata -->
             <div class="mt-4 flex justify-between items-center">
               <p><i class="fas fa-code"></i> jQuery, JavaScript</p>
               <div class="flex items-center">
@@ -183,6 +267,8 @@
             </div>
           </div>
         </div>
+        
+        <!-- Link to view all projects -->
         <div class="mt-8 text-center">
           <a href="projects.html" class="inline-flex items-center text-purple-500 hover:text-purple-400">
             View All Projects <i class="fas fa-arrow-right ml-2"></i>
@@ -190,37 +276,55 @@
         </div>
       </section>
       
+      <!-- Skills section with icon grid -->
       <section class="mt-16">
         <h3 class="text-3xl font-bold text-center sm:text-left typewriter-text">Skills</h3>
+        
+        <!-- Skills grid - 2 columns on mobile, 4 columns on desktop -->
         <div class="mt-6 grid grid-cols-2 md:grid-cols-4 gap-4">
+          <!-- HTML5 skill card -->
           <div class="bg-gray-900 p-4 rounded-lg text-center">
             <i class="fab fa-html5 text-orange-500 text-3xl"></i>
             <p class="mt-2">HTML5</p>
           </div>
+          
+          <!-- CSS3 skill card -->
           <div class="bg-gray-900 p-4 rounded-lg text-center">
             <i class="fab fa-css3-alt text-blue-500 text-3xl"></i>
             <p class="mt-2">CSS3</p>
           </div>
+          
+          <!-- JavaScript skill card -->
           <div class="bg-gray-900 p-4 rounded-lg text-center">
             <i class="fab fa-js text-yellow-400 text-3xl"></i>
             <p class="mt-2">JavaScript</p>
           </div>
+          
+          <!-- Python skill card -->
           <div class="bg-gray-900 p-4 rounded-lg text-center">
             <i class="fab fa-python text-blue-600 text-3xl"></i>
             <p class="mt-2">Python</p>
           </div>
+          
+          <!-- React skill card -->
           <div class="bg-gray-900 p-4 rounded-lg text-center">
             <i class="fab fa-react text-blue-400 text-3xl"></i>
             <p class="mt-2">React</p>
           </div>
+          
+          <!-- Database skill card -->
           <div class="bg-gray-900 p-4 rounded-lg text-center">
             <i class="fas fa-database text-green-500 text-3xl"></i>
             <p class="mt-2">Databases</p>
           </div>
+          
+          <!-- Electronics skill card -->
           <div class="bg-gray-900 p-4 rounded-lg text-center">
             <i class="fas fa-microchip text-red-400 text-3xl"></i>
             <p class="mt-2">Electronics</p>
           </div>
+          
+          <!-- Quantum skill card -->
           <div class="bg-gray-900 p-4 rounded-lg text-center">
             <i class="fas fa-atom text-purple-500 text-3xl"></i>
             <p class="mt-2">Quantum</p>
@@ -229,8 +333,11 @@
       </section>
     </main>
     
+    <!-- Social media links section -->
     <section class="mt-16 text-center">
       <h4 class="text-2xl font-bold text-white">Connect with Me</h4>
+      
+      <!-- Social icons with hover effects -->
       <div class="flex justify-center gap-6 mt-4">
         <a href="https://www.linkedin.com" class="text-blue-600 hover:text-blue-400 text-2xl transition-colors" target="_blank">
           <i class="fab fa-linkedin"></i>
@@ -250,6 +357,7 @@
       </div>
     </section>
 
+    <!-- Footer with copyright information -->
     <footer class="mt-16 pb-8 text-center border-t border-gray-800 pt-8">
       <p class="text-white">Made with <span class="text-purple-500">💜</span> by Maanvik Poddar &copy; 2025</p>
     </footer>
