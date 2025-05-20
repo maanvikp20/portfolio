@@ -134,6 +134,37 @@
         gap: 2rem;
       }
     }
+    
+    /* Loading spinner */
+    .loader {
+      border: 4px solid rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      border-top: 4px solid #9333ea;
+      width: 30px;
+      height: 30px;
+      animation: spin 1s linear infinite;
+      margin: 0 auto;
+    }
+    
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    
+    /* Color coding for different programming languages */
+    .lang-JavaScript, .lang-js { background-color: #f7df1e !important; color: black !important; }
+    .lang-Python, .lang-py { background-color: #3572A5 !important; }
+    .lang-HTML { background-color: #e34c26 !important; }
+    .lang-CSS { background-color: #563d7c !important; }
+    .lang-Java { background-color: #b07219 !important; }
+    .lang-C { background-color: #555555 !important; }
+    .lang-CPP, .lang-C\+\+ { background-color: #f34b7d !important; }
+    .lang-PHP { background-color: #4F5D95 !important; }
+    .lang-Ruby { background-color: #701516 !important; }
+    .lang-TypeScript, .lang-ts { background-color: #2b7489 !important; }
+    .lang-Swift { background-color: #ffac45 !important; }
+    .lang-Go { background-color: #00ADD8 !important; }
+    .lang-Rust { background-color: #dea584 !important; }
   </style>
 </head>
 <body class="bg-black text-white m-6">
@@ -158,156 +189,20 @@
       <section>
         <h2 class="text-4xl font-bold typewriter-text">My Projects</h2>
         <p class="mt-4">Hover over a project to view more details. All data is fetched live from GitHub API.</p>
+        <!-- Loading indicator -->
+        <div id="loading" class="mt-8 text-center">
+          <div class="loader"></div>
+          <p class="mt-2">Loading projects from GitHub...</p>
+        </div>
+        <!-- Error message container (initially hidden) -->
+        <div id="error-message" class="bg-red-600 text-white p-4 rounded-lg mt-6" style="display: none;">
+        </div>
       </section>
 
       <!-- Projects Grid -->
       <section class="mt-12">
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-          <!-- Project 1 -->
-          <div class="project-card bg-white text-black p-6 rounded-lg relative h-64">
-            <div class="relative z-1">
-              <h3 class="font-bold text-xl">One</h3>
-              <p>Projects will be displayed</p>
-            </div>
-            <div class="project-info rounded-lg">
-              <h3 class="text-xl font-bold text-purple-400">One</h3>
-              <p class="mt-2 text-center">A quantum computing simulator built with Python and Qiskit</p>
-              <div class="mt-4 flex items-center gap-2">
-                <i class="fas fa-star text-yellow-400"></i>
-                <span>24 Stars</span>
-              </div>
-              <div class="mt-2 flex items-center gap-2">
-                <i class="fas fa-code-branch text-blue-400"></i>
-                <span>12 Forks</span>
-              </div>
-              <div class="mt-2">
-                <span class="bg-blue-600 text-white text-xs px-2 py-1 rounded">Python</span>
-                <span class="bg-green-600 text-white text-xs px-2 py-1 rounded ml-2">Qiskit</span>
-              </div>
-              <a href="#" class="mt-4 text-purple-400 hover:text-purple-300 underline">View on GitHub</a>
-            </div>
-          </div>
-
-          <!-- Project 2 -->
-          <div class="project-card bg-white text-black p-6 rounded-lg relative h-64">
-            <div class="relative z-1">
-              <h3 class="font-bold text-xl">Two</h3>
-            </div>
-            <div class="project-info rounded-lg">
-              <h3 class="text-xl font-bold text-purple-400">Two</h3>
-              <p class="mt-2 text-center">Collection of ML projects including NLP and computer vision models</p>
-              <div class="mt-4 flex items-center gap-2">
-                <i class="fas fa-star text-yellow-400"></i>
-                <span>18 Stars</span>
-              </div>
-              <div class="mt-2 flex items-center gap-2">
-                <i class="fas fa-code-branch text-blue-400"></i>
-                <span>8 Forks</span>
-              </div>
-              <div class="mt-2">
-                <span class="bg-blue-600 text-white text-xs px-2 py-1 rounded">Python</span>
-                <span class="bg-red-600 text-white text-xs px-2 py-1 rounded ml-2">TensorFlow</span>
-              </div>
-              <a href="#" class="mt-4 text-purple-400 hover:text-purple-300 underline">View on GitHub</a>
-            </div>
-          </div>
-
-          <!-- Project 3 -->
-          <div class="project-card bg-white text-black p-6 rounded-lg relative h-64">
-            <div class="relative z-1">
-              <h3 class="font-bold text-xl">Three</h3>
-              <p class="mt-2">When hovered over, the frame will blur and display all the live info fetched from Github API</p>
-            </div>
-            <div class="project-info rounded-lg">
-              <h3 class="text-xl font-bold text-purple-400">Three</h3>
-              <p class="mt-2 text-center">Open-source library for digital circuit design and verification</p>
-              <div class="mt-4 flex items-center gap-2">
-                <i class="fas fa-star text-yellow-400"></i>
-                <span>32 Stars</span>
-              </div>
-              <div class="mt-2 flex items-center gap-2">
-                <i class="fas fa-code-branch text-blue-400"></i>
-                <span>15 Forks</span>
-              </div>
-              <div class="mt-2">
-                <span class="bg-orange-600 text-white text-xs px-2 py-1 rounded">C++</span>
-                <span class="bg-gray-700 text-white text-xs px-2 py-1 rounded ml-2">VHDL</span>
-              </div>
-              <a href="#" class="mt-4 text-purple-400 hover:text-purple-300 underline">View on GitHub</a>
-            </div>
-          </div>
-
-          <!-- Project 4 -->
-          <div class="project-card bg-white text-black p-6 rounded-lg relative h-64">
-            <div class="relative z-1">
-              <h3 class="font-bold text-xl">Four</h3>
-            </div>
-            <div class="project-info rounded-lg">
-              <h3 class="text-xl font-bold text-purple-400">Four</h3>
-              <p class="mt-2 text-center">Personal portfolio website built with HTML, CSS, and JavaScript</p>
-              <div class="mt-4 flex items-center gap-2">
-                <i class="fas fa-star text-yellow-400"></i>
-                <span>8 Stars</span>
-              </div>
-              <div class="mt-2 flex items-center gap-2">
-                <i class="fas fa-code-branch text-blue-400"></i>
-                <span>3 Forks</span>
-              </div>
-              <div class="mt-2">
-                <span class="bg-yellow-600 text-white text-xs px-2 py-1 rounded">JavaScript</span>
-                <span class="bg-blue-400 text-white text-xs px-2 py-1 rounded ml-2">HTML/CSS</span>
-              </div>
-              <a href="#" class="mt-4 text-purple-400 hover:text-purple-300 underline">View on GitHub</a>
-            </div>
-          </div>
-
-          <!-- Project 5 -->
-          <div class="project-card bg-white text-black p-6 rounded-lg relative h-64">
-            <div class="relative z-1">
-              <h3 class="font-bold text-xl">Five</h3>
-            </div>
-            <div class="project-info rounded-lg">
-              <h3 class="text-xl font-bold text-purple-400">Five</h3>
-              <p class="mt-2 text-center">Arduino-based weather monitoring system with web dashboard</p>
-              <div class="mt-4 flex items-center gap-2">
-                <i class="fas fa-star text-yellow-400"></i>
-                <span>14 Stars</span>
-              </div>
-              <div class="mt-2 flex items-center gap-2">
-                <i class="fas fa-code-branch text-blue-400"></i>
-                <span>6 Forks</span>
-              </div>
-              <div class="mt-2">
-                <span class="bg-teal-600 text-white text-xs px-2 py-1 rounded">Arduino</span>
-                <span class="bg-indigo-600 text-white text-xs px-2 py-1 rounded ml-2">JavaScript</span>
-              </div>
-              <a href="#" class="mt-4 text-purple-400 hover:text-purple-300 underline">View on GitHub</a>
-            </div>
-          </div>
-
-          <!-- Project 6 -->
-          <div class="project-card bg-white text-black p-6 rounded-lg relative h-64">
-            <div class="relative z-1">
-              <h3 class="font-bold text-xl">Six</h3>
-            </div>
-            <div class="project-info rounded-lg">
-              <h3 class="text-xl font-bold text-purple-400">Six</h3>
-              <p class="mt-2 text-center">Interactive tool for visualizing neural network architectures and training</p>
-              <div class="mt-4 flex items-center gap-2">
-                <i class="fas fa-star text-yellow-400"></i>
-                <span>22 Stars</span>
-              </div>
-              <div class="mt-2 flex items-center gap-2">
-                <i class="fas fa-code-branch text-blue-400"></i>
-                <span>9 Forks</span>
-              </div>
-              <div class="mt-2">
-                <span class="bg-yellow-600 text-white text-xs px-2 py-1 rounded">JavaScript</span>
-                <span class="bg-green-500 text-white text-xs px-2 py-1 rounded ml-2">D3.js</span>
-              </div>
-              <a href="#" class="mt-4 text-purple-400 hover:text-purple-300 underline">View on GitHub</a>
-            </div>
-          </div>
+        <div id="projects-grid" class="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <!-- Projects will be loaded dynamically -->
         </div>
       </section>
 
@@ -319,21 +214,21 @@
             <div class="text-5xl text-purple-500 mb-2">
               <i class="fas fa-code"></i>
             </div>
-            <h4 class="text-xl font-bold">42+</h4>
+            <h4 class="text-xl font-bold">-</h4>
             <p class="text-gray-400">Repositories</p>
           </div>
           <div class="bg-gray-900 p-6 rounded-lg text-center">
             <div class="text-5xl text-purple-500 mb-2">
               <i class="fas fa-star"></i>
             </div>
-            <h4 class="text-xl font-bold">150+</h4>
+            <h4 class="text-xl font-bold">-</h4>
             <p class="text-gray-400">Total Stars</p>
           </div>
           <div class="bg-gray-900 p-6 rounded-lg text-center">
             <div class="text-5xl text-purple-500 mb-2">
               <i class="fas fa-code-branch"></i>
             </div>
-            <h4 class="text-xl font-bold">75+</h4>
+            <h4 class="text-xl font-bold">-</h4>
             <p class="text-gray-400">Total Forks</p>
           </div>
         </div>
@@ -341,42 +236,192 @@
 
       <!-- JavaScript for GitHub API -->
       <script>
-        // This would be where you'd implement the GitHub API integration
-        // For demonstration purposes only - actual API integration would be needed
         document.addEventListener('DOMContentLoaded', function() {
-          console.log('GitHub API integration would be implemented here');
-          // Example:
-          // fetch('https://api.github.com/users/your-username/repos')
-          //   .then(response => response.json())
-          //   .then(data => {
-          //     // Process the data and update project cards
-          //   });
+          // Your GitHub username - REPLACE THIS
+          const username = 'maanvikp20';
+          
+          // Get containers
+          const projectsGrid = document.getElementById('projects-grid');
+          const loadingElement = document.getElementById('loading');
+          const errorElement = document.getElementById('error-message');
+          
+          // Fetch repositories from GitHub API
+          fetch(`https://api.github.com/users/${username}/repos?sort=stars&per_page=100`)
+            .then(response => {
+              if (!response.ok) {
+                throw new Error(`GitHub API request failed with status ${response.status}`);
+              }
+              return response.json();
+            })
+            .then(repos => {
+              // Hide loading indicator
+              loadingElement.style.display = 'none';
+              
+              // Update stats counters
+              updateGitHubStats(repos);
+              
+              // Sort by stars (most stars first)
+              repos.sort((a, b) => b.stargazers_count - a.stargazers_count);
+              
+              // Show only non-forked repos
+              const ownRepos = repos.filter(repo => !repo.fork);
+              
+              // Take top 6 repos
+              const topRepos = ownRepos.slice(0, 6);
+              
+              // Clear projects grid and add new project cards
+              projectsGrid.innerHTML = '';
+              
+              // If no repos found, show message
+              if (topRepos.length === 0) {
+                projectsGrid.innerHTML = `
+                  <div class="col-span-full text-center p-8 bg-gray-900 rounded-lg">
+                    <i class="fas fa-exclamation-circle text-yellow-500 text-4xl mb-4"></i>
+                    <p>No repositories found. Make sure your GitHub username is correct.</p>
+                  </div>
+                `;
+                return;
+              }
+              
+              // Create cards for each repo
+              topRepos.forEach(repo => {
+                const card = createProjectCard(repo);
+                projectsGrid.appendChild(card);
+              });
+              
+              // Fetch languages for each repo
+              topRepos.forEach(repo => {
+                fetchRepoLanguages(repo.name, username);
+              });
+            })
+            .catch(error => {
+              console.error('Error fetching GitHub data:', error);
+              loadingElement.style.display = 'none';
+              errorElement.textContent = `Failed to load GitHub repositories: ${error.message}`;
+              errorElement.style.display = 'block';
+            });
         });
+        
+        // Function to create a project card element
+        function createProjectCard(repo) {
+          const card = document.createElement('div');
+          card.className = 'project-card bg-white text-black p-6 rounded-lg relative h-64';
+          card.id = `repo-${repo.id}`;
+          
+          card.innerHTML = `
+            <div class="relative z-1">
+              <h3 class="font-bold text-xl">${repo.name}</h3>
+              <p class="mt-2">${repo.description || 'No description available'}</p>
+            </div>
+            <div class="project-info rounded-lg">
+              <h3 class="text-xl font-bold text-purple-400">${repo.name}</h3>
+              <p class="mt-2 text-center">${repo.description || 'No description available'}</p>
+              <div class="mt-4 flex items-center gap-2">
+                <i class="fas fa-star text-yellow-400"></i>
+                <span>${repo.stargazers_count} Stars</span>
+              </div>
+              <div class="mt-2 flex items-center gap-2">
+                <i class="fas fa-code-branch text-blue-400"></i>
+                <span>${repo.forks_count} Forks</span>
+              </div>
+              <div class="mt-2 language-tags">
+                ${repo.language ? 
+                  `<span class="bg-blue-600 text-white text-xs px-2 py-1 rounded lang-${repo.language}">${repo.language}</span>` : 
+                  ''}
+              </div>
+              <a href="${repo.html_url}" target="_blank" class="mt-4 text-purple-400 hover:text-purple-300 underline">View on GitHub</a>
+            </div>
+          `;
+          
+          return card;
+        }
+        
+        // Function to fetch languages for a repo
+        function fetchRepoLanguages(repoName, username) {
+          fetch(`https://api.github.com/repos/${username}/${repoName}/languages`)
+            .then(response => {
+              if (!response.ok) return null;
+              return response.json();
+            })
+            .then(languages => {
+              if (!languages) return;
+              
+              // Get all repos with this name (should be just one)
+              const repos = document.querySelectorAll(`[id^="repo-"]`);
+              
+              repos.forEach(repo => {
+                if (repo.querySelector('.relative.z-1 h3').textContent === repoName) {
+                  const langTagsContainer = repo.querySelector('.language-tags');
+                  
+                  // Clear existing tags
+                  langTagsContainer.innerHTML = '';
+                  
+                  // Get language names and sort by byte count (descending)
+                  const languageNames = Object.keys(languages);
+                  languageNames.sort((a, b) => languages[b] - languages[a]);
+                  
+                  // Take top 3 languages
+                  const topLanguages = languageNames.slice(0, 3);
+                  
+                  // Add language tags
+                  topLanguages.forEach((lang, index) => {
+                    const span = document.createElement('span');
+                    span.className = `${index > 0 ? 'ml-2 ' : ''}bg-blue-600 text-white text-xs px-2 py-1 rounded lang-${lang}`;
+                    span.textContent = lang;
+                    langTagsContainer.appendChild(span);
+                  });
+                }
+              });
+            })
+            .catch(error => {
+              console.error(`Error fetching languages for ${repoName}:`, error);
+            });
+        }
+        
+        // Function to update GitHub stats section
+        function updateGitHubStats(repos) {
+          // Filter out forked repos for more accurate stats
+          const ownRepos = repos.filter(repo => !repo.fork);
+          
+          // Calculate totals
+          const totalRepos = ownRepos.length;
+          const totalStars = ownRepos.reduce((sum, repo) => sum + repo.stargazers_count, 0);
+          const totalForks = ownRepos.reduce((sum, repo) => sum + repo.forks_count, 0);
+          
+          // Update the stats display
+          const statElements = document.querySelectorAll('.bg-gray-900 h4');
+          
+          if (statElements[0]) statElements[0].textContent = `${totalRepos}`;
+          if (statElements[1]) statElements[1].textContent = `${totalStars}`;
+          if (statElements[2]) statElements[2].textContent = `${totalForks}`;
+        }
       </script>
     </main>
     
     <!-- Social Media -->
     <section class="mt-16 text-center">
-      <h4 class="text-xl font-bold text-white">Connect with Me</h4>
+      <h4 class="text-2xl font-bold text-white">Connect with Me</h4>
       <div class="flex justify-center gap-6 mt-4">
-        <a href="https://www.linkedin.com" class="text-blue-600 text-2xl">
+        <a href="https://www.linkedin.com" class="text-blue-600 hover:text-blue-400 text-2xl transition-colors" target="_blank">
           <i class="fab fa-linkedin"></i>
         </a>
-        <a href="https://www.instagram.com" class="text-purple-600 text-2xl">
+        <a href="https://www.instagram.com" class="text-purple-600 hover:text-purple-400 text-2xl transition-colors" target="_blank">
           <i class="fab fa-instagram"></i>
         </a>
-        <a href="https://x.com" class="text-blue-400 text-2xl">
-          <i class="fab fa-x"></i>
+        <a href="https://x.com" class="text-blue-400 hover:text-blue-300 text-2xl transition-colors" target="_blank">
+          <i class="fab fa-twitter"></i>
         </a>
-        <a href="https://www.youtube.com" class="text-red-600 text-2xl">
+        <a href="https://github.com/maanvikp20" class="text-white hover:text-gray-300 text-2xl transition-colors" target="_blank">
+          <i class="fab fa-github"></i>
+        </a>
+        <a href="https://www.youtube.com" class="text-red-600 hover:text-red-400 text-2xl transition-colors" target="_blank">
           <i class="fab fa-youtube"></i>
         </a>
       </div>
     </section>
 
-    <!-- Footer -->
-    <footer class="mt-16 pb-8 text-center">
-      <p class="text-white">Made with 💜 - Maanvik Poddar</p>
+    <footer class="mt-16 pb-8 text-center border-t border-gray-800 pt-8">
+      <p class="text-white">Made with <span class="text-purple-500">💜</span> by Maanvik Poddar &copy; 2025</p>
     </footer>
   </div>
   

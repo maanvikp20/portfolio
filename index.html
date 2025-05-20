@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
   <link href="https://fonts.googleapis.com/css2?family=Cousine:wght@400;700&display=swap" rel="stylesheet">
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet"> <!-- Font Awesome CDN -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
   <title>Maanvik Poddar</title>
   <style>
     body {
@@ -27,6 +27,23 @@
 
     @keyframes blink {
       50% { border-color: transparent; }
+    }
+
+    .project-card {
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .project-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px rgba(138, 43, 226, 0.3);
+    }
+
+    .github-icon {
+      transition: transform 0.2s ease;
+    }
+
+    .github-icon:hover {
+      transform: scale(1.2);
     }
 
     @media (max-width: 425px) {
@@ -65,7 +82,7 @@
     <header class="py-4">
       <div class="flex flex-col items-center sm:flex-row sm:justify-between sm:items-center gap-4">
         <div class="flex items-center gap-4 typewriter">
-          <img class="rounded-full h-16" src="./assets/cat.png" alt="Profile Logo">
+          <img class="rounded-full h-16" src="/assets/cat.png" alt="Profile Logo">
           <h1 class="text-3xl font-bold">Maanvik Poddar</h1>
         </div>
         <nav class="space-x-6 text-purple-500 mt-4 sm:mt-0">
@@ -79,68 +96,162 @@
     
     <main class="mt-10">
       <section class="flex flex-col sm:flex-row gap-10 items-center sm:items-start">
-        <img class="rounded-lg w-full sm:w-1/3" src="./assets/maanvik.png" alt="Me at Coca-Cola Land">
+        <img class="rounded-lg w-full sm:w-1/3" src="/assets/maanvik.png" alt="Maanvik Poddar">
         <div class="w-full sm:w-2/3 text-center sm:text-left">
           <h2 class="text-4xl font-bold typewriter-text">I'm Maanvik</h2>
           <p class="mt-4">I'm a Junior at West-Mec Northeast Campus and Mountain Ridge High School who is passionate about coding and electrical engineering.</p>
           <p class="mt-2">In college, I hope to pursue an education in electrical engineering with a focus on Chip Design and Quantum Computing. In my free time, I like playing soccer, playing videogames, or weightlifting.</p>
+          <div class="mt-6 flex gap-4 justify-center sm:justify-start">
+            <a href="#projects" class="bg-purple-600 hover:bg-purple-700 text-white px-6 py-2 rounded-lg transition-colors">My Projects</a>
+            <a href="contact.html" class="border border-purple-600 text-purple-600 hover:bg-purple-600 hover:text-white px-6 py-2 rounded-lg transition-colors">Contact Me</a>
+          </div>
         </div>
       </section>
       
-      <!-- idk i will prob chuck an api to get my stuff -->
-      <section class="mt-16"> 
+      <section id="projects" class="mt-16"> 
         <h3 class="text-3xl font-bold text-center sm:text-left typewriter-text">My Projects</h3>
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mt-6">
-          <div class="bg-gray-900 p-4 rounded-lg">
-            <h4 class="text-purple-500 font-bold">Project 1</h4>
-            <p>Project Description</p>
-            <img class="mt-4 w-full h-32 bg-white" src="./assets/maanvik.png" alt="Project Image">
-            <p class="mt-2">⭐ Star Count | Programming Language</p>
+          <div class="bg-gray-900 p-5 rounded-lg project-card">
+            <div class="flex justify-between items-start">
+              <h4 class="text-purple-500 font-bold text-xl">FBLA Web Competition</h4>
+              <a href="https://github.com/justin-swenson111/fbla_web_competition" class="text-gray-400 hover:text-white github-icon" target="_blank"><i class="fab fa-github text-xl"></i></a>
+            </div>
+            <p class="mt-2">A collaborative web project for the FBLA competition featuring responsive design and modern web technologies.</p>
+            <div class="mt-4 h-40 overflow-hidden rounded-md bg-gray-800 flex items-center justify-center">
+              <img class="w-full object-cover" src="/assets/nec.png" alt="FBLA Web Competition">
+            </div>
+            <div class="mt-4 flex justify-between items-center">
+              <p><i class="fas fa-code"></i> HTML, CSS, JavaScript</p>
+              <div class="flex items-center">
+                <i class="fas fa-star text-yellow-400"></i>
+                <span class="ml-1">Collaborative</span>
+              </div>
+            </div>
           </div>
-          <div class="bg-gray-900 p-4 rounded-lg">
-            <h4 class="text-purple-500 font-bold">Project 2</h4>
-            <p>Project Description</p>
-            <img class="mt-4 w-full h-32 bg-white" src="./assets/maanvik.png" alt="Project Image">
-            <p class="mt-2">⭐ Star Count | Programming Language</p>
+          
+          <div class="bg-gray-900 p-5 rounded-lg project-card">
+            <div class="flex justify-between items-start">
+              <h4 class="text-purple-500 font-bold text-xl">Mandelbrot Generator</h4>
+              <a href="https://github.com/maanvikp20/mandelbrot-generator" class="text-gray-400 hover:text-white github-icon" target="_blank"><i class="fab fa-github text-xl"></i></a>
+            </div>
+            <p class="mt-2">An interactive Mandelbrot set generator that visualizes complex mathematical patterns with zoom functionality.</p>
+            <div class="mt-4 h-40 overflow-hidden rounded-md bg-gray-800 flex items-center justify-center">
+              <img class="w-full object-cover" src="/assets/mandelbrot.jfif" alt="Mandelbrot Generator">
+            </div>
+            <div class="mt-4 flex justify-between items-center">
+              <p><i class="fas fa-code"></i> Python</p>
+              <div class="flex items-center">
+                <i class="fas fa-star text-yellow-400"></i>
+                <span class="ml-1">Mathematics</span>
+              </div>
+            </div>
           </div>
-          <div class="bg-gray-900 p-4 rounded-lg">
-            <h4 class="text-purple-500 font-bold">Project 3</h4>
-            <p>Project Description</p>
-            <img class="mt-4 w-full h-32 bg-white" src="./assets/maanvik.png" alt="Project Image">
-            <p class="mt-2">⭐ Star Count | Programming Language</p>
+          
+          <div class="bg-gray-900 p-5 rounded-lg project-card">
+            <div class="flex justify-between items-start">
+              <h4 class="text-purple-500 font-bold text-xl">Stopwatch</h4>
+              <a href="https://github.com/maanvikp20/stopwatch" class="text-gray-400 hover:text-white github-icon" target="_blank"><i class="fab fa-github text-xl"></i></a>
+            </div>
+            <p class="mt-2">A precise digital stopwatch application with lap timing functionality and customizable interface.</p>
+            <div class="mt-4 h-40 overflow-hidden rounded-md bg-gray-800 flex items-center justify-center">
+              <img class="w-full object-cover" src="/assets/stopwatch.png" alt="Stopwatch">
+            </div>
+            <div class="mt-4 flex justify-between items-center">
+              <p><i class="fas fa-code"></i> JavaScript</p>
+              <div class="flex items-center">
+                <i class="fas fa-star text-yellow-400"></i>
+                <span class="ml-1">Utility</span>
+              </div>
+            </div>
           </div>
-          <div class="bg-gray-900 p-4 rounded-lg">
-            <h4 class="text-purple-500 font-bold">Project 4</h4>
-            <p>Project Description</p>
-            <img class="mt-4 w-full h-32 bg-white" src="./assets/maanvik.png" alt="Project Image">
-            <p class="mt-2">⭐ Star Count | Programming Language</p> 
+          
+          <div class="bg-gray-900 p-5 rounded-lg project-card">
+            <div class="flex justify-between items-start">
+              <h4 class="text-purple-500 font-bold text-xl">jQuery Game</h4>
+              <a href="https://github.com/justin-swenson111/jQuery-Game" class="text-gray-400 hover:text-white github-icon" target="_blank"><i class="fab fa-github text-xl"></i></a>
+            </div>
+            <p class="mt-2">An interactive browser-based game built with jQuery, featuring animations and dynamic gameplay.</p>
+            <div class="mt-4 h-40 overflow-hidden rounded-md bg-gray-800 flex items-center justify-center">
+              <img class="w-full object-cover" src="/assets/jquerygame.png" alt="jQuery Game">
+            </div>
+            <div class="mt-4 flex justify-between items-center">
+              <p><i class="fas fa-code"></i> jQuery, JavaScript</p>
+              <div class="flex items-center">
+                <i class="fas fa-star text-yellow-400"></i>
+                <span class="ml-1">Interactive</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="mt-8 text-center">
+          <a href="projects.html" class="inline-flex items-center text-purple-500 hover:text-purple-400">
+            View All Projects <i class="fas fa-arrow-right ml-2"></i>
+          </a>
+        </div>
+      </section>
+      
+      <section class="mt-16">
+        <h3 class="text-3xl font-bold text-center sm:text-left typewriter-text">Skills</h3>
+        <div class="mt-6 grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div class="bg-gray-900 p-4 rounded-lg text-center">
+            <i class="fab fa-html5 text-orange-500 text-3xl"></i>
+            <p class="mt-2">HTML5</p>
+          </div>
+          <div class="bg-gray-900 p-4 rounded-lg text-center">
+            <i class="fab fa-css3-alt text-blue-500 text-3xl"></i>
+            <p class="mt-2">CSS3</p>
+          </div>
+          <div class="bg-gray-900 p-4 rounded-lg text-center">
+            <i class="fab fa-js text-yellow-400 text-3xl"></i>
+            <p class="mt-2">JavaScript</p>
+          </div>
+          <div class="bg-gray-900 p-4 rounded-lg text-center">
+            <i class="fab fa-python text-blue-600 text-3xl"></i>
+            <p class="mt-2">Python</p>
+          </div>
+          <div class="bg-gray-900 p-4 rounded-lg text-center">
+            <i class="fab fa-react text-blue-400 text-3xl"></i>
+            <p class="mt-2">React</p>
+          </div>
+          <div class="bg-gray-900 p-4 rounded-lg text-center">
+            <i class="fas fa-database text-green-500 text-3xl"></i>
+            <p class="mt-2">Databases</p>
+          </div>
+          <div class="bg-gray-900 p-4 rounded-lg text-center">
+            <i class="fas fa-microchip text-red-400 text-3xl"></i>
+            <p class="mt-2">Electronics</p>
+          </div>
+          <div class="bg-gray-900 p-4 rounded-lg text-center">
+            <i class="fas fa-atom text-purple-500 text-3xl"></i>
+            <p class="mt-2">Quantum</p>
           </div>
         </div>
       </section>
     </main>
     
-    <!-- Social Media -->
     <section class="mt-16 text-center">
-      <h4 class="text-xl font-bold text-white">Connect with Me</h4>
+      <h4 class="text-2xl font-bold text-white">Connect with Me</h4>
       <div class="flex justify-center gap-6 mt-4">
-        <a href="https://www.linkedin.com" class="text-blue-600 text-2xl">
+        <a href="https://www.linkedin.com" class="text-blue-600 hover:text-blue-400 text-2xl transition-colors" target="_blank">
           <i class="fab fa-linkedin"></i>
         </a>
-        <a href="https://www.instagram.com" class="text-purple-600 text-2xl">
+        <a href="https://www.instagram.com" class="text-purple-600 hover:text-purple-400 text-2xl transition-colors" target="_blank">
           <i class="fab fa-instagram"></i>
         </a>
-        <a href="https://x.com" class="text-blue-400 text-2xl">
-          <i class="fab fa-x"></i>
+        <a href="https://x.com" class="text-blue-400 hover:text-blue-300 text-2xl transition-colors" target="_blank">
+          <i class="fab fa-twitter"></i>
         </a>
-        <a href="https://www.youtube.com" class="text-red-600 text-2xl">
+        <a href="https://github.com/maanvikp20" class="text-white hover:text-gray-300 text-2xl transition-colors" target="_blank">
+          <i class="fab fa-github"></i>
+        </a>
+        <a href="https://www.youtube.com" class="text-red-600 hover:text-red-400 text-2xl transition-colors" target="_blank">
           <i class="fab fa-youtube"></i>
         </a>
       </div>
     </section>
 
-    <!-- Footer -->
-    <footer class="mt-16 pb-8 text-center">
-      <p class="text-white">Made with 💜 - Maanvik Poddar</p>
+    <footer class="mt-16 pb-8 text-center border-t border-gray-800 pt-8">
+      <p class="text-white">Made with <span class="text-purple-500">💜</span> by Maanvik Poddar &copy; 2025</p>
     </footer>
   </div>
   
