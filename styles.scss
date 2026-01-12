@@ -1,15 +1,21 @@
-// Variables
+// ================================
+// VARIABLES
+// ================================
 $font-family: 'Cousine', monospace;
 $hover-color: #d8b4fe;
 $active-border: #a855f7;
 $bg-dark: #000;
-$text-light: white;
+$text-light: #ffffff;
 $card-bg: #121A2B;
 $highlight: #A17BF3;
 $secondary-text: #E5E7EB;
 $github-gray: #A0AEC0;
+$border-subtle: #1f2937;
+$accent: #7c3aed;
 
-// Mixins
+// ================================
+// MIXINS
+// ================================
 @mixin hover-glow($color) {
   content: '';
   position: absolute;
@@ -29,21 +35,53 @@ $github-gray: #A0AEC0;
   animation: typing 2s steps($steps, end) forwards, blink 0.7s infinite;
 }
 
-// Base styles
+@mixin card-hover {
+  transition: transform 0.25s ease, border-color 0.25s ease;
+  &:hover {
+    transform: translateY(-4px);
+    border-color: $accent;
+  }
+}
+
+// ================================
+// BASE / RESET
+// ================================
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
 body {
+  margin: 0;
   font-family: $font-family;
   background-color: $bg-dark;
   color: $text-light;
+  line-height: 1.6;
 }
 
-// Typewriter
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+// ================================
+// TYPEWRITER
+// ================================
 .typewriter {
-  h1, &-text {
+  h1,
+  &-text {
     @include typewriter-animation(12);
   }
 }
 
-// Keyframes
 @keyframes typing {
   from { width: 0; }
   to { width: 100%; }
@@ -53,11 +91,22 @@ body {
   50% { border-color: transparent; }
 }
 
-// Nav links
+// ================================
+// NAVIGATION
+// ================================
+nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  border-bottom: 1px solid $border-subtle;
+}
+
 .nav-link {
   position: relative;
   transition: transform 0.3s ease, color 0.3s ease;
   display: inline-block;
+  margin-left: 1.25rem;
 
   &:hover {
     transform: scale(1.15);
@@ -73,30 +122,48 @@ body {
   }
 }
 
-// Project card
+// ================================
+// LAYOUT HELPERS
+// ================================
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.grid {
+  display: grid;
+  gap: 2rem;
+}
+
+.grid-3 {
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+}
+
+// ================================
+// PROJECT CARDS
+// ================================
 .project-card {
-  transition: all 0.3s ease;
   position: relative;
   overflow: hidden;
-  height: 200px;
+  height: 220px;
   background-color: $card-bg;
-  border-radius: 0.5rem;
+  border-radius: 0.75rem;
+  border: 1px solid $border-subtle;
+  @include card-hover;
 
   &::before {
     content: "";
     position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+    inset: 0;
     background: transparent;
     transition: all 0.3s ease;
     z-index: 1;
   }
 
   &:hover::before {
-    backdrop-filter: blur(3px);
-    background-color: rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(4px);
+    background-color: rgba(0, 0, 0, 0.2);
   }
 
   &:hover .project-info {
@@ -112,26 +179,23 @@ body {
 
 .project-info {
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  inset: 0;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   opacity: 0;
   transition: opacity 0.3s ease;
-  background-color: rgba(0, 0, 0, 0.7);
+  background-color: rgba(0, 0, 0, 0.75);
   color: $text-light;
-  padding: 1rem;
+  padding: 1.25rem;
   z-index: 10;
   text-align: center;
 }
 
 .project-title {
   color: $highlight;
-  font-weight: bold;
+  font-weight: 700;
   font-size: 1.25rem;
 }
 
@@ -142,11 +206,28 @@ body {
   margin-top: 0.5rem;
 }
 
-// GitHub icon
+.tag-row {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.tag {
+  padding: 0.25rem 0.6rem;
+  background: #1f1f1f;
+  border-radius: 0.5rem;
+  color: $highlight;
+  font-size: 0.75rem;
+}
+
+// ================================
+// ICONS
+// ================================
 .github-icon {
   color: $github-gray;
-  margin-top: 0.5rem;
-  transition: transform 0.2s ease;
+  margin-top: 0.75rem;
+  transition: transform 0.2s ease, color 0.2s ease;
 
   &:hover {
     transform: scale(1.2);
@@ -154,7 +235,9 @@ body {
   }
 }
 
-// Selection dots
+// ================================
+// SELECTION DOTS (DESIGN DETAIL)
+// ================================
 .selection-dot {
   width: 12px;
   height: 12px;
@@ -169,15 +252,34 @@ body {
   &.dot-left { left: -6px; top: 50%; transform: translateY(-50%); }
 }
 
-// Responsive
+// ================================
+// FOOTER
+// ================================
+footer {
+  border-top: 1px solid $border-subtle;
+  padding: 2rem;
+  text-align: center;
+  color: $secondary-text;
+  font-size: 0.875rem;
+}
+
+// ================================
+// RESPONSIVE
+// ================================
+@media (max-width: 768px) {
+  .container {
+    padding: 1.25rem;
+  }
+
+  nav {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+  }
+}
+
 @media (max-width: 425px) {
   nav {
     font-size: 0.875rem;
-    display: flex;
-    justify-content: space-between;
-    width: 100%;
-    flex-wrap: nowrap;
-    overflow-x: auto;
 
     a {
       white-space: nowrap;
@@ -186,17 +288,9 @@ body {
   }
 
   .typewriter {
-    h1, &-text {
+    h1,
+    &-text {
       font-size: 1.5rem;
     }
-  }
-
-  .flex {
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .gap-4 {
-    gap: 2rem;
   }
 }
