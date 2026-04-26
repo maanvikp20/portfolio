@@ -3,21 +3,22 @@ import { useEffect, useState } from "react";
 import { FaSun, FaMoon } from "react-icons/fa";
 
 export default function DarkModeToggle() {
-  const [dark, setDark] = useState(false);
+  const [dark, setDark] = useState(true);
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
     const saved = localStorage.getItem("theme");
 
-    if (
-      saved === "dark" ||
-      (!saved && window.matchMedia("(prefers-color-scheme: dark)").matches)
-    ) {
+    if (saved === "light") {
+      document.documentElement.classList.remove("dark");
+      setDark(false);
+    } else {
+      // default to dark
       document.documentElement.classList.add("dark");
       setDark(true);
     }
 
-    setMounted(true); // prevents hydration mismatch
+    setMounted(true);
   }, []);
 
   const toggleDark = () => {
@@ -31,7 +32,6 @@ export default function DarkModeToggle() {
     setDark(!dark);
   };
 
-  // avoid SSR flicker
   if (!mounted) return null;
 
   return (

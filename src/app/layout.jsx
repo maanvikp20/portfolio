@@ -1,6 +1,7 @@
 import React from 'react'
 import './globals.css'
 import { Instrument_Serif } from 'next/font/google'
+import DarkModeToggle from '../../components/DarkModeToggle'
 
 const instrumentSerif = Instrument_Serif({
   weight: '400',
@@ -12,9 +13,10 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en" className={instrumentSerif.variable}>
       <head>
-        <title>My Portfolio</title>
+        <title>Maanvik Poddar</title>
       </head>
       <body>
+        <DarkModeToggle />
         {children}
       </body>
     </html>

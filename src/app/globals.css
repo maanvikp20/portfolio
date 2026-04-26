@@ -1,22 +1,25 @@
 @import "tailwindcss";
 
+@variant dark (&:where(.dark, .dark *));
+
 :root {
-  --background: #0a0a0a;
-  --foreground: #ededed;
-  --font-instrument-serif: 'Instrument Serif', serif;
+  --overlay-opacity: 0.5;
+  --overlay-color: 0, 0, 0;
+  --text-primary: #000000;
+  --text-secondary: rgba(0, 0, 0, 0.75);
+}
+
+.dark {
+  --overlay-opacity: 0.3;
+  --overlay-color: 255, 255, 255;
+  --text-primary: #111111;
+  --text-secondary: rgba(0, 0, 0, 0.75);
 }
 
 * {
-  transition: background-color 0.3s ease, color 0.3s ease;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-instrument-serif: var(--font-instrument-serif);
+  transition: background-color 0.3s ease, color 0.3s ease, opacity 0.3s ease;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
+  color: var(--text-primary);
 }
