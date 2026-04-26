@@ -1,9 +1,11 @@
 "use client";
 import { motion } from "framer-motion";
+import Navbar from "../../../components/Navbar"
 
 export default function page() {
   return (
     <main className="relative min-h-screen overflow-hidden">
+      <Navbar />
       {/* Header */}
       <section className="text-center py-24 px-8">
         <motion.h1
