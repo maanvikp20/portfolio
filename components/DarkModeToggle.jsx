@@ -8,16 +8,13 @@ export default function DarkModeToggle() {
 
   useEffect(() => {
     const saved = localStorage.getItem("theme");
-
     if (saved === "light") {
       document.documentElement.classList.remove("dark");
       setDark(false);
     } else {
-      // default to dark
       document.documentElement.classList.add("dark");
       setDark(true);
     }
-
     setMounted(true);
   }, []);
 
@@ -37,15 +34,24 @@ export default function DarkModeToggle() {
   return (
     <button
       onClick={toggleDark}
-      className="fixed top-6 right-6 z-50 w-12 h-12 rounded-full 
-                 bg-white/20 dark:bg-black/40 backdrop-blur 
-                 flex items-center justify-center 
+      className="w-11 h-11 z-[1100] rounded-[10px] bg-transparent
+                 flex items-center justify-center
                  hover:scale-110 transition-all duration-300"
+      style={{
+        border: "1.5px solid rgba(var(--overlay-color), 0.25)",
+      }}
+      aria-label="Toggle dark mode"
     >
       {dark ? (
-        <FaSun className="text-yellow-300 w-5 h-5 transition-all duration-300" />
+        <FaSun
+          className="w-4 h-4 transition-all duration-300"
+          style={{ color: "var(--text-primary)" }}
+        />
       ) : (
-        <FaMoon className="text-white w-5 h-5 transition-all duration-300" />
+        <FaMoon
+          className="w-4 h-4 transition-all duration-300"
+          style={{ color: "var(--text-primary)" }}
+        />
       )}
     </button>
   );

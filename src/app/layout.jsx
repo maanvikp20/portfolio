@@ -16,7 +16,6 @@ export default function RootLayout({ children }) {
         <title>Maanvik Poddar</title>
       </head>
       <body>
-        <DarkModeToggle />
         {children}
       </body>
     </html>

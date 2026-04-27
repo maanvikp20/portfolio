@@ -1,5 +1,6 @@
 import { FaYoutube, FaInstagram } from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6";
+import DarkModeToggle from "../../components/DarkModeToggle"
 
 export default function Page() {
   return (
@@ -14,13 +15,17 @@ export default function Page() {
           loop
           playsInline
         />
-
         <div
           className="absolute inset-0 transition-all duration-500"
           style={{
             backgroundColor: `rgba(var(--overlay-color), var(--overlay-opacity))`,
           }}
         />
+      </div>
+
+      {/* Dark mode toggle — top right */}
+      <div className="fixed top-4 right-6 z-50">
+        <DarkModeToggle />
       </div>
 
       {/* Hero Text */}
@@ -61,27 +66,25 @@ export default function Page() {
             className="w-10 h-10 rounded-full bg-white/20 backdrop-blur flex items-center justify-center hover:bg-white/40 transition"
           >
             <FaInstagram
-              className="w-5 h-5 text-white"
+              className="w-5 h-5"
               style={{ color: "var(--text-primary)" }}
             />
           </a>
-
           <a
             href="#"
             className="w-10 h-10 rounded-full bg-white/20 backdrop-blur flex items-center justify-center hover:bg-white/40 transition"
           >
             <FaXTwitter
-              className="w-5 h-5 text-white"
+              className="w-5 h-5"
               style={{ color: "var(--text-primary)" }}
             />
           </a>
-
           <a
             href="#"
             className="w-10 h-10 rounded-full bg-white/20 backdrop-blur flex items-center justify-center hover:bg-white/40 transition"
           >
             <FaYoutube
-              className="w-5 h-5 text-white"
+              className="w-5 h-5"
               style={{ color: "var(--text-primary)" }}
             />
           </a>

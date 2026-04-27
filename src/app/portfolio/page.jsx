@@ -1,6 +1,7 @@
 "use client";
 import { motion } from "framer-motion";
-import Navbar from "../../../components/Navbar"
+import Navbar from "../../../components/Navbar";
+import Contact from "../../../components/Contact"
 
 export default function page() {
   return (
@@ -287,9 +288,12 @@ export default function page() {
         </div>
       </section>
 
+      {/* Resume and Experiences */}
+
       {/* Skills */}
 
       {/* Contact */}
+      {<Contact />}
     </main>
   );
 }

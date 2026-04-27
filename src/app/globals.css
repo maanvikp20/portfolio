@@ -5,14 +5,14 @@
 :root {
   --overlay-opacity: 0.5;
   --overlay-color: 0, 0, 0;
-  --text-primary: #000000;
-  --text-secondary: rgba(0, 0, 0, 0.75);
+  --text-primary: #ffffff;
+  --text-secondary: rgba(255, 255, 255, 0.75);
 }
 
 .dark {
   --overlay-opacity: 0.3;
   --overlay-color: 255, 255, 255;
-  --text-primary: #111111;
+  --text-primary: #000000;
   --text-secondary: rgba(0, 0, 0, 0.75);
 }
 
