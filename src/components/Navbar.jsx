@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import DarkModeToggle from "./DarkModeToggle";
+import DarkModeToggle from "./ui/DarkModeToggle";
 
 const navLinks = [
   { label: "About Me", href: "#about" },
@@ -60,7 +60,9 @@ export default function Navbar() {
           <motion.span
             className="block w-5 rounded-sm origin-center"
             style={{ height: "1.5px", backgroundColor: "var(--text-primary)" }}
-            animate={open ? { opacity: 0, scaleX: 0 } : { opacity: 1, scaleX: 1 }}
+            animate={
+              open ? { opacity: 0, scaleX: 0 } : { opacity: 1, scaleX: 1 }
+            }
             transition={{ duration: 0.3 }}
           />
           <motion.span

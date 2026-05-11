@@ -1,7 +1,7 @@
 "use client";
 import { motion } from "framer-motion";
-import Navbar from "../../../components/Navbar";
-import Contact from "../../../components/Contact"
+import Navbar from "../../components/Navbar";
+import Contact from "../../components/Contact";
 
 export default function page() {
   return (
