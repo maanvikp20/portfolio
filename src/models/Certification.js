@@ -10,5 +10,4 @@ const CertificationSchema = new mongoose.Schema(
   { timestamps: true },
 );
 
-export default mongoose.models.Certification ||
-  mongoose.model("Certification", CertificationSchema);
+export default mongoose.models.Certification || mongoose.model("Certification", CertificationSchema);

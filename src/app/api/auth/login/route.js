@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { loginAdmin } from "@/src/controllers/authController";
 
+// admin login route
 export async function POST(req) {
   try {
     const { email, password } = await req.json();

@@ -1,50 +1,22 @@
 import mongoose from "mongoose";
 
-const projectSchema = new mongoose.Schema(
+const ProjectSchema = new mongoose.Schema(
   {
-    title: {
+    title: { type: String, required: true },
+    slug: { type: String, required: true, unique: true },
+    description: { type: String, required: true },
+    content: { type: String }, 
+    category: {
       type: String,
+      enum: ["electronics", "software", "calculator-games"],
       required: true,
-      maxLength: 100,
-      trim: true,
     },
-    description: {
-      type: String,
-      required: true,
-      maxLength: 1000,
-      trim: true,
-    },
-    image: {
-      type: String,
-      trim: true,
-    },
-    url: {
-      type: String,
-      trim: true,
-    },
-    technologies: [
-      {
-        type: String,
-        trim: true,
-      },
-    ],
-    github: {
-      type: String,
-      trim: true,
-    },
-    featured: {
-      type: Boolean,
-      default: false,
-    },
-    status: {
-      type: String,
-      enum: ["completed", "in-progress", "planned"],
-      default: "completed",
-    },
+    repoLink: { type: String, default: "" },
+    liveLink: { type: String, default: "" },
+    coverImage: { type: String, default: "" },
+    tags: [{ type: String }],
   },
   { timestamps: true },
 );
 
-const Project =
-  mongoose.models.Project || mongoose.model("Project", projectSchema);
-export default Project;
+export default mongoose.models.Project || mongoose.model("Project", ProjectSchema);

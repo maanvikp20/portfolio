@@ -18,7 +18,7 @@ export default async function Page() {
       getAllCertifications() || [],
     ]);
 
-    // Data turned into JS objects so it can be passed safely to page with any issues along with fallbacks to prevent full crash
+    // data parses to json and back to make it usuable on the client
     const projects = JSON.parse(JSON.stringify(allProjects || []));
     const blogs = JSON.parse(JSON.stringify(rawBlogs || []));
     const skills = JSON.parse(JSON.stringify(rawSkills || []));

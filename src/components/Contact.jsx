@@ -48,6 +48,7 @@ export default function Contact() {
 
   return (
     <motion.section
+      id = "contact"
       className="px-8 md:px-16 py-16"
       initial={{ opacity: 0, y: 40 }}
       whileInView={{ opacity: 1, y: 0 }}

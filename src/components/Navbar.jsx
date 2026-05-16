@@ -1,16 +1,18 @@
 "use client";
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import Link from "next/link";
 import DarkModeToggle from "../components/ui/DarkModeToggle";
 
+// Navbar links
 const navLinks = [
-  { label: "About Me", href: "#about" },
+  { label: "About Me", href: "#about", isHash: true },
   { label: "Writings & Blog", href: "/blog" },
   { label: "Electronics Projects", href: "/portfolio/electronics" },
   { label: "Software Projects", href: "/portfolio/software" },
-  { label: "Technical Skills", href: "#skills" },
-  { label: "Certifications", href: "#certifications" },
-  { label: "Contact", href: "#contact", dividerBefore: true },
+  { label: "Technical Skills", href: "#skills", isHash: true },
+  { label: "Certifications", href: "#certifications", isHash: true },
+  { label: "Contact", href: "#contact", isHash: true, dividerBefore: true },
   { label: "Resume", href: "/resume" },
 ];
 
@@ -24,7 +26,35 @@ export default function Navbar() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  // Lock body scroll when open
+  useEffect(() => {
+    document.body.style.overflow = open ? "hidden" : "";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [open]);
+
   const close = () => setOpen(false);
+
+  // Motion properties for links
+  const linkMotionProps = (i) => ({
+    className:
+      "flex items-center px-[22px] py-[11px] text-[15px] font-bold no-underline transition-all duration-150 cursor-pointer",
+    style: {
+      fontFamily: "var(--font-instrument-serif)",
+      color: "var(--text-secondary)",
+      borderLeft: "2px solid transparent",
+    },
+    initial: { opacity: 0, x: -10 },
+    animate: { opacity: 1, x: 0 },
+    transition: { duration: 0.2, delay: 0.04 + i * 0.03 },
+    whileHover: {
+      color: "var(--text-primary)",
+      paddingLeft: "28px",
+      borderLeftColor: "var(--text-primary)",
+    },
+    onClick: close,
+  });
 
   return (
     <>
@@ -84,9 +114,11 @@ export default function Navbar() {
         {open && (
           <motion.div
             className="fixed inset-0 z-[998]"
+            style={{ backgroundColor: "rgba(0, 0, 0, 0.25)" }}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
             onClick={close}
             aria-hidden="true"
           />
@@ -112,7 +144,6 @@ export default function Navbar() {
             }}
             role="menu"
           >
-            {/* Label */}
             <p
               className="px-[22px] pt-[10px] pb-1 text-[9px] tracking-[0.18em] uppercase font-mono"
               style={{ color: "rgba(var(--overlay-color), 0.35)" }}
@@ -130,26 +161,43 @@ export default function Navbar() {
                     }}
                   />
                 )}
-                <motion.a
-                  href={link.href}
-                  className="flex items-center px-[22px] py-[11px] text-[15px] font-bold no-underline transition-all duration-150 cursor-pointer"
-                  style={{
-                    fontFamily: "var(--font-instrument-serif)",
-                    color: "var(--text-secondary)",
-                    borderLeft: "2px solid transparent",
-                  }}
-                  initial={{ opacity: 0, x: -10 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.2, delay: 0.04 + i * 0.03 }}
-                  whileHover={{
-                    color: "var(--text-primary)",
-                    paddingLeft: "28px",
-                    borderLeftColor: "var(--text-primary)",
-                  }}
-                  onClick={close}
-                >
-                  {link.label}
-                </motion.a>
+
+                {link.isHash ? (
+                  <motion.a href={link.href} {...linkMotionProps(i)}>
+                    {link.label}
+                  </motion.a>
+                ) : (
+                  <motion.div
+                    initial={{ opacity: 0, x: -10 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.2, delay: 0.04 + i * 0.03 }}
+                  >
+                    <Link
+                      href={link.href}
+                      onClick={close}
+                      className="flex items-center px-[22px] py-[11px] text-[15px] font-bold no-underline transition-all duration-150 cursor-pointer"
+                      style={{
+                        fontFamily: "var(--font-instrument-serif)",
+                        color: "var(--text-secondary)",
+                        borderLeft: "2px solid transparent",
+                        display: "flex",
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.color = "var(--text-primary)";
+                        e.currentTarget.style.paddingLeft = "28px";
+                        e.currentTarget.style.borderLeftColor =
+                          "var(--text-primary)";
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.color = "var(--text-secondary)";
+                        e.currentTarget.style.paddingLeft = "22px";
+                        e.currentTarget.style.borderLeftColor = "transparent";
+                      }}
+                    >
+                      {link.label}
+                    </Link>
+                  </motion.div>
+                )}
               </div>
             ))}
           </motion.div>

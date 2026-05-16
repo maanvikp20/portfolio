@@ -37,8 +37,9 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 
 
 todo
-fix blogs uploads
-fix navbar and make it dynamic per page
 cloudinary for images?
-fix project uploads
 deploy
+
+cloudinary for projects and certs
+fix blog post fetch in side bar in admin
+make sure fields dont have anything saved after submission

@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 export default function AdminLoginPage() {
   const router = useRouter();
@@ -14,7 +15,6 @@ export default function AdminLoginPage() {
     setSubmitting(true);
     setError("");
 
-    // network request to login route
     try {
       const res = await fetch("/api/auth/login", {
         method: "POST",
@@ -28,7 +28,6 @@ export default function AdminLoginPage() {
         throw new Error(data.error || "Login execution failed.");
       }
 
-      // redirects to admin dash on success, triggering a fresh server-side token verification
       router.push("/admin");
       router.refresh();
     } catch (err) {
@@ -39,11 +38,25 @@ export default function AdminLoginPage() {
   };
 
   return (
-    <main className="w-full min-h-screen flex items-center justify-center bg-neutral-50 px-6 font-sans">
+    <main className="relative w-full min-h-screen flex items-center justify-center bg-neutral-50 px-6 font-sans">
+      <Link
+        href="/"
+        className="absolute top-6 left-6 flex items-center gap-2 text-xs font-medium text-neutral-500 hover:text-neutral-900 transition-colors group"
+      >
+        <span className="transform group-hover:-translate-x-0.5 transition-transform">
+          ←
+        </span>
+        Back to Portfolio
+      </Link>
+
       <div className="w-full max-w-md bg-white border border-neutral-200 p-8 rounded-2xl shadow-sm">
         <div className="mb-6">
-          <h1 className="text-2xl font-bold tracking-tight text-neutral-900">Admin Gateway</h1>
-          <p className="text-sm text-neutral-500 mt-1">Sign in to update your blog, projects, skills, and certs.</p>
+          <h1 className="text-2xl font-bold tracking-tight text-neutral-900">
+            Admin Gateway
+          </h1>
+          <p className="text-sm text-neutral-500 mt-1">
+            Sign in to update your blog, projects, skills, and certs.
+          </p>
         </div>
 
         {error && (
@@ -54,7 +67,9 @@ export default function AdminLoginPage() {
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-xs font-bold uppercase tracking-wider text-neutral-400 mb-2">Secure Email Address</label>
+            <label className="block text-xs font-bold uppercase tracking-wider text-neutral-400 mb-2">
+              Secure Email Address
+            </label>
             <input
               type="email"
               required
@@ -66,7 +81,9 @@ export default function AdminLoginPage() {
           </div>
 
           <div>
-            <label className="block text-xs font-bold uppercase tracking-wider text-neutral-400 mb-2">Password</label>
+            <label className="block text-xs font-bold uppercase tracking-wider text-neutral-400 mb-2">
+              Password
+            </label>
             <input
               type="password"
               required

@@ -5,7 +5,7 @@ import Link from "next/link";
 import Navbar from "../../components/Navbar";
 import Contact from "../../components/Contact";
 
-// blog card component (i was genuienly lazy to make a component)
+// Reusable card for blog posts on the homepage
 function BlogCard({ blog, index }) {
   return (
     <motion.div
@@ -78,7 +78,7 @@ function BlogCard({ blog, index }) {
   );
 }
 
-// project row component for project sections
+// Reusable row for projects in the project sections
 function ProjectRow({ project, index, category }) {
   return (
     <motion.div
@@ -123,7 +123,7 @@ function ProjectRow({ project, index, category }) {
   );
 }
 
-// project section component for each category block on main portfolio page
+// Reusable section for each project category
 function ProjectSection({ title, href, category, projects }) {
   return (
     <motion.section
@@ -172,7 +172,7 @@ function ProjectSection({ title, href, category, projects }) {
   );
 }
 
-// main client component for portfolio page, recieves all data from server component and reders it
+// Main portfolio page that combines everything together
 export default function PortfolioClient({
   electronics = [],
   software = [],
@@ -185,7 +185,7 @@ export default function PortfolioClient({
     <main className="relative min-h-screen overflow-hidden">
       <Navbar />
 
-      {/* Header*/}
+      {/* Header */}
       <section className="text-center pt-32 pb-20 px-8">
         <motion.h1
           className="text-5xl md:text-7xl font-bold leading-tight transition-colors duration-300"
@@ -205,7 +205,8 @@ export default function PortfolioClient({
 
       {/* About Me */}
       <motion.section
-        className="max-w-6xl mx-auto pb-24 px-8"
+        id="about"
+        className="max-w-6xl mx-auto pb-24 px-8 scroll-mt-[72px]"
         initial={{ opacity: 0, y: 40 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: "-100px" }}
@@ -326,9 +327,10 @@ export default function PortfolioClient({
         projects={calculatorGames}
       />
 
-      {/* Certs and Skills */}
+      {/* Skills & Certifications */}
       <motion.section
-        className="px-8 md:px-16 py-20 border-t"
+        id="skills"
+        className="px-8 md:px-16 py-20 border-t scroll-mt-[72px]"
         style={{ borderColor: "rgba(var(--overlay-color), 0.15)" }}
         initial={{ opacity: 0, y: 40 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -350,7 +352,7 @@ export default function PortfolioClient({
           </div>
 
           <div className="lg:w-3/4 grid grid-col-1 md:grid-cols-2 gap-12 lg:gap-16">
-            {/* Col 1: skills */}
+            {/* Skills */}
             <div>
               <h3
                 className="text-xs uppercase tracking-widest font-bold mb-6 opacity-60"
@@ -433,8 +435,8 @@ export default function PortfolioClient({
               </div>
             </div>
 
-            {/* Col 2: Certs */}
-            <div>
+            {/* Certifications */}
+            <div id="certifications" className="scroll-mt-[72px]">
               <h3
                 className="text-xs uppercase tracking-widest font-bold mb-6 opacity-60"
                 style={{ color: "var(--text-secondary)" }}
@@ -501,7 +503,7 @@ export default function PortfolioClient({
         </div>
       </motion.section>
 
-      {/* Contact Section */}
+      {/* Contact */}
       <Contact />
     </main>
   );

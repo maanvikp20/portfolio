@@ -2,12 +2,15 @@ import Blog from "@/src/models/Blog";
 import User from "@/src/models/User";
 import connectDB from "@/src/lib/mongodb";
 
-// get all published blogs
+// get all blogs
 export const getAllBlogs = async (status = "published") => {
   await connectDB();
 
+  // If status is "all", find all blogs otherwise filter by status
+  const query = status === "all" ? {} : { status };
+
   // Fetch blogs with author deets and sort by published date
-  const blogs = await Blog.find({ status })
+  const blogs = await Blog.find(query)
     .populate("author", "name email")
     .sort({ publishedAt: -1 })
     .lean();
