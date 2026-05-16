@@ -1,12 +1,15 @@
 "use client";
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import DarkModeToggle from "./ui/DarkModeToggle";
+import DarkModeToggle from "../components/ui/DarkModeToggle";
 
 const navLinks = [
   { label: "About Me", href: "#about" },
+  { label: "Writings & Blog", href: "/blog" },
   { label: "Electronics Projects", href: "/portfolio/electronics" },
   { label: "Software Projects", href: "/portfolio/software" },
+  { label: "Technical Skills", href: "#skills" },
+  { label: "Certifications", href: "#certifications" },
   { label: "Contact", href: "#contact", dividerBefore: true },
   { label: "Resume", href: "/resume" },
 ];
@@ -25,7 +28,7 @@ export default function Navbar() {
 
   return (
     <>
-      {/* ── Navbar bar ── */}
+      {/* Navbar bar */}
       <nav
         className="fixed top-0 left-0 w-full h-[60px] z-[1000] flex items-center justify-between px-6 transition-all duration-300"
         style={{
@@ -48,7 +51,7 @@ export default function Navbar() {
             border: "1.5px solid",
             borderColor: open
               ? "var(--text-primary)"
-              : "rgba(var(--overlay-color), 0.25)",
+              : "rgba(var(--overlay-color), 100)",
           }}
         >
           <motion.span
@@ -76,7 +79,7 @@ export default function Navbar() {
         <DarkModeToggle />
       </nav>
 
-      {/* ── Backdrop ── */}
+      {/* Backdrop */}
       <AnimatePresence>
         {open && (
           <motion.div
@@ -90,18 +93,11 @@ export default function Navbar() {
         )}
       </AnimatePresence>
 
-      {/* ── Dropdown menu ── */}
+      {/* Dropdown menu */}
       <AnimatePresence>
         {open && (
           <motion.div
             className="fixed top-[60px] left-0 w-[260px] z-[999] pb-4 pt-2 rounded-br-2xl"
-            style={{
-              background: "rgba(var(--overlay-color), 0.06)",
-              backdropFilter: "blur(20px)",
-              border: "1px solid rgba(var(--overlay-color), 0.12)",
-              borderTop: "none",
-              boxShadow: "4px 8px 32px rgba(var(--overlay-color), 0.10)",
-            }}
             initial={{ opacity: 0, y: -8, scaleY: 0.96 }}
             animate={{ opacity: 1, y: 0, scaleY: 1 }}
             exit={{ opacity: 0, y: -8, scaleY: 0.96 }}
@@ -144,7 +140,7 @@ export default function Navbar() {
                   }}
                   initial={{ opacity: 0, x: -10 }}
                   animate={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.25, delay: 0.04 + i * 0.04 }}
+                  transition={{ duration: 0.2, delay: 0.04 + i * 0.03 }}
                   whileHover={{
                     color: "var(--text-primary)",
                     paddingLeft: "28px",

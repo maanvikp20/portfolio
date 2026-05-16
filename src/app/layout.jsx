@@ -1,7 +1,6 @@
 import React from 'react'
 import './globals.css'
 import { Instrument_Serif } from 'next/font/google'
-import DarkModeToggle from '../../components/DarkModeToggle'
 
 const instrumentSerif = Instrument_Serif({
   weight: '400',

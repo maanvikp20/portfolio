@@ -3,23 +3,31 @@
 @variant dark (&:where(.dark, .dark *));
 
 :root {
+  /* Light Mode Styles */
+  --bg-primary: #ffffff;
+  --bg-secondary: #f9fafb;
   --overlay-opacity: 0.5;
   --overlay-color: 0, 0, 0;
-  --text-primary: #ffffff;
-  --text-secondary: rgba(255, 255, 255, 0.75);
-}
-
-.dark {
-  --overlay-opacity: 0.3;
-  --overlay-color: 255, 255, 255;
   --text-primary: #000000;
   --text-secondary: rgba(0, 0, 0, 0.75);
 }
 
-* {
-  transition: background-color 0.3s ease, color 0.3s ease, opacity 0.3s ease;
+.dark {
+  /* Dark Mode Styles */
+  --bg-primary: #0a0a0a;
+  --bg-secondary: #141414;
+  --overlay-opacity: 0.3;
+  --overlay-color: 255, 255, 255;
+  --text-primary: #ffffff;
+  --text-secondary: rgba(255, 255, 255, 0.75);
 }
 
 body {
+  background-color: var(--bg-primary);
   color: var(--text-primary);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+a, button, input, textarea {
+  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease, opacity 0.2s ease;
 }

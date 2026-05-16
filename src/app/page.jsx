@@ -1,10 +1,14 @@
 import { FaYoutube, FaInstagram } from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6";
-import DarkModeToggle from "../../components/DarkModeToggle"
+import DarkModeToggle from "@/src/components/ui/DarkModeToggle";
 
 export default function Page() {
   return (
-    <main className="relative min-h-screen overflow-hidden">
+    <main
+      className="relative min-h-screen overflow-hidden 
+                 [--text-primary:#ffffff] [--text-secondary:rgba(255,255,255,0.75)] [--overlay-color:0,0,0] [--overlay-opacity:0.5]
+                 dark:[--text-primary:#000000] dark:[--text-secondary:rgba(0,0,0,0.75)] dark:[--overlay-color:255,255,255] dark:[--overlay-opacity:0.3]"
+    >
       {/* Background Video */}
       <div className="fixed top-0 left-0 w-full h-full -z-10">
         <video
@@ -23,7 +27,7 @@ export default function Page() {
         />
       </div>
 
-      {/* Dark mode toggle — top right */}
+      {/* Dark mode toggle */}
       <div className="fixed top-4 right-6 z-50">
         <DarkModeToggle />
       </div>
@@ -49,7 +53,7 @@ export default function Page() {
             color: "var(--text-secondary)",
           }}
         >
-          an electrical engineering student building at the intersection of
+          an electrical engineering student building at the intersection of{" "}
           hardware and software.{" "}
           <a
             href="/portfolio"
@@ -66,7 +70,7 @@ export default function Page() {
             className="w-10 h-10 rounded-full bg-white/20 backdrop-blur flex items-center justify-center hover:bg-white/40 transition"
           >
             <FaInstagram
-              className="w-5 h-5"
+              className="w-5 h-5 transition-colors duration-300"
               style={{ color: "var(--text-primary)" }}
             />
           </a>
@@ -75,7 +79,7 @@ export default function Page() {
             className="w-10 h-10 rounded-full bg-white/20 backdrop-blur flex items-center justify-center hover:bg-white/40 transition"
           >
             <FaXTwitter
-              className="w-5 h-5"
+              className="w-5 h-5 transition-colors duration-300"
               style={{ color: "var(--text-primary)" }}
             />
           </a>
@@ -84,7 +88,7 @@ export default function Page() {
             className="w-10 h-10 rounded-full bg-white/20 backdrop-blur flex items-center justify-center hover:bg-white/40 transition"
           >
             <FaYoutube
-              className="w-5 h-5"
+              className="w-5 h-5 transition-colors duration-300"
               style={{ color: "var(--text-primary)" }}
             />
           </a>
