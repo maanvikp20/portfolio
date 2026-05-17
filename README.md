@@ -1,45 +1,75 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Maanvik Poddar — Portfolio & Blog
 
-## Getting Started
+Source code for my personal portfolio and CMS, featuring a dynamic blog, project showcase, and a secure admin workspace for managing content in real-time.
 
-First, run the development server:
+**Live:** [maanvikpoddar.vercel.app](https://maanvikpoddar.vercel.app)
+
+---
+
+## Features
+
+- **Dynamic Blog Engine** — Multi-category publishing across Software Engineering, Electrical & Electronics, and Calculator Games, with full Markdown support.
+- **Project Showcase** — Filterable grid of production-ready projects with links to source repositories and live deployments.
+- **Admin Workspace** — Secure dashboard for full CRUD operations on all database records directly through the UI.
+- **Media Pipelines** — Binary stream uploads piped directly to Cloudinary's CDN for all image assets.
+
+---
+
+## Tech Stack
+
+| Layer | Technology |
+|---|---|
+| Framework | Next.js (App Router) |
+| Database | MongoDB + Mongoose |
+| Media | Cloudinary CDN |
+| Styling | Tailwind CSS |
+
+---
+
+## Local Development
+
+### 1. Clone the repository
+
+```bash
+git clone https://github.com/your-username/your-repo-name.git
+cd your-repo-name
+```
+
+### 2. Install dependencies
+
+```bash
+npm install
+```
+
+### 3. Configure environment variables
+
+Create a `.env.local` file in the project root:
+
+```env
+# Database
+MONGODB_URI=your_mongodb_connection_string
+
+# Cloudinary
+CLOUDINARY_CLOUD_NAME=your_cloud_name
+CLOUDINARY_API_KEY=your_api_key
+CLOUDINARY_API_SECRET=your_api_secret
+```
+
+### 4. Start the development server
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) to view the local deployment.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Deployment
 
-## Learn More
+This project is configured for deployment on Vercel. Pushing to `main` automatically triggers a production build.
 
-To learn more about Next.js, take a look at the following resources:
+Before deploying, make sure to:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
-
-
-todo
-cloudinary for images?
-deploy
-
-cloudinary for projects and certs
-fix blog post fetch in side bar in admin
-make sure fields dont have anything saved after submission
+1. Mirror all `.env.local` keys in your Vercel project's environment variable settings.
+2. Whitelist all incoming traffic in MongoDB Atlas network access (`0.0.0.0/0`).

@@ -1,6 +1,7 @@
 import React from 'react'
 import './globals.css'
 import { Instrument_Serif } from 'next/font/google'
+import { SpeedInsights } from '@vercel/speed-insights/next';
 
 const instrumentSerif = Instrument_Serif({
   weight: '400',
@@ -16,6 +17,7 @@ export default function RootLayout({ children }) {
       </head>
       <body>
         {children}
+        <SpeedInsights />
       </body>
     </html>
   )
