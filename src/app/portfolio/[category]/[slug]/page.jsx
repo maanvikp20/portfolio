@@ -5,16 +5,24 @@ import { getAllProjects } from "@/src/controllers/projectController";
 
 export const dynamic = "force-dynamic";
 
-export default async function SoftwareDetailPage({ params }) {
-  const { slug } = await params;
-
+export default async function ProjectDetailPage({ params }) {
+  // Extract url segments
+  const { category, slug } = await params;
+  
   const projects = await getAllProjects();
 
+  // Find matches across any category string
   const project = projects.find(
-    (p) => p.slug === slug && p.category === "software",
+    (p) => p.slug === slug && p.category === category,
   );
 
   if (!project) notFound();
+
+  // Generate display titles
+  const cleanCategoryName = category
+    .split("-")
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(" ");
 
   return (
     <main className="relative min-h-screen">
@@ -23,11 +31,11 @@ export default async function SoftwareDetailPage({ params }) {
       <section className="pt-32 pb-24 px-8 md:px-16">
         <div className="max-w-3xl mx-auto">
           <Link
-            href="/portfolio/software"
+            href={`/portfolio/${category}`}
             className="inline-flex items-center gap-2 text-sm mb-12 hover:opacity-70 transition underline underline-offset-4"
             style={{ color: "var(--text-secondary)" }}
           >
-            ← Back to Software
+            ← Back to {cleanCategoryName}
           </Link>
 
           <div className="mb-6">
@@ -56,6 +64,20 @@ export default async function SoftwareDetailPage({ params }) {
             className="w-16 h-0.5 mb-10"
             style={{ backgroundColor: "var(--text-primary)" }}
           />
+
+          {/* Image */}
+          {project.coverImage && (
+            <div 
+              className="w-full mb-12 rounded-2xl overflow-hidden border shadow-sm" 
+              style={{ borderColor: "rgba(var(--overlay-color), 0.12)" }}
+            >
+              <img 
+                src={project.coverImage} 
+                alt={project.title} 
+                className="w-full h-auto max-h-[480px] object-cover"
+              />
+            </div>
+          )}
 
           <p
             className="text-lg md:text-xl leading-relaxed mb-12"

@@ -5,6 +5,7 @@ import { getAllBlogs } from "@/src/controllers/blogController";
 import { getAllProjects } from "@/src/controllers/projectController";
 import { getAllSkills } from "@/src/controllers/skillController";
 import { getAllCertifications } from "@/src/controllers/certificationController";
+import { getAllExperiences } from "@/src/controllers/experienceController";
 import AdminWorkspace from "./AdminWorkspace";
 
 export const dynamic = "force-dynamic";
@@ -21,19 +22,21 @@ export default async function AdminDashboardPage() {
   }
 
   // fetch all data for admin dashboard
-  const [blogsRaw, projectsRaw, skillsRaw, certsRaw] = await Promise.all([
+  const [blogsRaw, projectsRaw, skillsRaw, certsRaw, expRaw] = await Promise.all([
     getAllBlogs("all"),
     getAllProjects(),
     getAllSkills(),
     getAllCertifications(),
+    getAllExperiences(),
   ]);
 
-  // parse data to json to make it usuable on client
+  // parse data to json to make it usable on client
   const initialData = {
     blogs: JSON.parse(JSON.stringify(blogsRaw || [])),
     projects: JSON.parse(JSON.stringify(projectsRaw || [])),
     skills: JSON.parse(JSON.stringify(skillsRaw || [])),
     certifications: JSON.parse(JSON.stringify(certsRaw || [])),
+    experiences: JSON.parse(JSON.stringify(expRaw || [])),
   };
 
   return <AdminWorkspace initialData={initialData} />;

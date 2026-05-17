@@ -2,6 +2,7 @@ import { getAllProjects } from "@/src/controllers/projectController";
 import { getAllBlogs } from "@/src/controllers/blogController";
 import { getAllSkills } from "@/src/controllers/skillController";
 import { getAllCertifications } from "@/src/controllers/certificationController";
+import { getAllExperiences } from "@/src/controllers/experienceController";
 import PortfolioClient from "./PortfolioClient";
 
 export const dynamic = "force-dynamic"; // most recent data on every request
@@ -10,19 +11,21 @@ export const fetchCache = "force-no-store"; // ensures data bypasses cache and a
 
 export default async function Page() {
   try {
-    // gets all data together to have less lag
-    const [allProjects, rawBlogs, rawSkills, rawCerts] = await Promise.all([
+    // Fetch all data
+    const [allProjects, rawBlogs, rawSkills, rawCerts, rawExperiences] = await Promise.all([
       getAllProjects() || [],
       getAllBlogs("published") || [],
       getAllSkills() || [],
       getAllCertifications() || [],
+      getAllExperiences() || [], 
     ]);
 
-    // data parses to json and back to make it usuable on the client
+    // plain json object
     const projects = JSON.parse(JSON.stringify(allProjects || []));
     const blogs = JSON.parse(JSON.stringify(rawBlogs || []));
     const skills = JSON.parse(JSON.stringify(rawSkills || []));
     const certifications = JSON.parse(JSON.stringify(rawCerts || []));
+    const experiences = JSON.parse(JSON.stringify(rawExperiences || []));
 
     // filter projects on category
     const electronics = projects
@@ -35,7 +38,7 @@ export default async function Page() {
       .filter((p) => p && p.category === "calculator-games")
       .slice(0, 3);
 
-    // pass data to client
+    // pass data to portfolio client
     return (
       <PortfolioClient
         electronics={electronics}
@@ -44,6 +47,7 @@ export default async function Page() {
         blogs={blogs}
         skills={skills}
         certifications={certifications}
+        experiences={experiences}
       />
     );
   } catch (error) {

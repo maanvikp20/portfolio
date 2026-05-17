@@ -89,12 +89,24 @@ function ProjectRow({ project, index, category }) {
       className="flex items-center gap-6"
     >
       <div
-        className="w-36 h-24 rounded-lg flex-shrink-0 hidden sm:block"
+        className="w-36 h-24 rounded-lg flex-shrink-0 hidden sm:block overflow-hidden border"
         style={{
-          border: "1px solid rgba(var(--overlay-color), 0.15)",
+          borderColor: "rgba(var(--overlay-color), 0.15)",
           backgroundColor: "rgba(var(--overlay-color), 0.04)",
         }}
-      />
+      >
+        {project.coverImage ? (
+          <img
+            src={project.coverImage}
+            alt={project.title}
+            className="w-full h-full object-cover grayscale hover:grayscale-0 transition duration-300"
+          />
+        ) : (
+          <div className="w-full h-full flex items-center justify-center opacity-30 text-xs">
+            No Image
+          </div>
+        )}
+      </div>
       <div>
         <p
           className="text-xl font-bold mb-1"
@@ -172,12 +184,13 @@ function ProjectSection({ title, href, category, projects }) {
   );
 }
 
-// Main portfolio page that combines everything together
+// Main portfolio page component
 export default function PortfolioClient({
   electronics = [],
   software = [],
   calculatorGames = [],
   blogs = [],
+  experiences = [], // Renders dynamic data cleanly injected from your DB wrapper
   skills = [],
   certifications = [],
 }) {
@@ -326,6 +339,113 @@ export default function PortfolioClient({
         category="calculator-games"
         projects={calculatorGames}
       />
+
+        {/* Experiences */}
+      <motion.section
+        id="experience"
+        className="px-8 md:px-16 py-16 border-t scroll-mt-[72px]"
+        style={{ borderColor: "rgba(var(--overlay-color), 0.15)" }}
+        initial={{ opacity: 0, y: 40 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-100px" }}
+        transition={{ duration: 0.7, ease: "easeOut" }}
+      >
+        <div className="flex flex-col md:flex-row gap-16">
+          <div className="md:w-1/3">
+            <h2
+              className="text-4xl md:text-5xl font-bold leading-none"
+              style={{
+                fontFamily: "var(--font-instrument-serif)",
+                color: "var(--text-primary)",
+              }}
+            >
+              Professional
+              <br />
+              Experience
+            </h2>
+          </div>
+
+          <div className="md:w-2/3 flex flex-col gap-12">
+            {experiences.length === 0 ? (
+              <p
+                className="text-sm opacity-50"
+                style={{ color: "var(--text-secondary)" }}
+              >
+                No experience data provided. Populate historical logs via admin
+                layout panel.
+              </p>
+            ) : (
+              experiences.map((exp, index) => (
+                <motion.div
+                  key={exp._id || index}
+                  initial={{ opacity: 0, x: 20 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: index * 0.05 }}
+                  className="relative pl-0 flex flex-col gap-2 group"
+                >
+                  <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-1">
+                    <h3
+                      className="text-2xl font-bold leading-tight"
+                      style={{
+                        fontFamily: "var(--font-instrument-serif)",
+                        color: "var(--text-primary)",
+                      }}
+                    >
+                      {/* Unified mapping: reads DB 'title' first, falls back to 'role' */}
+                      {exp.title || exp.role}
+                    </h3>
+                    <span
+                      className="text-xs font-mono tracking-wider opacity-60 uppercase sm:text-right"
+                      style={{ color: "var(--text-secondary)" }}
+                    >
+                      {/* Unified mapping: reads DB 'startDate' first, falls back to 'duration' */}
+                      {exp.startDate || exp.duration}
+                    </span>
+                  </div>
+
+                  <div className="flex flex-wrap items-center gap-x-2 gap-y-0.5 text-sm font-medium opacity-80">
+                    <span style={{ color: "var(--text-primary)" }}>
+                      {exp.company}
+                    </span>
+                    {/* If type exists, capitalize it and display it alongside the company */}
+                    {exp.type && (
+                      <>
+                        <span style={{ color: "var(--text-secondary)" }}>
+                          •
+                        </span>
+                        <span
+                          className="capitalize"
+                          style={{ color: "var(--text-secondary)" }}
+                        >
+                          {exp.type.replace("-", " ")}
+                        </span>
+                      </>
+                    )}
+                    {exp.location && (
+                      <>
+                        <span style={{ color: "var(--text-secondary)" }}>
+                          •
+                        </span>
+                        <span style={{ color: "var(--text-secondary)" }}>
+                          {exp.location}
+                        </span>
+                      </>
+                    )}
+                  </div>
+
+                  <p
+                    className="text-sm leading-relaxed mt-2 whitespace-pre-wrap max-w-3xl"
+                    style={{ color: "var(--text-secondary)" }}
+                  >
+                    {exp.description}
+                  </p>
+                </motion.div>
+              ))
+            )}
+          </div>
+        </div>
+      </motion.section>
 
       {/* Skills & Certifications */}
       <motion.section
