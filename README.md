@@ -73,3 +73,42 @@ Before deploying, make sure to:
 
 1. Mirror all `.env.local` keys in your Vercel project's environment variable settings.
 2. Whitelist all incoming traffic in MongoDB Atlas network access (`0.0.0.0/0`).
+
+# How to Add Things to the Portfolio
+
+## Access the Website
+
+You can access the portfolio locally or through the deployed site:
+
+- Local: `http://localhost:3000`
+- Production: `https://maanvikpoddar.vercel.app`
+
+---
+
+## Admin Login
+
+To add or manage portfolio content, go to the admin login page:
+
+- Local: `http://localhost:3000/admin/login`
+- Production: `https://maanvikpoddar.vercel.app/admin/login`
+
+---
+
+## Steps to Add Portfolio Content
+
+1. Open the admin login page.
+2. Sign in with your admin credentials.
+3. Navigate to the dashboard.
+4. Add, edit, or remove portfolio items.
+5. Save your changes to publish them to the site.
+
+---
+
+## Quick Links
+
+```txt
+Local:
+http://localhost:3000/admin/login
+
+Production:
+https://maanvikpoddar.vercel.app/admin/login

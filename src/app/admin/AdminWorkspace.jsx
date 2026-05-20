@@ -244,7 +244,6 @@ export default function AdminWorkspace({ initialData }) {
         image: item.image || "",
       });
     } else if (tab === "experiences") {
-      // <-- Added edit branch
       setExperienceForm({
         role: item.role || "",
         company: item.company || "",
@@ -273,7 +272,7 @@ export default function AdminWorkspace({ initialData }) {
                 Maanvik Admin
               </h2>
               <p className="text-xs text-neutral-500 mt-0.5">
-                Core Control Engine
+                Welcome, Maanvik
               </p>
             </div>
             <div className="flex-shrink-0">
@@ -285,8 +284,8 @@ export default function AdminWorkspace({ initialData }) {
             {[
               { id: "blogs", label: "Writings & Blog Posts" },
               { id: "projects", label: "Engineering Projects" },
-              { id: "skills", label: "Technical Competencies" },
-              { id: "certs", label: "Verified Credentials" },
+              { id: "skills", label: "Skills" },
+              { id: "certs", label: "Credentials" },
               { id: "experiences", label: "Work Experiences" },
             ].map((tab) => (
               <button
@@ -313,7 +312,7 @@ export default function AdminWorkspace({ initialData }) {
           onClick={handleLogout}
           className="w-full py-2.5 rounded-xl border border-neutral-800 hover:border-neutral-700 text-xs font-bold uppercase tracking-wider text-neutral-400 hover:text-rose-400 transition"
         >
-          Terminate Session ⎋
+          Log Out ⎋
         </button>
       </aside>
 
@@ -457,7 +456,7 @@ export default function AdminWorkspace({ initialData }) {
 
             <div className="bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 p-6 rounded-2xl shadow-sm max-h-[70vh] overflow-y-auto">
               <h4 className="text-xs uppercase tracking-wider text-neutral-400 font-bold mb-4">
-                Database Archives ({safeBlogs.length})
+                All Blog Posts ({safeBlogs.length})
               </h4>
               {safeBlogs.map((b) => (
                 <div
@@ -496,7 +495,7 @@ export default function AdminWorkspace({ initialData }) {
               <h3 className="text-xl font-bold mb-4">
                 {editingId
                   ? "Modify System Specification"
-                  : "Register New Engineering Portfolio Spec"}
+                  : "Add New Project"}
               </h3>
               <form
                 onSubmit={(e) => {
@@ -622,7 +621,7 @@ export default function AdminWorkspace({ initialData }) {
                     disabled={loading || uploadingImage}
                     className="px-6 py-2 bg-neutral-900 dark:bg-white text-white dark:text-neutral-900 rounded-xl text-sm font-bold hover:opacity-80 transition disabled:opacity-50"
                   >
-                    {editingId ? "Save Spec Changes" : "Append System Spec"}
+                    {editingId ? "Save Spec Changes" : "Add Project"}
                   </button>
                   {editingId && (
                     <button
@@ -641,7 +640,7 @@ export default function AdminWorkspace({ initialData }) {
 
             <div className="bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 p-6 rounded-2xl shadow-sm max-h-[70vh] overflow-y-auto">
               <h4 className="text-xs uppercase tracking-wider text-neutral-400 font-bold mb-4">
-                Active System Specs ({safeProjects.length})
+                Uploaded Projects ({safeProjects.length})
               </h4>
               {safeProjects.map((p) => (
                 <div
@@ -685,7 +684,7 @@ export default function AdminWorkspace({ initialData }) {
               <h3 className="text-xl font-bold mb-4">
                 {editingId
                   ? "Modify Competency Metric"
-                  : "Register System Skill Metric"}
+                  : "Add A Skill"}
               </h3>
               <form
                 onSubmit={(e) => {
@@ -738,7 +737,7 @@ export default function AdminWorkspace({ initialData }) {
                   >
                     {editingId
                       ? "Save Metric Changes"
-                      : "Append Technical Skill Bar"}
+                      : "Add Skill"}
                   </button>
                   {editingId && (
                     <button
@@ -799,7 +798,7 @@ export default function AdminWorkspace({ initialData }) {
               <h3 className="text-xl font-bold mb-4">
                 {editingId
                   ? "Modify Credential Records"
-                  : "Log Verification Certificate"}
+                  : "Log Credential"}
               </h3>
               <form
                 onSubmit={(e) => {
@@ -892,7 +891,7 @@ export default function AdminWorkspace({ initialData }) {
                   >
                     {editingId
                       ? "Save Badge Changes"
-                      : "Publish Credential Card"}
+                      : "Add Credential"}
                   </button>
                   {editingId && (
                     <button
@@ -1248,7 +1247,7 @@ export default function AdminWorkspace({ initialData }) {
                   >
                     {editingId
                       ? "Save Experience Changes"
-                      : "Append Work History"}
+                      : "Add Work History"}
                   </button>
                   {editingId && (
                     <button
