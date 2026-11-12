@@ -9,10 +9,10 @@ export const getAllBlogs = async (status = "published") => {
   // If status is "all", find all blogs otherwise filter by status
   const query = status === "all" ? {} : { status };
 
-  // Fetch blogs with author deets and sort by published date
+  // Fetch blogs with author deets and sort newest first
   const blogs = await Blog.find(query)
     .populate("author", "name email")
-    .sort({ publishedAt: -1 })
+    .sort({ createdAt: -1 })
     .lean();
 
   // Convert _id and author._id to strings for client use
@@ -25,12 +25,14 @@ export const getAllBlogs = async (status = "published") => {
   }));
 };
 
-// get a specific blog by slug
+// get a specific blog by slug (published only, drafts stay hidden)
 export const getBlogBySlug = async (slug) => {
   await connectDB();
 
-  // get specific blog and populate author deets
-  const blog = await Blog.findOne({ slug }).populate("author", "name").lean();
+  // get specific published blog and populate author deets
+  const blog = await Blog.findOne({ slug, status: "published" })
+    .populate("author", "name")
+    .lean();
   if (!blog) throw new Error("Blog not found");
 
   // Convert _id and author._id to strings for client use

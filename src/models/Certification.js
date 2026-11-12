@@ -6,8 +6,10 @@ const CertificationSchema = new mongoose.Schema(
     issuer: { type: String, required: true, trim: true },
     date: { type: String },
     link: { type: String },
+    image: { type: String, default: "" },
   },
   { timestamps: true },
 );
 
-export default mongoose.models.Certification || mongoose.model("Certification", CertificationSchema);
+export default mongoose.models.Certification ||
+  mongoose.model("Certification", CertificationSchema);

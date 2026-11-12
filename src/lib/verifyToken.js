@@ -8,8 +8,8 @@ export function verifyAdminToken(reqOrCookies) {
   if (typeof reqOrCookies.get === "function") {
     const result = reqOrCookies.get("token");
     token = typeof result === "object" ? result?.value : result;
-  } 
-  
+  }
+
   // fallback to check headers
   if (!token && reqOrCookies.cookies?.get) {
     token = reqOrCookies.cookies.get("token")?.value;
@@ -23,8 +23,8 @@ export function verifyAdminToken(reqOrCookies) {
   // Verify token and check for admin role
   try {
     const secret = process.env.JWT_SECRET;
-    const decoded = jwt.verify(token, secret);
-    
+    const decoded = jwt.verify(token, secret, { algorithms: ["HS256"] });
+
     if (decoded.role !== "admin") {
       throw new Error("Unauthorized access configuration level.");
     }

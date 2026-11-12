@@ -30,7 +30,10 @@ export default async function BlogIndexPage() {
           />
 
           {blogs.length === 0 ? (
-            <p className="text-lg opacity-60" style={{ color: "var(--text-secondary)" }}>
+            <p
+              className="text-lg opacity-60"
+              style={{ color: "var(--text-secondary)" }}
+            >
               No articles published yet — check back soon.
             </p>
           ) : (
@@ -48,19 +51,27 @@ export default async function BlogIndexPage() {
                       className="w-full md:w-48 h-32 object-cover rounded-xl opacity-90 group-hover:opacity-100 transition"
                     />
                   )}
-                  
+
                   <div className="flex-1">
-                    <div className="flex items-center gap-3 mb-2 text-xs" style={{ color: "var(--text-secondary)" }}>
-                      <span className="capitalize font-medium">{blog.category}</span>
-                      {blog.publishedAt && (
+                    <div
+                      className="flex items-center gap-3 mb-2 text-xs"
+                      style={{ color: "var(--text-secondary)" }}
+                    >
+                      <span className="capitalize font-medium">
+                        {blog.category}
+                      </span>
+                      {blog.createdAt && (
                         <>
                           <span>•</span>
                           <span>
-                            {new Date(blog.publishedAt).toLocaleDateString(undefined, {
-                              month: "long",
-                              day: "numeric",
-                              year: "numeric"
-                            })}
+                            {new Date(blog.createdAt).toLocaleDateString(
+                              undefined,
+                              {
+                                month: "long",
+                                day: "numeric",
+                                year: "numeric",
+                              },
+                            )}
                           </span>
                         </>
                       )}
@@ -76,7 +87,10 @@ export default async function BlogIndexPage() {
                       <Link href={`/blog/${blog.slug}`}>{blog.title}</Link>
                     </h2>
 
-                    <p className="text-sm line-clamp-2 mb-4 leading-relaxed" style={{ color: "var(--text-secondary)" }}>
+                    <p
+                      className="text-sm line-clamp-2 mb-4 leading-relaxed"
+                      style={{ color: "var(--text-secondary)" }}
+                    >
                       {blog.excerpt || blog.content}
                     </p>
 

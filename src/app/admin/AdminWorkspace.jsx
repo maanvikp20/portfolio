@@ -36,6 +36,7 @@ export default function AdminWorkspace({ initialData }) {
     category: "software",
     status: "published",
     coverImage: "",
+    tagsString: "",
   };
   const initialProject = {
     title: "",
@@ -136,7 +137,10 @@ export default function AdminWorkspace({ initialData }) {
     // Create payload copy to manipulate for specific endpoint needs
     let sanitizedPayload = { ...payload };
 
-    if (endpoint === "projects" && sanitizedPayload.tagsString !== undefined) {
+    if (
+      (endpoint === "projects" || endpoint === "blogs") &&
+      sanitizedPayload.tagsString !== undefined
+    ) {
       sanitizedPayload.tags = sanitizedPayload.tagsString
         .split(",")
         .map((tag) => tag.trim())
@@ -221,6 +225,7 @@ export default function AdminWorkspace({ initialData }) {
         category: item.category || "software",
         status: item.status || "published",
         coverImage: item.coverImage || "",
+        tagsString: item.tags ? item.tags.join(", ") : "",
       });
     } else if (tab === "projects") {
       setProjectForm({
@@ -420,6 +425,15 @@ export default function AdminWorkspace({ initialData }) {
                   }
                   className="w-full px-4 py-2 rounded-xl border dark:border-neutral-700 dark:bg-neutral-950 text-sm"
                 />
+                <input
+                  type="text"
+                  placeholder="Tags (comma separated, e.g. React, Verilog)"
+                  value={blogForm.tagsString}
+                  onChange={(e) =>
+                    setBlogForm({ ...blogForm, tagsString: e.target.value })
+                  }
+                  className="w-full px-4 py-2 rounded-xl border dark:border-neutral-700 dark:bg-neutral-950 text-sm"
+                />
                 <textarea
                   rows="8"
                   placeholder="Write full text markdown blocks here..."
@@ -493,9 +507,7 @@ export default function AdminWorkspace({ initialData }) {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             <div className="lg:col-span-2 bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 p-6 rounded-2xl shadow-sm">
               <h3 className="text-xl font-bold mb-4">
-                {editingId
-                  ? "Modify System Specification"
-                  : "Add New Project"}
+                {editingId ? "Modify System Specification" : "Add New Project"}
               </h3>
               <form
                 onSubmit={(e) => {
@@ -682,9 +694,7 @@ export default function AdminWorkspace({ initialData }) {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div className="bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 p-6 rounded-2xl shadow-sm h-fit">
               <h3 className="text-xl font-bold mb-4">
-                {editingId
-                  ? "Modify Competency Metric"
-                  : "Add A Skill"}
+                {editingId ? "Modify Competency Metric" : "Add A Skill"}
               </h3>
               <form
                 onSubmit={(e) => {
@@ -735,9 +745,7 @@ export default function AdminWorkspace({ initialData }) {
                     disabled={loading}
                     className="w-full py-2 bg-neutral-900 dark:bg-white text-white dark:text-neutral-900 rounded-xl text-sm font-bold hover:opacity-80 transition disabled:opacity-50"
                   >
-                    {editingId
-                      ? "Save Metric Changes"
-                      : "Add Skill"}
+                    {editingId ? "Save Metric Changes" : "Add Skill"}
                   </button>
                   {editingId && (
                     <button
@@ -796,9 +804,7 @@ export default function AdminWorkspace({ initialData }) {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div className="bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 p-6 rounded-2xl shadow-sm h-fit">
               <h3 className="text-xl font-bold mb-4">
-                {editingId
-                  ? "Modify Credential Records"
-                  : "Log Credential"}
+                {editingId ? "Modify Credential Records" : "Log Credential"}
               </h3>
               <form
                 onSubmit={(e) => {
@@ -889,9 +895,7 @@ export default function AdminWorkspace({ initialData }) {
                     disabled={loading || uploadingImage}
                     className="w-full py-2 bg-neutral-900 dark:bg-white text-white dark:text-neutral-900 rounded-xl text-sm font-bold hover:opacity-80 transition disabled:opacity-50"
                   >
-                    {editingId
-                      ? "Save Badge Changes"
-                      : "Add Credential"}
+                    {editingId ? "Save Badge Changes" : "Add Credential"}
                   </button>
                   {editingId && (
                     <button
@@ -1245,9 +1249,7 @@ export default function AdminWorkspace({ initialData }) {
                     disabled={loading}
                     className="px-6 py-2 bg-neutral-900 dark:bg-white text-white dark:text-neutral-900 rounded-xl text-sm font-bold hover:opacity-80 transition disabled:opacity-50"
                   >
-                    {editingId
-                      ? "Save Experience Changes"
-                      : "Add Work History"}
+                    {editingId ? "Save Experience Changes" : "Add Work History"}
                   </button>
                   {editingId && (
                     <button

@@ -1,37 +1,44 @@
 import { NextResponse } from "next/server";
-import { verifyAdminToken } from "@/src/lib/verifyToken";
 import connectDB from "@/src/lib/mongodb";
 import Skill from "@/src/models/Skill";
+import { pick, requireAdmin, errorResponse } from "@/src/lib/routeHelpers";
+
+// the only fields a client is allowed to set
+const SKILL_FIELDS = ["name", "percent", "order"];
 
 // create a skill
 export async function POST(req) {
+  const auth = requireAdmin(req);
+  if (auth.response) return auth.response;
+
   try {
-    verifyAdminToken(req);
     await connectDB();
-    const data = await req.json();
+    const data = pick(await req.json(), SKILL_FIELDS);
 
     const doc = await Skill.create(data);
     return NextResponse.json({ success: true, data: doc }, { status: 201 });
   } catch (error) {
-    return NextResponse.json({ error: error.message }, { status: 400 });
+    return errorResponse(error);
   }
 }
 
 // update a skill by id
 export async function PUT(req) {
+  const auth = requireAdmin(req);
+  if (auth.response) return auth.response;
+
   try {
-    verifyAdminToken(req);
     await connectDB();
 
     const { searchParams } = new URL(req.url);
     const id = searchParams.get("id");
-    const data = await req.json();
-
     if (!id)
       return NextResponse.json(
         { error: "Missing parameter: id" },
         { status: 400 },
       );
+
+    const data = pick(await req.json(), SKILL_FIELDS);
 
     const updatedDoc = await Skill.findByIdAndUpdate(id, data, {
       new: true,
@@ -48,14 +55,16 @@ export async function PUT(req) {
       { status: 200 },
     );
   } catch (error) {
-    return NextResponse.json({ error: error.message }, { status: 400 });
+    return errorResponse(error);
   }
 }
 
 // delete a skill by id
 export async function DELETE(req) {
+  const auth = requireAdmin(req);
+  if (auth.response) return auth.response;
+
   try {
-    verifyAdminToken(req);
     await connectDB();
     const { searchParams } = new URL(req.url);
     const id = searchParams.get("id");
@@ -66,9 +75,15 @@ export async function DELETE(req) {
         { status: 400 },
       );
 
-    await Skill.findByIdAndDelete(id);
+    const deleted = await Skill.findByIdAndDelete(id);
+    if (!deleted)
+      return NextResponse.json(
+        { error: "No document matched that ID" },
+        { status: 404 },
+      );
+
     return NextResponse.json({ success: true }, { status: 200 });
   } catch (error) {
-    return NextResponse.json({ error: error.message }, { status: 400 });
+    return errorResponse(error);
   }
 }

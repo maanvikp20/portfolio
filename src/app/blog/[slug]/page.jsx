@@ -8,7 +8,7 @@ export const dynamic = "force-dynamic";
 
 export default async function BlogDetailPage({ params }) {
   const { slug } = await params;
-  
+
   let blog;
   try {
     const rawBlog = await getBlogBySlug(slug);
@@ -31,16 +31,22 @@ export default async function BlogDetailPage({ params }) {
             ← Back to Writings
           </Link>
 
-          <div className="flex items-center gap-3 mb-4 text-sm" style={{ color: "var(--text-secondary)" }}>
-            <span className="font-medium capitalize px-2.5 py-0.5 rounded-full text-xs" style={{ backgroundColor: "rgba(var(--overlay-color), 0.06)" }}>
+          <div
+            className="flex items-center gap-3 mb-4 text-sm"
+            style={{ color: "var(--text-secondary)" }}
+          >
+            <span
+              className="font-medium capitalize px-2.5 py-0.5 rounded-full text-xs"
+              style={{ backgroundColor: "rgba(var(--overlay-color), 0.06)" }}
+            >
               {blog.category}
             </span>
-            {blog.publishedAt && (
+            {blog.createdAt && (
               <span>
-                {new Date(blog.publishedAt).toLocaleDateString(undefined, {
+                {new Date(blog.createdAt).toLocaleDateString(undefined, {
                   month: "long",
                   day: "numeric",
-                  year: "numeric"
+                  year: "numeric",
                 })}
               </span>
             )}
@@ -57,7 +63,10 @@ export default async function BlogDetailPage({ params }) {
           </h1>
 
           {blog.author && (
-            <p className="text-sm mb-8 italic" style={{ color: "var(--text-secondary)" }}>
+            <p
+              className="text-sm mb-8 italic"
+              style={{ color: "var(--text-secondary)" }}
+            >
               By {blog.author.name}
             </p>
           )}
@@ -71,7 +80,7 @@ export default async function BlogDetailPage({ params }) {
           )}
 
           {/* Render layout text content blocks */}
-          <div 
+          <div
             className="prose prose-neutral max-w-none text-base md:text-lg leading-relaxed whitespace-pre-line"
             style={{ color: "var(--text-primary)" }}
           >
@@ -79,7 +88,10 @@ export default async function BlogDetailPage({ params }) {
           </div>
 
           {blog.tags?.length > 0 && (
-            <div className="mt-16 pt-8 border-t flex flex-wrap gap-2" style={{ borderColor: "rgba(var(--overlay-color), 0.1)" }}>
+            <div
+              className="mt-16 pt-8 border-t flex flex-wrap gap-2"
+              style={{ borderColor: "rgba(var(--overlay-color), 0.1)" }}
+            >
               {blog.tags.map((tag) => (
                 <span
                   key={tag}

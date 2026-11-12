@@ -37,12 +37,12 @@ function BlogCard({ blog, index }) {
           >
             {blog.category || "General"}
           </span>
-          {blog.publishedAt && (
+          {blog.createdAt && (
             <span
               className="text-xs opacity-50"
               style={{ color: "var(--text-secondary)" }}
             >
-              {new Date(blog.publishedAt).toLocaleDateString(undefined, {
+              {new Date(blog.createdAt).toLocaleDateString(undefined, {
                 month: "short",
                 day: "numeric",
                 year: "numeric",
@@ -340,7 +340,7 @@ export default function PortfolioClient({
         projects={calculatorGames}
       />
 
-        {/* Experiences */}
+      {/* Experiences */}
       <motion.section
         id="experience"
         className="px-8 md:px-16 py-16 border-t scroll-mt-[72px]"
