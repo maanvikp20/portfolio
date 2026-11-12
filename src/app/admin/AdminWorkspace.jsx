@@ -26,7 +26,7 @@ export default function AdminWorkspace({ initialData }) {
 
   // Local data state to reflect changes
   const [localData, setLocalData] = useState(initialData);
-  const [fileInputKey, setFileInputKey] = useState(Date.now());
+  const [fileInputKey, setFileInputKey] = useState(0);
 
   // Initial form states for reset and edit loading
   const initialBlog = {
@@ -178,7 +178,7 @@ export default function AdminWorkspace({ initialData }) {
       });
       resetState(fallbackStructure);
       setEditingId(null);
-      setFileInputKey(Date.now());
+      setFileInputKey((k) => k + 1);
       router.refresh();
     } catch (err) {
       setStatusMsg({ type: "error", text: err.message });
@@ -215,7 +215,7 @@ export default function AdminWorkspace({ initialData }) {
       type: "success",
       text: `Loaded: "${item.title || item.name || item.role}" for modifications.`,
     });
-    setFileInputKey(Date.now());
+    setFileInputKey((k) => k + 1);
 
     if (tab === "blogs") {
       setBlogForm({
@@ -264,7 +264,7 @@ export default function AdminWorkspace({ initialData }) {
     setEditingId(null);
     resetState(fallbackStructure);
     setStatusMsg({ type: "", text: "" });
-    setFileInputKey(Date.now());
+    setFileInputKey((k) => k + 1);
   };
 
   return (
@@ -299,7 +299,7 @@ export default function AdminWorkspace({ initialData }) {
                   setActiveTab(tab.id);
                   setStatusMsg({ type: "", text: "" });
                   setEditingId(null);
-                  setFileInputKey(Date.now());
+                  setFileInputKey((k) => k + 1);
                 }}
                 className={`w-full text-left px-4 py-2.5 rounded-xl text-sm font-medium transition ${
                   activeTab === tab.id

@@ -9,53 +9,45 @@ export const dynamic = "force-dynamic"; // most recent data on every request
 export const revalidate = 0; // sets cache lifetime to 0 seconds, no caching of rendered page
 export const fetchCache = "force-no-store"; // ensures data bypasses cache and always fetches fresh from server and controllers
 
-export default async function Page() {
+// fetch everything and shape it for the client; returns null if the database is unreachable
+async function loadPortfolioData() {
   try {
-    // Fetch all data
-    const [allProjects, rawBlogs, rawSkills, rawCerts, rawExperiences] = await Promise.all([
-      getAllProjects() || [],
-      getAllBlogs("published") || [],
-      getAllSkills() || [],
-      getAllCertifications() || [],
-      getAllExperiences() || [], 
-    ]);
+    const [allProjects, rawBlogs, rawSkills, rawCerts, rawExperiences] =
+      await Promise.all([
+        getAllProjects(),
+        getAllBlogs("published"),
+        getAllSkills(),
+        getAllCertifications(),
+        getAllExperiences(),
+      ]);
 
-    // plain json object
+    // plain json objects
     const projects = JSON.parse(JSON.stringify(allProjects || []));
-    const blogs = JSON.parse(JSON.stringify(rawBlogs || []));
-    const skills = JSON.parse(JSON.stringify(rawSkills || []));
-    const certifications = JSON.parse(JSON.stringify(rawCerts || []));
-    const experiences = JSON.parse(JSON.stringify(rawExperiences || []));
 
     // filter projects on category
-    const electronics = projects
-      .filter((p) => p && p.category === "electronics")
-      .slice(0, 3);
-    const software = projects
-      .filter((p) => p && p.category === "software")
-      .slice(0, 3);
-    const calculatorGames = projects
-      .filter((p) => p && p.category === "calculator-games")
-      .slice(0, 3);
+    const byCategory = (category) =>
+      projects.filter((p) => p && p.category === category).slice(0, 3);
 
-    // pass data to portfolio client
-    return (
-      <PortfolioClient
-        electronics={electronics}
-        software={software}
-        calculatorGames={calculatorGames}
-        blogs={blogs}
-        skills={skills}
-        certifications={certifications}
-        experiences={experiences}
-      />
-    );
+    return {
+      electronics: byCategory("electronics"),
+      software: byCategory("software"),
+      calculatorGames: byCategory("calculator-games"),
+      blogs: JSON.parse(JSON.stringify(rawBlogs || [])),
+      skills: JSON.parse(JSON.stringify(rawSkills || [])),
+      certifications: JSON.parse(JSON.stringify(rawCerts || [])),
+      experiences: JSON.parse(JSON.stringify(rawExperiences || [])),
+    };
   } catch (error) {
-    console.error(
-      "Database resolution error during navigation tracing:",
-      error,
-    );
-    // create fallback incase of failure so page doesn't completely crash
-    return <PortfolioClient />;
+    console.error("Portfolio data load failed:", error);
+    return null;
   }
+}
+
+export default async function Page() {
+  const data = await loadPortfolioData();
+
+  // fallback so the page doesn't completely crash if the database is down
+  if (!data) return <PortfolioClient />;
+
+  return <PortfolioClient {...data} />;
 }

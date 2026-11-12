@@ -210,7 +210,7 @@ export default function PortfolioClient({
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: "easeOut" }}
         >
-          Hi there! I'm an Electrical
+          Hi there! I&apos;m an Electrical
           <br />
           Engineer and Developer!
         </motion.h1>
@@ -247,11 +247,11 @@ export default function PortfolioClient({
                 color: "var(--text-secondary)",
               }}
             >
-              Hey there, I'm{" "}
+              Hey there, I&apos;m{" "}
               <span style={{ color: "var(--text-primary)", fontWeight: 600 }}>
                 Maanvik
               </span>
-              ! I'm an electrical engineering student at the University of
+              ! I&apos;m an electrical engineering student at the University of
               Illinois Urbana-Champaign, passionate about building at the
               intersection of hardware and software.
             </p>

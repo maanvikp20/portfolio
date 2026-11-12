@@ -13,7 +13,7 @@ export default async function BlogDetailPage({ params }) {
   try {
     const rawBlog = await getBlogBySlug(slug);
     blog = JSON.parse(JSON.stringify(rawBlog));
-  } catch (error) {
+  } catch {
     notFound();
   }
 

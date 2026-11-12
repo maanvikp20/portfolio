@@ -6,6 +6,8 @@ export default function DarkModeToggle() {
   const [dark, setDark] = useState(true);
   const [mounted, setMounted] = useState(false);
 
+  // reading localStorage must wait until after mount to avoid a hydration mismatch
+  /* eslint-disable react-hooks/set-state-in-effect */
   useEffect(() => {
     const saved = localStorage.getItem("theme");
     if (saved === "light") {
@@ -17,6 +19,7 @@ export default function DarkModeToggle() {
     }
     setMounted(true);
   }, []);
+  /* eslint-enable react-hooks/set-state-in-effect */
 
   const toggleDark = () => {
     if (dark) {

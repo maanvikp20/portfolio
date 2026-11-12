@@ -1,5 +1,6 @@
 import Blog from "@/src/models/Blog";
-import User from "@/src/models/User";
+// side-effect import: registers the User model so populate("author") works
+import "@/src/models/User";
 import connectDB from "@/src/lib/mongodb";
 
 // get all blogs
@@ -9,7 +10,7 @@ export const getAllBlogs = async (status = "published") => {
   // If status is "all", find all blogs otherwise filter by status
   const query = status === "all" ? {} : { status };
 
-  // Fetch blogs with author deets and sort newest first
+  // Fetch blogs with author deets and sort by published date
   const blogs = await Blog.find(query)
     .populate("author", "name email")
     .sort({ createdAt: -1 })
@@ -25,14 +26,12 @@ export const getAllBlogs = async (status = "published") => {
   }));
 };
 
-// get a specific blog by slug (published only, drafts stay hidden)
+// get a specific blog by slug
 export const getBlogBySlug = async (slug) => {
   await connectDB();
 
-  // get specific published blog and populate author deets
-  const blog = await Blog.findOne({ slug, status: "published" })
-    .populate("author", "name")
-    .lean();
+  // get specific blog and populate author deets
+  const blog = await Blog.findOne({ slug, status: "published" }).populate("author", "name").lean();
   if (!blog) throw new Error("Blog not found");
 
   // Convert _id and author._id to strings for client use

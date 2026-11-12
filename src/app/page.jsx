@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { FaYoutube, FaInstagram } from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6";
 import DarkModeToggle from "@/src/components/ui/DarkModeToggle";
@@ -12,7 +13,8 @@ export default function Page() {
       {/* Background Video */}
       <div className="fixed top-0 left-0 w-full h-full -z-10">
         <video
-          src="/IMG_6577.mp4"
+          src="/hero.mp4"
+          poster="/hero-poster.jpg"
           className="w-full h-full object-cover"
           autoPlay
           muted
@@ -55,12 +57,12 @@ export default function Page() {
         >
           an electrical engineering student building at the intersection of{" "}
           hardware and software.{" "}
-          <a
+          <Link
             href="/portfolio"
             className="underline underline-offset-4 cursor-pointer hover:opacity-70 transition"
           >
             learn more here →
-          </a>
+          </Link>
         </p>
 
         {/* Social Icons */}
