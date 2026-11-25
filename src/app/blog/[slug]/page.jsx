@@ -1,10 +1,36 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import Navbar from "@/src/components/Navbar";
+import Markdown from "@/src/components/Markdown";
 import { getBlogBySlug } from "@/src/controllers/blogController";
+import { excerptFrom } from "@/src/lib/markdown";
+import { buildMetadata } from "@/src/lib/seo";
 
 // always render page to get latest blog content
 export const dynamic = "force-dynamic";
+
+export async function generateMetadata({ params }) {
+  const { slug } = await params;
+  try {
+    const blog = await getBlogBySlug(slug);
+    return buildMetadata({
+      title: blog.title,
+      description: blog.excerpt || excerptFrom(blog.content, 160),
+      path: `/blog/${slug}`,
+      image: blog.coverImage || undefined,
+      type: "article",
+      publishedTime: blog.createdAt
+        ? new Date(blog.createdAt).toISOString()
+        : undefined,
+      modifiedTime: blog.updatedAt
+        ? new Date(blog.updatedAt).toISOString()
+        : undefined,
+      tags: blog.tags,
+    });
+  } catch {
+    return { title: "Post not found", robots: { index: false } };
+  }
+}
 
 export default async function BlogDetailPage({ params }) {
   const { slug } = await params;
@@ -74,18 +100,12 @@ export default async function BlogDetailPage({ params }) {
           {blog.coverImage && (
             <img
               src={blog.coverImage}
-              alt={blog.title}
+              alt=""
               className="w-full h-96 object-cover rounded-2xl mb-10 shadow-sm"
             />
           )}
 
-          {/* Render layout text content blocks */}
-          <div
-            className="prose prose-neutral max-w-none text-base md:text-lg leading-relaxed whitespace-pre-line"
-            style={{ color: "var(--text-primary)" }}
-          >
-            {blog.content}
-          </div>
+          <Markdown>{blog.content}</Markdown>
 
           {blog.tags?.length > 0 && (
             <div

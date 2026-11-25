@@ -1,27 +1,50 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import Navbar from "@/src/components/Navbar";
-import { getAllProjects } from "@/src/controllers/projectController";
+import Markdown from "@/src/components/Markdown";
+import { getProjectBySlug } from "@/src/controllers/projectController";
+import { buildMetadata } from "@/src/lib/seo";
 
 export const dynamic = "force-dynamic";
+
+const STATUS_LABELS = {
+  completed: "Completed",
+  "in-progress": "In progress",
+  planned: "Planned",
+};
+
+// only http(s) links are ever rendered as hrefs
+const isSafeUrl = (url) => typeof url === "string" && /^https?:\/\//i.test(url);
+
+export async function generateMetadata({ params }) {
+  const { category, slug } = await params;
+  try {
+    const project = await getProjectBySlug(category, slug);
+    if (!project)
+      return { title: "Project not found", robots: { index: false } };
+    return buildMetadata({
+      title: project.title,
+      description: project.description,
+      path: `/portfolio/${category}/${slug}`,
+      image: project.coverImage || undefined,
+    });
+  } catch {
+    return { title: "Project not found", robots: { index: false } };
+  }
+}
 
 export default async function ProjectDetailPage({ params }) {
   // Extract url segments
   const { category, slug } = await params;
-  
-  const projects = await getAllProjects();
 
-  // Find matches across any category string
-  const project = projects.find(
-    (p) => p.slug === slug && p.category === category,
-  );
+  const project = await getProjectBySlug(category, slug);
 
   if (!project) notFound();
 
   // Generate display titles
   const cleanCategoryName = category
     .split("-")
-    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
     .join(" ");
 
   return (
@@ -46,7 +69,7 @@ export default async function ProjectDetailPage({ params }) {
                 color: "var(--text-secondary)",
               }}
             >
-              {project.status || "Completed"}
+              {STATUS_LABELS[project.status] || STATUS_LABELS.completed}
             </span>
           </div>
 
@@ -67,13 +90,13 @@ export default async function ProjectDetailPage({ params }) {
 
           {/* Image */}
           {project.coverImage && (
-            <div 
-              className="w-full mb-12 rounded-2xl overflow-hidden border shadow-sm" 
+            <div
+              className="w-full mb-12 rounded-2xl overflow-hidden border shadow-sm"
               style={{ borderColor: "rgba(var(--overlay-color), 0.12)" }}
             >
-              <img 
-                src={project.coverImage} 
-                alt={project.title} 
+              <img
+                src={project.coverImage}
+                alt=""
                 className="w-full h-auto max-h-[480px] object-cover"
               />
             </div>
@@ -89,16 +112,55 @@ export default async function ProjectDetailPage({ params }) {
             {project.description}
           </p>
 
-          {project.technologies?.length > 0 && (
+          {(isSafeUrl(project.repoLink) || isSafeUrl(project.liveLink)) && (
+            <div className="flex flex-wrap gap-4 mb-12">
+              {isSafeUrl(project.repoLink) && (
+                <a
+                  href={project.repoLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-sm font-medium px-5 py-2.5 rounded-xl hover:opacity-70 transition"
+                  style={{
+                    border: "1px solid rgba(var(--overlay-color), 0.25)",
+                    color: "var(--text-primary)",
+                  }}
+                >
+                  View source →
+                </a>
+              )}
+              {isSafeUrl(project.liveLink) && (
+                <a
+                  href={project.liveLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-sm font-medium px-5 py-2.5 rounded-xl hover:opacity-70 transition"
+                  style={{
+                    border: "1px solid rgba(var(--overlay-color), 0.25)",
+                    color: "var(--text-primary)",
+                  }}
+                >
+                  Live demo →
+                </a>
+              )}
+            </div>
+          )}
+
+          {project.content && (
+            <div className="mb-12">
+              <Markdown>{project.content}</Markdown>
+            </div>
+          )}
+
+          {project.tags?.length > 0 && (
             <div>
               <h2
-                className="text-sm font-medium uppercase tracking-widest mb-4 opacity-60"
+                className="text-sm font-medium uppercase tracking-widest mb-4 opacity-80"
                 style={{ color: "var(--text-primary)" }}
               >
                 Technologies
               </h2>
               <div className="flex flex-wrap gap-3">
-                {project.technologies.map((tech) => (
+                {project.tags.map((tech) => (
                   <span
                     key={tech}
                     className="text-sm px-4 py-2 rounded-xl"

@@ -1,24 +1,32 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import DarkModeToggle from "../components/ui/DarkModeToggle";
 
 // Navbar links
 const navLinks = [
-  { label: "About Me", href: "#about", isHash: true },
+  { label: "About Me", href: "/portfolio#about", isHash: true },
   { label: "Writings & Blog", href: "/blog" },
   { label: "Electronics Projects", href: "/portfolio/electronics" },
   { label: "Software Projects", href: "/portfolio/software" },
-  { label: "Technical Skills", href: "#skills", isHash: true },
-  { label: "Certifications", href: "#certifications", isHash: true },
-  { label: "Contact", href: "#contact", isHash: true, dividerBefore: true },
-  { label: "Resume", href: "/resume" },
+  { label: "Technical Skills", href: "/portfolio#skills", isHash: true },
+  { label: "Certifications", href: "/portfolio#certifications", isHash: true },
+  {
+    label: "Contact",
+    href: "/portfolio#contact",
+    isHash: true,
+    dividerBefore: true,
+  },
+  // the PDF lives at public/resume.pdf; opens in a new tab
+  { label: "Resume", href: "/resume.pdf", external: true },
 ];
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const buttonRef = useRef(null);
+  const panelRef = useRef(null);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
@@ -32,6 +40,39 @@ export default function Navbar() {
     return () => {
       document.body.style.overflow = "";
     };
+  }, [open]);
+
+  // While the menu is open: focus moves into it, Escape closes it (and returns focus
+  // to the button), and Tab cycles through the menu instead of the page behind it.
+  useEffect(() => {
+    if (!open) return;
+    panelRef.current?.querySelector("a")?.focus();
+
+    const onKeyDown = (e) => {
+      if (e.key === "Escape") {
+        setOpen(false);
+        buttonRef.current?.focus();
+        return;
+      }
+      if (e.key !== "Tab" || !panelRef.current) return;
+
+      const items = [
+        buttonRef.current,
+        ...panelRef.current.querySelectorAll("a"),
+      ].filter(Boolean);
+      const first = items[0];
+      const last = items[items.length - 1];
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
+    };
+
+    document.addEventListener("keydown", onKeyDown);
+    return () => document.removeEventListener("keydown", onKeyDown);
   }, [open]);
 
   const close = () => setOpen(false);
@@ -59,7 +100,7 @@ export default function Navbar() {
   return (
     <>
       {/* Navbar bar */}
-      <nav
+      <header
         className="fixed top-0 left-0 w-full h-[60px] z-[1000] flex items-center justify-between px-6 transition-all duration-300"
         style={{
           background: scrolled
@@ -73,15 +114,17 @@ export default function Navbar() {
       >
         {/* Hamburger button */}
         <button
+          ref={buttonRef}
           onClick={() => setOpen((v) => !v)}
-          aria-label="Toggle menu"
+          aria-label={open ? "Close menu" : "Open menu"}
           aria-expanded={open}
+          aria-controls="site-menu"
           className="w-11 h-11 flex flex-col items-center justify-center gap-[5px] rounded-[10px] bg-transparent cursor-pointer p-0 transition-all duration-200 z-[1100]"
           style={{
             border: "1.5px solid",
             borderColor: open
               ? "var(--text-primary)"
-              : "rgba(var(--overlay-color), 100)",
+              : "rgba(var(--overlay-color), 0.25)",
           }}
         >
           <motion.span
@@ -107,7 +150,7 @@ export default function Navbar() {
         </button>
 
         <DarkModeToggle />
-      </nav>
+      </header>
 
       {/* Backdrop */}
       <AnimatePresence>
@@ -128,7 +171,10 @@ export default function Navbar() {
       {/* Dropdown menu */}
       <AnimatePresence>
         {open && (
-          <motion.div
+          <motion.nav
+            id="site-menu"
+            aria-label="Main menu"
+            ref={panelRef}
             className="fixed top-[60px] left-0 w-[260px] z-[999] pb-4 pt-2 rounded-br-2xl"
             initial={{ opacity: 0, y: -8, scaleY: 0.96 }}
             animate={{ opacity: 1, y: 0, scaleY: 1 }}
@@ -142,7 +188,6 @@ export default function Navbar() {
               boxShadow: "4px 8px 32px rgba(var(--overlay-color), 0.10)",
               transformOrigin: "top left",
             }}
-            role="menu"
           >
             <p
               className="px-[22px] pt-[10px] pb-1 text-[9px] tracking-[0.18em] uppercase font-mono"
@@ -174,6 +219,9 @@ export default function Navbar() {
                   >
                     <Link
                       href={link.href}
+                      {...(link.external
+                        ? { target: "_blank", rel: "noopener noreferrer" }
+                        : {})}
                       onClick={close}
                       className="flex items-center px-[22px] py-[11px] text-[15px] font-bold no-underline transition-all duration-150 cursor-pointer"
                       style={{
@@ -200,7 +248,7 @@ export default function Navbar() {
                 )}
               </div>
             ))}
-          </motion.div>
+          </motion.nav>
         )}
       </AnimatePresence>
     </>

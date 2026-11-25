@@ -4,6 +4,14 @@ import { getAllSkills } from "@/src/controllers/skillController";
 import { getAllCertifications } from "@/src/controllers/certificationController";
 import { getAllExperiences } from "@/src/controllers/experienceController";
 import PortfolioClient from "./PortfolioClient";
+import { buildMetadata } from "@/src/lib/seo";
+
+export const metadata = buildMetadata({
+  title: "Portfolio",
+  description:
+    "Projects, experience, skills, and certifications of Maanvik Poddar, an electrical engineering student.",
+  path: "/portfolio",
+});
 
 export const dynamic = "force-dynamic"; // most recent data on every request
 export const revalidate = 0; // sets cache lifetime to 0 seconds, no caching of rendered page

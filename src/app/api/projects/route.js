@@ -16,6 +16,7 @@ const PROJECT_FIELDS = [
   "description",
   "content",
   "category",
+  "status",
   "repoLink",
   "liveLink",
   "coverImage",

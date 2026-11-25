@@ -43,6 +43,7 @@ export default function AdminWorkspace({ initialData }) {
     description: "",
     content: "",
     category: "software",
+    status: "completed",
     repoLink: "",
     liveLink: "",
     coverImage: "",
@@ -233,6 +234,7 @@ export default function AdminWorkspace({ initialData }) {
         description: item.description || "",
         content: item.content || "",
         category: item.category || "software",
+        status: item.status || "completed",
         repoLink: item.repoLink || "",
         liveLink: item.liveLink || "",
         coverImage: item.coverImage || "",
@@ -532,6 +534,19 @@ export default function AdminWorkspace({ initialData }) {
                   required
                   className="w-full px-4 py-2 rounded-xl border dark:border-neutral-700 dark:bg-neutral-950 text-sm"
                 />
+
+                <select
+                  value={projectForm.status}
+                  onChange={(e) =>
+                    setProjectForm({ ...projectForm, status: e.target.value })
+                  }
+                  aria-label="Project status"
+                  className="w-full px-4 py-2 rounded-xl border dark:border-neutral-700 dark:bg-neutral-950 text-sm"
+                >
+                  <option value="completed">Completed</option>
+                  <option value="in-progress">In progress</option>
+                  <option value="planned">Planned</option>
+                </select>
 
                 <div className="grid grid-cols-3 gap-4">
                   <select

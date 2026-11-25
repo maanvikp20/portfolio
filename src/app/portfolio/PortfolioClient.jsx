@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import Navbar from "../../components/Navbar";
 import Contact from "../../components/Contact";
+import { excerptFrom } from "../../lib/markdown";
 
 // Reusable card for blog posts on the homepage
 function BlogCard({ blog, index }) {
@@ -23,7 +24,7 @@ function BlogCard({ blog, index }) {
         {blog.coverImage && (
           <img
             src={blog.coverImage}
-            alt={blog.title}
+            alt=""
             className="w-full h-44 object-cover rounded-xl mb-4 opacity-90 group-hover:opacity-100 transition"
           />
         )}
@@ -39,7 +40,7 @@ function BlogCard({ blog, index }) {
           </span>
           {blog.createdAt && (
             <span
-              className="text-xs opacity-50"
+              className="text-xs opacity-80"
               style={{ color: "var(--text-secondary)" }}
             >
               {new Date(blog.createdAt).toLocaleDateString(undefined, {
@@ -63,7 +64,7 @@ function BlogCard({ blog, index }) {
           className="text-sm line-clamp-3 mb-6"
           style={{ color: "var(--text-secondary)" }}
         >
-          {blog.excerpt || blog.content}
+          {excerptFrom(blog.excerpt || blog.content)}
         </p>
       </div>
 
@@ -98,11 +99,14 @@ function ProjectRow({ project, index, category }) {
         {project.coverImage ? (
           <img
             src={project.coverImage}
-            alt={project.title}
+            alt=""
             className="w-full h-full object-cover grayscale hover:grayscale-0 transition duration-300"
           />
         ) : (
-          <div className="w-full h-full flex items-center justify-center opacity-30 text-xs">
+          <div
+            aria-hidden="true"
+            className="w-full h-full flex items-center justify-center opacity-30 text-xs"
+          >
             No Image
           </div>
         )}
@@ -163,7 +167,7 @@ function ProjectSection({ title, href, category, projects }) {
         <div className="md:w-2/3 flex flex-col gap-10">
           {projects.length === 0 ? (
             <p
-              className="text-sm opacity-50"
+              className="text-sm opacity-80"
               style={{ color: "var(--text-secondary)" }}
             >
               No projects yet — check back soon.
@@ -260,7 +264,7 @@ export default function PortfolioClient({
           <div className="md:w-2/5 flex justify-center">
             <img
               src="/profile.jpeg"
-              alt="Maanvik"
+              alt="Portrait of Maanvik Poddar"
               className="w-72 h-72 object-cover rounded-2xl shadow-sm"
               style={{ border: "1px solid rgba(var(--overlay-color), 0.25)" }}
             />
@@ -305,7 +309,7 @@ export default function PortfolioClient({
         <div className="w-full overflow-x-auto pb-6 px-8 md:px-16 flex gap-6 scrollbar-thin scrollbar-thumb-neutral-200">
           {blogs.length === 0 ? (
             <p
-              className="text-sm opacity-50 py-4"
+              className="text-sm opacity-80 py-4"
               style={{ color: "var(--text-secondary)" }}
             >
               No articles published yet.
@@ -368,7 +372,7 @@ export default function PortfolioClient({
           <div className="md:w-2/3 flex flex-col gap-12">
             {experiences.length === 0 ? (
               <p
-                className="text-sm opacity-50"
+                className="text-sm opacity-80"
                 style={{ color: "var(--text-secondary)" }}
               >
                 No experience data provided. Populate historical logs via admin
@@ -396,7 +400,7 @@ export default function PortfolioClient({
                       {exp.title || exp.role}
                     </h3>
                     <span
-                      className="text-xs font-mono tracking-wider opacity-60 uppercase sm:text-right"
+                      className="text-xs font-mono tracking-wider opacity-80 uppercase sm:text-right"
                       style={{ color: "var(--text-secondary)" }}
                     >
                       {/* Unified mapping: reads DB 'startDate' first, falls back to 'duration' */}
@@ -475,7 +479,7 @@ export default function PortfolioClient({
             {/* Skills */}
             <div>
               <h3
-                className="text-xs uppercase tracking-widest font-bold mb-6 opacity-60"
+                className="text-xs uppercase tracking-widest font-bold mb-6 opacity-80"
                 style={{ color: "var(--text-secondary)" }}
               >
                 Core Engineering Competencies
@@ -558,7 +562,7 @@ export default function PortfolioClient({
             {/* Certifications */}
             <div id="certifications" className="scroll-mt-[72px]">
               <h3
-                className="text-xs uppercase tracking-widest font-bold mb-6 opacity-60"
+                className="text-xs uppercase tracking-widest font-bold mb-6 opacity-80"
                 style={{ color: "var(--text-secondary)" }}
               >
                 Verified Certifications
@@ -567,7 +571,7 @@ export default function PortfolioClient({
               <div className="flex flex-col gap-4">
                 {certifications.length === 0 ? (
                   <p
-                    className="text-sm italic opacity-50"
+                    className="text-sm italic opacity-80"
                     style={{ color: "var(--text-secondary)" }}
                   >
                     No certifications uploaded yet — update via the admin

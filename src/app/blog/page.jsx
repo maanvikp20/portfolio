@@ -1,6 +1,15 @@
 import Link from "next/link";
 import Navbar from "@/src/components/Navbar";
 import { getAllBlogs } from "@/src/controllers/blogController";
+import { excerptFrom } from "@/src/lib/markdown";
+import { buildMetadata } from "@/src/lib/seo";
+
+export const metadata = buildMetadata({
+  title: "Writings",
+  description:
+    "Articles and notes by Maanvik Poddar on electronics, software, and building things.",
+  path: "/blog",
+});
 
 // always render page to get latest blogs
 export const dynamic = "force-dynamic";
@@ -31,7 +40,7 @@ export default async function BlogIndexPage() {
 
           {blogs.length === 0 ? (
             <p
-              className="text-lg opacity-60"
+              className="text-lg opacity-80"
               style={{ color: "var(--text-secondary)" }}
             >
               No articles published yet — check back soon.
@@ -47,7 +56,7 @@ export default async function BlogIndexPage() {
                   {blog.coverImage && (
                     <img
                       src={blog.coverImage}
-                      alt={blog.title}
+                      alt=""
                       className="w-full md:w-48 h-32 object-cover rounded-xl opacity-90 group-hover:opacity-100 transition"
                     />
                   )}
@@ -91,7 +100,7 @@ export default async function BlogIndexPage() {
                       className="text-sm line-clamp-2 mb-4 leading-relaxed"
                       style={{ color: "var(--text-secondary)" }}
                     >
-                      {blog.excerpt || blog.content}
+                      {excerptFrom(blog.excerpt || blog.content)}
                     </p>
 
                     <Link

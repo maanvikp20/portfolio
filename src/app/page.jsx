@@ -1,7 +1,38 @@
 import Link from "next/link";
-import { FaYoutube, FaInstagram } from "react-icons/fa";
+import { FaYoutube, FaInstagram, FaGithub, FaLinkedin } from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6";
 import DarkModeToggle from "@/src/components/ui/DarkModeToggle";
+import { socials } from "@/src/lib/socials";
+import { SITE_URL, SITE_NAME, SITE_DESCRIPTION } from "@/src/lib/site";
+
+export const metadata = {
+  title: { absolute: SITE_NAME },
+  alternates: { canonical: "/" },
+};
+
+const ICONS = {
+  GitHub: FaGithub,
+  LinkedIn: FaLinkedin,
+  Instagram: FaInstagram,
+  X: FaXTwitter,
+  YouTube: FaYoutube,
+};
+
+// only show icons that have a real http(s) link
+const visibleSocials = socials.filter(
+  (s) => ICONS[s.label] && /^https?:\/\//i.test(s.href),
+);
+
+// structured data so search engines know this site is about a person
+const personJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: SITE_NAME,
+  url: SITE_URL,
+  description: SITE_DESCRIPTION,
+  jobTitle: "Electrical Engineering Student",
+  sameAs: visibleSocials.map((s) => s.href),
+};
 
 export default function Page() {
   return (
@@ -10,12 +41,23 @@ export default function Page() {
                  [--text-primary:#ffffff] [--text-secondary:rgba(255,255,255,0.75)] [--overlay-color:0,0,0] [--overlay-opacity:0.5]
                  dark:[--text-primary:#000000] dark:[--text-secondary:rgba(0,0,0,0.75)] dark:[--overlay-color:255,255,255] dark:[--overlay-opacity:0.3]"
     >
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(personJsonLd).replace(/</g, "\\u003c"),
+        }}
+      />
+
       {/* Background Video */}
-      <div className="fixed top-0 left-0 w-full h-full -z-10">
+      <div
+        className="fixed top-0 left-0 w-full h-full -z-10 bg-cover bg-center"
+        style={{ backgroundImage: "url(/hero-poster.jpg)" }}
+      >
+        {/* motion-reduce: no autoplaying video; the poster image above shows instead */}
         <video
           src="/hero.mp4"
           poster="/hero-poster.jpg"
-          className="w-full h-full object-cover"
+          className="w-full h-full object-cover motion-reduce:hidden"
           autoPlay
           muted
           loop
@@ -66,35 +108,28 @@ export default function Page() {
         </p>
 
         {/* Social Icons */}
-        <div className="absolute bottom-10 left-1/2 -translate-x-1/2 flex gap-6">
-          <a
-            href="#"
-            className="w-10 h-10 rounded-full bg-white/20 backdrop-blur flex items-center justify-center hover:bg-white/40 transition"
-          >
-            <FaInstagram
-              className="w-5 h-5 transition-colors duration-300"
-              style={{ color: "var(--text-primary)" }}
-            />
-          </a>
-          <a
-            href="#"
-            className="w-10 h-10 rounded-full bg-white/20 backdrop-blur flex items-center justify-center hover:bg-white/40 transition"
-          >
-            <FaXTwitter
-              className="w-5 h-5 transition-colors duration-300"
-              style={{ color: "var(--text-primary)" }}
-            />
-          </a>
-          <a
-            href="#"
-            className="w-10 h-10 rounded-full bg-white/20 backdrop-blur flex items-center justify-center hover:bg-white/40 transition"
-          >
-            <FaYoutube
-              className="w-5 h-5 transition-colors duration-300"
-              style={{ color: "var(--text-primary)" }}
-            />
-          </a>
-        </div>
+        {visibleSocials.length > 0 && (
+          <div className="absolute bottom-10 left-1/2 -translate-x-1/2 flex gap-6">
+            {visibleSocials.map(({ label, href }) => {
+              const Icon = ICONS[label];
+              return (
+                <a
+                  key={label}
+                  href={href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={label}
+                  className="w-10 h-10 rounded-full bg-white/20 backdrop-blur flex items-center justify-center hover:bg-white/40 transition"
+                >
+                  <Icon
+                    className="w-5 h-5 transition-colors duration-300"
+                    style={{ color: "var(--text-primary)" }}
+                  />
+                </a>
+              );
+            })}
+          </div>
+        )}
       </div>
     </main>
   );

@@ -37,7 +37,13 @@ export async function POST(req) {
       );
     }
 
-    const body = await req.json();
+    // malformed JSON is the caller's mistake (400), not a server error
+    let body;
+    try {
+      body = await req.json();
+    } catch {
+      return NextResponse.json({ error: "Invalid request." }, { status: 400 });
+    }
     const fields = {};
 
     // every field must be a non-empty string within its length limit
@@ -67,22 +73,37 @@ export async function POST(req) {
       );
     }
 
+    // where messages go, and who they are sent from (set both in .env / Vercel)
+    const toEmail = process.env.CONTACT_TO_EMAIL;
+    if (!toEmail || !process.env.RESEND_API_KEY) {
+      console.error(
+        "Contact form is missing CONTACT_TO_EMAIL or RESEND_API_KEY.",
+      );
+      return NextResponse.json(
+        { error: "Message could not be sent. Please try again later." },
+        { status: 500 },
+      );
+    }
+    const fromEmail =
+      process.env.CONTACT_FROM_EMAIL ||
+      "Portfolio Contact Form <onboarding@resend.dev>";
+
     const resend = new Resend(process.env.RESEND_API_KEY);
 
     // resend returns { data, error } instead of throwing on API failures
     const { error } = await resend.emails.send({
-      from: "Portfolio Contact Form <onboarding@resend.dev>",
-      to: ["maanvikpoddar@gmail.com"],
+      from: fromEmail,
+      to: [toEmail],
       replyTo: email,
       subject: `[Portfolio Contact] ${subject.replace(/[\r\n]+/g, " ")}`,
       html: `
         <div style="font-family: sans-serif; padding: 20px; color: #333; max-width: 600px; border: 1px solid #eee; border-radius: 8px;">
-          <h2 style="border-bottom: 1px solid #eee; padding-bottom: 10px;">New Message From Portfolio Workspace</h2>
-          <p><strong>Sender Name:</strong> ${escapeHtml(firstName)} ${escapeHtml(lastName)}</p>
-          <p><strong>Return Email Address:</strong> <a href="mailto:${escapeHtml(email)}">${escapeHtml(email)}</a></p>
-          <p><strong>Stated Subject Line:</strong> ${escapeHtml(subject)}</p>
+          <h2 style="border-bottom: 1px solid #eee; padding-bottom: 10px;">New message from your portfolio</h2>
+          <p><strong>Name:</strong> ${escapeHtml(firstName)} ${escapeHtml(lastName)}</p>
+          <p><strong>Email:</strong> <a href="mailto:${escapeHtml(email)}">${escapeHtml(email)}</a></p>
+          <p><strong>Subject:</strong> ${escapeHtml(subject)}</p>
           <div style="margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-radius: 6px; white-space: pre-wrap;">
-            <strong>Message Content Payload:</strong><br/><br/>${escapeHtml(message)}
+            <strong>Message:</strong><br/><br/>${escapeHtml(message)}
           </div>
         </div>
       `,

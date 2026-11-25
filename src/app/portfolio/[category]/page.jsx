@@ -2,8 +2,22 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import Navbar from "@/src/components/Navbar";
 import { getAllProjects } from "@/src/controllers/projectController";
+import { buildMetadata } from "@/src/lib/seo";
 
 export const dynamic = "force-dynamic";
+
+export async function generateMetadata({ params }) {
+  const { category } = await params;
+  const name = category
+    .split("-")
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(" ");
+  return buildMetadata({
+    title: `${name} Projects`,
+    description: `${name} projects by Maanvik Poddar.`,
+    path: `/portfolio/${category}`,
+  });
+}
 
 export default async function CategoryListPage({ params }) {
   const { category } = await params;
@@ -47,8 +61,12 @@ export default async function CategoryListPage({ params }) {
             {cleanCategoryName}
           </h1>
 
-          <p className="text-sm mb-12" style={{ color: "var(--text-secondary)" }}>
-            A comprehensive archive of engineering logs, development architectures, and projects under {cleanCategoryName}.
+          <p
+            className="text-sm mb-12"
+            style={{ color: "var(--text-secondary)" }}
+          >
+            A comprehensive archive of engineering logs, development
+            architectures, and projects under {cleanCategoryName}.
           </p>
 
           <div
@@ -58,13 +76,17 @@ export default async function CategoryListPage({ params }) {
 
           {/* Render List */}
           {filteredProjects.length === 0 ? (
-            <p className="text-sm italic opacity-50" style={{ color: "var(--text-secondary)" }}>
-              No production projects currently deployed in this index. Check back soon.
+            <p
+              className="text-sm italic opacity-80"
+              style={{ color: "var(--text-secondary)" }}
+            >
+              No production projects currently deployed in this index. Check
+              back soon.
             </p>
           ) : (
             <div className="flex flex-col gap-12">
               {filteredProjects.map((project) => (
-                <div 
+                <div
                   key={project._id || project.slug}
                   className="flex flex-col sm:flex-row items-start sm:items-center gap-6 group"
                 >
@@ -79,11 +101,14 @@ export default async function CategoryListPage({ params }) {
                     {project.coverImage ? (
                       <img
                         src={project.coverImage}
-                        alt={project.title}
+                        alt=""
                         className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition duration-300"
                       />
                     ) : (
-                      <div className="w-full h-full flex items-center justify-center opacity-30 text-xs">
+                      <div
+                        aria-hidden="true"
+                        className="w-full h-full flex items-center justify-center opacity-30 text-xs"
+                      >
                         No Preview Asset
                       </div>
                     )}

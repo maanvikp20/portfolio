@@ -6,33 +6,26 @@ export default function DarkModeToggle() {
   const [dark, setDark] = useState(true);
   const [mounted, setMounted] = useState(false);
 
-  // reading localStorage must wait until after mount to avoid a hydration mismatch
+  // The inline script in layout.jsx has already applied the theme class before
+  // paint, so here we only sync React state with it (after mount, to avoid a
+  // hydration mismatch).
   /* eslint-disable react-hooks/set-state-in-effect */
   useEffect(() => {
-    const saved = localStorage.getItem("theme");
-    if (saved === "light") {
-      document.documentElement.classList.remove("dark");
-      setDark(false);
-    } else {
-      document.documentElement.classList.add("dark");
-      setDark(true);
-    }
+    setDark(document.documentElement.classList.contains("dark"));
     setMounted(true);
   }, []);
   /* eslint-enable react-hooks/set-state-in-effect */
 
   const toggleDark = () => {
-    if (dark) {
-      document.documentElement.classList.remove("dark");
-      localStorage.setItem("theme", "light");
-    } else {
-      document.documentElement.classList.add("dark");
-      localStorage.setItem("theme", "dark");
+    const next = !dark;
+    document.documentElement.classList.toggle("dark", next);
+    try {
+      localStorage.setItem("theme", next ? "dark" : "light");
+    } catch {
+      // storage can be blocked (private mode); the theme still switches for this visit
     }
-    setDark(!dark);
+    setDark(next);
   };
-
-  if (!mounted) return null;
 
   return (
     <button
@@ -44,18 +37,21 @@ export default function DarkModeToggle() {
         border: "1.5px solid rgba(var(--overlay-color), 0.25)",
       }}
       aria-label="Toggle dark mode"
+      aria-pressed={dark}
     >
-      {dark ? (
-        <FaSun
-          className="w-4 h-4 transition-all duration-300"
-          style={{ color: "var(--text-primary)" }}
-        />
-      ) : (
-        <FaMoon
-          className="w-4 h-4 transition-all duration-300"
-          style={{ color: "var(--text-primary)" }}
-        />
-      )}
+      {/* the button is always rendered so the layout doesn't shift; the icon waits for mount */}
+      {mounted &&
+        (dark ? (
+          <FaSun
+            className="w-4 h-4 transition-all duration-300"
+            style={{ color: "var(--text-primary)" }}
+          />
+        ) : (
+          <FaMoon
+            className="w-4 h-4 transition-all duration-300"
+            style={{ color: "var(--text-primary)" }}
+          />
+        ))}
     </button>
   );
 }

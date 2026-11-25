@@ -7,12 +7,21 @@ export const getAllProjects = async () => {
 
   // get projects by most recent and convert _id to string for frontedn
   const projects = await Project.find({}).sort({ createdAt: -1 }).lean();
-  
+
   // convert _id to string for frontend
   return projects.map((project) => ({
     ...project,
-    _id: project._id.toString()
+    _id: project._id.toString(),
   }));
+};
+
+// get one project by category + slug (null if there is no match)
+export const getProjectBySlug = async (category, slug) => {
+  await connectDB();
+
+  const project = await Project.findOne({ category, slug }).lean();
+  if (!project) return null;
+  return { ...project, _id: project._id.toString() };
 };
 
 // create project
@@ -27,7 +36,9 @@ export const updateProject = async (id, data) => {
   await connectDB();
 
   // if title updated also update slug
-  const project = await Project.findByIdAndUpdate(id, data, { new: true }).lean();
+  const project = await Project.findByIdAndUpdate(id, data, {
+    new: true,
+  }).lean();
   if (!project) return null;
   return { ...project, _id: project._id.toString() };
 };
