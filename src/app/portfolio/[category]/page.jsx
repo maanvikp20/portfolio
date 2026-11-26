@@ -1,8 +1,9 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import Navbar from "@/src/components/Navbar";
-import { getAllProjects } from "@/src/controllers/projectController";
+import { getPublicProjectsByCategory } from "@/src/lib/publicData";
 import { buildMetadata } from "@/src/lib/seo";
+import { optimizeImage } from "@/src/lib/images";
 
 export const dynamic = "force-dynamic";
 
@@ -27,9 +28,7 @@ export default async function CategoryListPage({ params }) {
     notFound();
   }
 
-  const allProjects = await getAllProjects();
-
-  const filteredProjects = allProjects.filter((p) => p.category === category);
+  const filteredProjects = await getPublicProjectsByCategory(category);
 
   const cleanCategoryName = category
     .split("-")
@@ -65,8 +64,7 @@ export default async function CategoryListPage({ params }) {
             className="text-sm mb-12"
             style={{ color: "var(--text-secondary)" }}
           >
-            A comprehensive archive of engineering logs, development
-            architectures, and projects under {cleanCategoryName}.
+            {cleanCategoryName} projects, newest first.
           </p>
 
           <div
@@ -80,8 +78,7 @@ export default async function CategoryListPage({ params }) {
               className="text-sm italic opacity-80"
               style={{ color: "var(--text-secondary)" }}
             >
-              No production projects currently deployed in this index. Check
-              back soon.
+              No projects here yet. Check back soon.
             </p>
           ) : (
             <div className="flex flex-col gap-12">
@@ -100,7 +97,9 @@ export default async function CategoryListPage({ params }) {
                   >
                     {project.coverImage ? (
                       <img
-                        src={project.coverImage}
+                        src={optimizeImage(project.coverImage, 800)}
+                        loading="lazy"
+                        decoding="async"
                         alt=""
                         className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition duration-300"
                       />
@@ -109,7 +108,7 @@ export default async function CategoryListPage({ params }) {
                         aria-hidden="true"
                         className="w-full h-full flex items-center justify-center opacity-30 text-xs"
                       >
-                        No Preview Asset
+                        No image
                       </div>
                     )}
                   </div>
@@ -136,7 +135,7 @@ export default async function CategoryListPage({ params }) {
                       className="text-sm font-medium hover:opacity-70 transition underline underline-offset-4"
                       style={{ color: "var(--text-secondary)" }}
                     >
-                      Explore Project Documentation →
+                      View project →
                     </Link>
                   </div>
                 </div>

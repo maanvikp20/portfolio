@@ -1,8 +1,10 @@
-import { getAllProjects } from "@/src/controllers/projectController";
-import { getAllBlogs } from "@/src/controllers/blogController";
-import { getAllSkills } from "@/src/controllers/skillController";
-import { getAllCertifications } from "@/src/controllers/certificationController";
-import { getAllExperiences } from "@/src/controllers/experienceController";
+import {
+  getPublicProjects,
+  getPublicBlogs,
+  getPublicSkills,
+  getPublicCertifications,
+  getPublicExperiences,
+} from "@/src/lib/publicData";
 import PortfolioClient from "./PortfolioClient";
 import { buildMetadata } from "@/src/lib/seo";
 
@@ -13,20 +15,20 @@ export const metadata = buildMetadata({
   path: "/portfolio",
 });
 
-export const dynamic = "force-dynamic"; // most recent data on every request
-export const revalidate = 0; // sets cache lifetime to 0 seconds, no caching of rendered page
-export const fetchCache = "force-no-store"; // ensures data bypasses cache and always fetches fresh from server and controllers
+// the page renders per request, but its data comes from a cache that is
+// refreshed whenever content is saved in admin (see src/lib/cache.js)
+export const dynamic = "force-dynamic";
 
 // fetch everything and shape it for the client; returns null if the database is unreachable
 async function loadPortfolioData() {
   try {
     const [allProjects, rawBlogs, rawSkills, rawCerts, rawExperiences] =
       await Promise.all([
-        getAllProjects(),
-        getAllBlogs("published"),
-        getAllSkills(),
-        getAllCertifications(),
-        getAllExperiences(),
+        getPublicProjects(),
+        getPublicBlogs("published"),
+        getPublicSkills(),
+        getPublicCertifications(),
+        getPublicExperiences(),
       ]);
 
     // plain json objects

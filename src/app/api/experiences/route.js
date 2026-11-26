@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { revalidateContent } from "@/src/lib/cache";
 import {
   getAllExperiences,
   createExperience,
@@ -45,6 +46,7 @@ export async function POST(request) {
   try {
     const body = await request.json();
     const newExp = await createExperience(normalize(body));
+    revalidateContent();
     return NextResponse.json({ data: newExp }, { status: 201 });
   } catch (error) {
     return errorResponse(error);
@@ -65,6 +67,7 @@ export async function PUT(request) {
 
     const body = await request.json();
     const updatedExp = await updateExperience(id, normalize(body));
+    revalidateContent();
     return NextResponse.json({ data: updatedExp }, { status: 200 });
   } catch (error) {
     if (error.message === NOT_FOUND)
@@ -86,6 +89,7 @@ export async function DELETE(request) {
       );
 
     await deleteExperience(id);
+    revalidateContent();
     return NextResponse.json({ success: true }, { status: 200 });
   } catch (error) {
     if (error.message === NOT_FOUND)

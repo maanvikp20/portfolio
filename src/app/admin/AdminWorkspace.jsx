@@ -95,8 +95,7 @@ export default function AdminWorkspace({ initialData }) {
         body: formData,
       });
       const data = await res.json();
-      if (!res.ok)
-        throw new Error(data.error || "File asset upload execution failure.");
+      if (!res.ok) throw new Error(data.error || "Image upload failed.");
 
       if (formType === "blogs")
         setBlogForm((prev) => ({ ...prev, coverImage: data.url }));
@@ -109,7 +108,7 @@ export default function AdminWorkspace({ initialData }) {
 
       setStatusMsg({
         type: "success",
-        text: "Image uploaded and locked into state payload!",
+        text: "Image uploaded. Save to keep it.",
       });
     } catch (err) {
       setStatusMsg({ type: "error", text: err.message });
@@ -157,7 +156,7 @@ export default function AdminWorkspace({ initialData }) {
       });
       const data = await res.json();
       if (!res.ok)
-        throw new Error(data.error || "Database operation rejected.");
+        throw new Error(data.error || "Couldn't save. Please try again.");
 
       setLocalData((prev) => {
         let list = extractList(prev[dataKey], dataKey);
@@ -173,9 +172,7 @@ export default function AdminWorkspace({ initialData }) {
 
       setStatusMsg({
         type: "success",
-        text: isEditing
-          ? "Record modified successfully!"
-          : "New record created successfully!",
+        text: isEditing ? "Changes saved." : "Saved.",
       });
       resetState(fallbackStructure);
       setEditingId(null);
@@ -190,12 +187,12 @@ export default function AdminWorkspace({ initialData }) {
 
   // Item delete
   const executeItemDeletion = async (endpoint, id, dataKey) => {
-    if (!confirm("Permanently delete this record instance?")) return;
+    if (!confirm("Delete this permanently? This can't be undone.")) return;
     try {
       const res = await fetch(`/api/${endpoint}?id=${id}`, {
         method: "DELETE",
       });
-      if (!res.ok) throw new Error("Deletion Rejected.");
+      if (!res.ok) throw new Error("Couldn't delete. Please try again.");
 
       setLocalData((prev) => {
         let list = extractList(prev[dataKey], dataKey);
@@ -205,7 +202,7 @@ export default function AdminWorkspace({ initialData }) {
       if (editingId === id) setEditingId(null);
       router.refresh();
     } catch (err) {
-      alert(err.message);
+      setStatusMsg({ type: "error", text: err.message });
     }
   };
 
@@ -214,7 +211,7 @@ export default function AdminWorkspace({ initialData }) {
     setEditingId(item._id);
     setStatusMsg({
       type: "success",
-      text: `Loaded: "${item.title || item.name || item.role}" for modifications.`,
+      text: `Editing "${item.title || item.name || item.role}".`,
     });
     setFileInputKey((k) => k + 1);
 
@@ -275,10 +272,10 @@ export default function AdminWorkspace({ initialData }) {
         <div>
           <div className="mb-10 flex justify-between items-start">
             <div>
-              <h2 className="text-white text-lg font-bold tracking-tight">
+              <p className="text-white text-lg font-bold tracking-tight">
                 Maanvik Admin
-              </h2>
-              <p className="text-xs text-neutral-500 mt-0.5">
+              </p>
+              <p className="text-xs text-neutral-400 mt-0.5">
                 Welcome, Maanvik
               </p>
             </div>
@@ -287,16 +284,18 @@ export default function AdminWorkspace({ initialData }) {
             </div>
           </div>
 
-          <nav className="flex flex-col gap-1.5">
+          <nav aria-label="Admin sections" className="flex flex-col gap-1.5">
             {[
-              { id: "blogs", label: "Writings & Blog Posts" },
-              { id: "projects", label: "Engineering Projects" },
+              { id: "blogs", label: "Articles" },
+              { id: "projects", label: "Projects" },
               { id: "skills", label: "Skills" },
-              { id: "certs", label: "Credentials" },
-              { id: "experiences", label: "Work Experiences" },
+              { id: "certs", label: "Certifications" },
+              { id: "experiences", label: "Experience" },
             ].map((tab) => (
               <button
                 key={tab.id}
+                type="button"
+                aria-current={activeTab === tab.id ? "page" : undefined}
                 onClick={() => {
                   setActiveTab(tab.id);
                   setStatusMsg({ type: "", text: "" });
@@ -324,25 +323,28 @@ export default function AdminWorkspace({ initialData }) {
       </aside>
 
       <main className="flex-1 p-10 max-w-5xl overflow-y-auto">
-        {statusMsg.text && (
-          <div
-            className={`p-4 mb-6 text-sm rounded-xl border font-medium ${
-              statusMsg.type === "success"
-                ? "bg-emerald-50 border-emerald-200 text-emerald-800 dark:bg-emerald-900/30 dark:border-emerald-800 dark:text-emerald-300"
-                : "bg-rose-50 border-rose-200 text-rose-800 dark:bg-rose-900/30 dark:border-rose-800 dark:text-rose-300"
-            }`}
-          >
-            {statusMsg.text}
-          </div>
-        )}
+        <div aria-live="polite" aria-atomic="true">
+          {statusMsg.text && (
+            <div
+              role={statusMsg.type === "error" ? "alert" : undefined}
+              className={`p-4 mb-6 text-sm rounded-xl border font-medium ${
+                statusMsg.type === "success"
+                  ? "bg-emerald-50 border-emerald-200 text-emerald-800 dark:bg-emerald-900/30 dark:border-emerald-800 dark:text-emerald-300"
+                  : "bg-rose-50 border-rose-200 text-rose-800 dark:bg-rose-900/30 dark:border-rose-800 dark:text-rose-300"
+              }`}
+            >
+              {statusMsg.text}
+            </div>
+          )}
+        </div>
 
         {/* Blogs Layer */}
         {activeTab === "blogs" && (
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             <div className="lg:col-span-2 bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 p-6 rounded-2xl shadow-sm">
-              <h3 className="text-xl font-bold mb-4">
-                {editingId ? "Modify Existing Article" : "Draft New Article"}
-              </h3>
+              <h1 className="text-xl font-bold mb-4">
+                {editingId ? "Edit article" : "New article"}
+              </h1>
               <form
                 onSubmit={(e) => {
                   e.preventDefault();
@@ -356,96 +358,130 @@ export default function AdminWorkspace({ initialData }) {
                 }}
                 className="space-y-4"
               >
-                <input
-                  type="text"
-                  placeholder="Article Headline Title"
-                  value={blogForm.title}
-                  onChange={(e) =>
-                    setBlogForm({ ...blogForm, title: e.target.value })
-                  }
-                  required
-                  className="w-full px-4 py-2 rounded-xl border dark:border-neutral-700 dark:bg-neutral-950 text-sm"
-                />
+                <label className="block">
+                  <span className="block text-xs font-semibold text-neutral-600 dark:text-neutral-400 mb-1">
+                    Title
+                  </span>
+                  <input
+                    type="text"
+                    placeholder="Article title"
+                    value={blogForm.title}
+                    onChange={(e) =>
+                      setBlogForm({ ...blogForm, title: e.target.value })
+                    }
+                    required
+                    className="w-full px-4 py-2 rounded-xl border dark:border-neutral-700 dark:bg-neutral-950 text-sm"
+                  />
+                </label>
 
                 <div className="grid grid-cols-2 gap-4">
-                  <select
-                    value={blogForm.category}
-                    onChange={(e) =>
-                      setBlogForm({ ...blogForm, category: e.target.value })
-                    }
-                    className="px-4 py-2 rounded-xl border dark:border-neutral-700 dark:bg-neutral-950 text-sm"
-                  >
-                    <option value="software">Software</option>
-                    <option value="electronics">Electronics</option>
-                    <option value="calculator-games">Calculator Games</option>
-                  </select>
-                  <select
-                    value={blogForm.status}
-                    onChange={(e) =>
-                      setBlogForm({ ...blogForm, status: e.target.value })
-                    }
-                    className="px-4 py-2 rounded-xl border dark:border-neutral-700 dark:bg-neutral-950 text-sm"
-                  >
-                    <option value="published">Published</option>
-                    <option value="draft">Draft Workspace</option>
-                  </select>
+                  <label className="block">
+                    <span className="block text-xs font-semibold text-neutral-600 dark:text-neutral-400 mb-1">
+                      Category
+                    </span>
+                    <select
+                      value={blogForm.category}
+                      onChange={(e) =>
+                        setBlogForm({ ...blogForm, category: e.target.value })
+                      }
+                      className="w-full px-4 py-2 rounded-xl border dark:border-neutral-700 dark:bg-neutral-950 text-sm"
+                    >
+                      <option value="software">Software</option>
+                      <option value="electronics">Electronics</option>
+                      <option value="calculator-games">Calculator Games</option>
+                    </select>
+                  </label>
+                  <label className="block">
+                    <span className="block text-xs font-semibold text-neutral-600 dark:text-neutral-400 mb-1">
+                      Status
+                    </span>
+                    <select
+                      value={blogForm.status}
+                      onChange={(e) =>
+                        setBlogForm({ ...blogForm, status: e.target.value })
+                      }
+                      className="w-full px-4 py-2 rounded-xl border dark:border-neutral-700 dark:bg-neutral-950 text-sm"
+                    >
+                      <option value="published">Published</option>
+                      <option value="draft">
+                        Draft (hidden from the site)
+                      </option>
+                    </select>
+                  </label>
                 </div>
 
                 <div className="p-4 bg-neutral-50 dark:bg-neutral-950/50 rounded-xl border border-dashed border-neutral-200 dark:border-neutral-700 text-xs">
-                  <span className="block font-bold text-neutral-400 uppercase tracking-wide mb-2">
-                    Article Cover Asset
+                  <span className="block font-bold text-neutral-600 dark:text-neutral-400 uppercase tracking-wide mb-2">
+                    Article cover image
                   </span>
                   <input
                     key={fileInputKey}
                     type="file"
                     accept="image/*"
+                    aria-label="Article cover image"
                     onChange={(e) => handleCloudinaryUpload(e, "blogs")}
                     disabled={uploadingImage}
                     className="block text-xs"
                   />
                   {uploadingImage && (
-                    <p className="mt-2 text-amber-600 animate-pulse font-medium">
-                      Streaming file directly to Cloudinary...
+                    <p className="mt-2 text-amber-700 dark:text-amber-400 animate-pulse font-medium">
+                      Uploading image…
                     </p>
                   )}
                   {blogForm.coverImage && (
                     <input
                       type="text"
                       readOnly
+                      aria-label="Uploaded image address"
                       value={blogForm.coverImage}
-                      className="w-full mt-2 p-2 bg-neutral-100 dark:bg-neutral-900 rounded border dark:border-neutral-800 text-neutral-500 font-mono text-[10px]"
+                      className="w-full mt-2 p-2 bg-neutral-100 dark:bg-neutral-900 rounded border dark:border-neutral-800 text-neutral-600 dark:text-neutral-400 font-mono text-[10px]"
                     />
                   )}
                 </div>
 
-                <input
-                  type="text"
-                  placeholder="Short Meta Excerpt Summary"
-                  value={blogForm.excerpt}
-                  onChange={(e) =>
-                    setBlogForm({ ...blogForm, excerpt: e.target.value })
-                  }
-                  className="w-full px-4 py-2 rounded-xl border dark:border-neutral-700 dark:bg-neutral-950 text-sm"
-                />
-                <input
-                  type="text"
-                  placeholder="Tags (comma separated, e.g. React, Verilog)"
-                  value={blogForm.tagsString}
-                  onChange={(e) =>
-                    setBlogForm({ ...blogForm, tagsString: e.target.value })
-                  }
-                  className="w-full px-4 py-2 rounded-xl border dark:border-neutral-700 dark:bg-neutral-950 text-sm"
-                />
-                <textarea
-                  rows="8"
-                  placeholder="Write full text markdown blocks here..."
-                  value={blogForm.content}
-                  onChange={(e) =>
-                    setBlogForm({ ...blogForm, content: e.target.value })
-                  }
-                  required
-                  className="w-full px-4 py-2 rounded-xl border dark:border-neutral-700 dark:bg-neutral-950 text-sm font-mono"
-                />
+                <label className="block">
+                  <span className="block text-xs font-semibold text-neutral-600 dark:text-neutral-400 mb-1">
+                    Short summary (shown on cards and in search results)
+                  </span>
+                  <input
+                    type="text"
+                    placeholder="One or two sentences"
+                    value={blogForm.excerpt}
+                    onChange={(e) =>
+                      setBlogForm({ ...blogForm, excerpt: e.target.value })
+                    }
+                    className="w-full px-4 py-2 rounded-xl border dark:border-neutral-700 dark:bg-neutral-950 text-sm"
+                  />
+                </label>
+                <label className="block">
+                  <span className="block text-xs font-semibold text-neutral-600 dark:text-neutral-400 mb-1">
+                    Tags (comma separated)
+                  </span>
+                  <input
+                    type="text"
+                    placeholder="React, Verilog"
+                    value={blogForm.tagsString}
+                    onChange={(e) =>
+                      setBlogForm({ ...blogForm, tagsString: e.target.value })
+                    }
+                    className="w-full px-4 py-2 rounded-xl border dark:border-neutral-700 dark:bg-neutral-950 text-sm"
+                  />
+                </label>
+                <label className="block">
+                  <span className="block text-xs font-semibold text-neutral-600 dark:text-neutral-400 mb-1">
+                    Article body (Markdown)
+                  </span>
+                  <textarea
+                    rows="8"
+                    placeholder="Write the full article in Markdown"
+                    value={blogForm.content}
+                    onChange={(e) =>
+                      setBlogForm({ ...blogForm, content: e.target.value })
+                    }
+                    required
+                    className="w-full px-4 py-2 rounded-xl border dark:border-neutral-700 dark:bg-neutral-950 text-sm font-mono"
+                  />
+                </label>
 
                 <div className="flex gap-3">
                   <button
@@ -453,9 +489,7 @@ export default function AdminWorkspace({ initialData }) {
                     disabled={loading || uploadingImage}
                     className="px-6 py-2 bg-neutral-900 dark:bg-white text-white dark:text-neutral-900 rounded-xl text-sm font-bold hover:opacity-80 transition disabled:opacity-50"
                   >
-                    {editingId
-                      ? "Save Document Changes"
-                      : "Publish Live Article"}
+                    {editingId ? "Save changes" : "Publish article"}
                   </button>
                   {editingId && (
                     <button
@@ -471,9 +505,9 @@ export default function AdminWorkspace({ initialData }) {
             </div>
 
             <div className="bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 p-6 rounded-2xl shadow-sm max-h-[70vh] overflow-y-auto">
-              <h4 className="text-xs uppercase tracking-wider text-neutral-400 font-bold mb-4">
-                All Blog Posts ({safeBlogs.length})
-              </h4>
+              <h2 className="text-xs uppercase tracking-wider text-neutral-600 dark:text-neutral-400 font-bold mb-4">
+                Articles ({safeBlogs.length})
+              </h2>
               {safeBlogs.map((b) => (
                 <div
                   key={b._id}
@@ -485,7 +519,9 @@ export default function AdminWorkspace({ initialData }) {
                   <div className="flex gap-2.5">
                     <button
                       onClick={() => startEditing("blogs", b)}
-                      className="text-blue-600 dark:text-blue-400 hover:underline"
+                      type="button"
+                      aria-label={`Edit ${b.title}`}
+                      className="text-blue-700 dark:text-blue-400 hover:underline"
                     >
                       Edit
                     </button>
@@ -493,7 +529,9 @@ export default function AdminWorkspace({ initialData }) {
                       onClick={() =>
                         executeItemDeletion("blogs", b._id, "blogs")
                       }
-                      className="text-rose-600 dark:text-rose-400 font-bold hover:underline"
+                      type="button"
+                      aria-label={`Delete ${b.title}`}
+                      className="text-rose-700 dark:text-rose-400 font-bold hover:underline"
                     >
                       Delete
                     </button>
@@ -508,9 +546,9 @@ export default function AdminWorkspace({ initialData }) {
         {activeTab === "projects" && (
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             <div className="lg:col-span-2 bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 p-6 rounded-2xl shadow-sm">
-              <h3 className="text-xl font-bold mb-4">
-                {editingId ? "Modify System Specification" : "Add New Project"}
-              </h3>
+              <h1 className="text-xl font-bold mb-4">
+                {editingId ? "Edit project" : "Add New Project"}
+              </h1>
               <form
                 onSubmit={(e) => {
                   e.preventDefault();
@@ -524,123 +562,166 @@ export default function AdminWorkspace({ initialData }) {
                 }}
                 className="space-y-4"
               >
-                <input
-                  type="text"
-                  placeholder="Project Workspace Title Name"
-                  value={projectForm.title}
-                  onChange={(e) =>
-                    setProjectForm({ ...projectForm, title: e.target.value })
-                  }
-                  required
-                  className="w-full px-4 py-2 rounded-xl border dark:border-neutral-700 dark:bg-neutral-950 text-sm"
-                />
+                <label className="block">
+                  <span className="block text-xs font-semibold text-neutral-600 dark:text-neutral-400 mb-1">
+                    Project title
+                  </span>
+                  <input
+                    type="text"
+                    placeholder="Project title"
+                    value={projectForm.title}
+                    onChange={(e) =>
+                      setProjectForm({ ...projectForm, title: e.target.value })
+                    }
+                    required
+                    className="w-full px-4 py-2 rounded-xl border dark:border-neutral-700 dark:bg-neutral-950 text-sm"
+                  />
+                </label>
 
-                <select
-                  value={projectForm.status}
-                  onChange={(e) =>
-                    setProjectForm({ ...projectForm, status: e.target.value })
-                  }
-                  aria-label="Project status"
-                  className="w-full px-4 py-2 rounded-xl border dark:border-neutral-700 dark:bg-neutral-950 text-sm"
-                >
-                  <option value="completed">Completed</option>
-                  <option value="in-progress">In progress</option>
-                  <option value="planned">Planned</option>
-                </select>
+                <label className="block">
+                  <span className="block text-xs font-semibold text-neutral-600 dark:text-neutral-400 mb-1">
+                    Status
+                  </span>
+                  <select
+                    value={projectForm.status}
+                    onChange={(e) =>
+                      setProjectForm({ ...projectForm, status: e.target.value })
+                    }
+                    className="w-full px-4 py-2 rounded-xl border dark:border-neutral-700 dark:bg-neutral-950 text-sm"
+                  >
+                    <option value="completed">Completed</option>
+                    <option value="in-progress">In progress</option>
+                    <option value="planned">Planned</option>
+                  </select>
+                </label>
 
                 <div className="grid grid-cols-3 gap-4">
-                  <select
-                    value={projectForm.category}
-                    onChange={(e) =>
-                      setProjectForm({
-                        ...projectForm,
-                        category: e.target.value,
-                      })
-                    }
-                    className="px-4 py-2 rounded-xl border dark:border-neutral-700 dark:bg-neutral-950 text-sm col-span-1"
-                  >
-                    <option value="software">Software</option>
-                    <option value="electronics">Electronics</option>
-                    <option value="calculator-games">Calculator Games</option>
-                  </select>
-                  <input
-                    type="url"
-                    placeholder="Repository Link (repoLink)"
-                    value={projectForm.repoLink}
-                    onChange={(e) =>
-                      setProjectForm({
-                        ...projectForm,
-                        repoLink: e.target.value,
-                      })
-                    }
-                    className="px-4 py-2 rounded-xl border dark:border-neutral-700 dark:bg-neutral-950 text-sm col-span-1"
-                  />
-                  <input
-                    type="url"
-                    placeholder="Live Demo Link URL"
-                    value={projectForm.liveLink}
-                    onChange={(e) =>
-                      setProjectForm({
-                        ...projectForm,
-                        liveLink: e.target.value,
-                      })
-                    }
-                    className="px-4 py-2 rounded-xl border dark:border-neutral-700 dark:bg-neutral-950 text-sm col-span-1"
-                  />
+                  <label className="block">
+                    <span className="block text-xs font-semibold text-neutral-600 dark:text-neutral-400 mb-1">
+                      Category
+                    </span>
+                    <select
+                      value={projectForm.category}
+                      onChange={(e) =>
+                        setProjectForm({
+                          ...projectForm,
+                          category: e.target.value,
+                        })
+                      }
+                      className="w-full px-4 py-2 rounded-xl border dark:border-neutral-700 dark:bg-neutral-950 text-sm col-span-1"
+                    >
+                      <option value="software">Software</option>
+                      <option value="electronics">Electronics</option>
+                      <option value="calculator-games">Calculator Games</option>
+                    </select>
+                  </label>
+                  <label className="block">
+                    <span className="block text-xs font-semibold text-neutral-600 dark:text-neutral-400 mb-1">
+                      Source code link
+                    </span>
+                    <input
+                      type="url"
+                      placeholder="https://github.com/…"
+                      value={projectForm.repoLink}
+                      onChange={(e) =>
+                        setProjectForm({
+                          ...projectForm,
+                          repoLink: e.target.value,
+                        })
+                      }
+                      className="w-full px-4 py-2 rounded-xl border dark:border-neutral-700 dark:bg-neutral-950 text-sm col-span-1"
+                    />
+                  </label>
+                  <label className="block">
+                    <span className="block text-xs font-semibold text-neutral-600 dark:text-neutral-400 mb-1">
+                      Live demo link
+                    </span>
+                    <input
+                      type="url"
+                      placeholder="https://…"
+                      value={projectForm.liveLink}
+                      onChange={(e) =>
+                        setProjectForm({
+                          ...projectForm,
+                          liveLink: e.target.value,
+                        })
+                      }
+                      className="w-full px-4 py-2 rounded-xl border dark:border-neutral-700 dark:bg-neutral-950 text-sm col-span-1"
+                    />
+                  </label>
                 </div>
 
                 <div className="grid grid-cols-2 gap-4">
-                  <input
-                    type="text"
-                    placeholder="Technology stack tags (e.g. React, C++, Verilog)"
-                    value={projectForm.tagsString}
-                    onChange={(e) =>
-                      setProjectForm({
-                        ...projectForm,
-                        tagsString: e.target.value,
-                      })
-                    }
-                    className="w-full px-4 py-2 rounded-xl border dark:border-neutral-700 dark:bg-neutral-950 text-sm"
-                  />
+                  <label className="block">
+                    <span className="block text-xs font-semibold text-neutral-600 dark:text-neutral-400 mb-1">
+                      Technologies (comma separated)
+                    </span>
+                    <input
+                      type="text"
+                      placeholder="React, C++, Verilog"
+                      value={projectForm.tagsString}
+                      onChange={(e) =>
+                        setProjectForm({
+                          ...projectForm,
+                          tagsString: e.target.value,
+                        })
+                      }
+                      className="w-full px-4 py-2 rounded-xl border dark:border-neutral-700 dark:bg-neutral-950 text-sm"
+                    />
+                  </label>
 
                   <div className="p-3 bg-neutral-50 dark:bg-neutral-950/50 border border-dashed dark:border-neutral-700 rounded-xl text-xs flex flex-col justify-center">
                     <input
                       key={fileInputKey}
                       type="file"
                       accept="image/*"
+                      aria-label="Project cover image"
                       onChange={(e) => handleCloudinaryUpload(e, "projects")}
                       disabled={uploadingImage}
                     />
                     {uploadingImage && (
-                      <p className="text-[10px] text-amber-600 animate-pulse mt-1 font-medium">
-                        Uploading asset image...
+                      <p className="text-[10px] text-amber-700 dark:text-amber-400 animate-pulse mt-1 font-medium">
+                        Uploading image…
                       </p>
                     )}
                   </div>
                 </div>
 
-                <input
-                  type="text"
-                  placeholder="Short card snippet description summary..."
-                  value={projectForm.description}
-                  onChange={(e) =>
-                    setProjectForm({
-                      ...projectForm,
-                      description: e.target.value,
-                    })
-                  }
-                  required
-                  className="w-full px-4 py-2 rounded-xl border dark:border-neutral-700 dark:bg-neutral-950 text-sm"
-                />
-                <textarea
-                  rows="6"
-                  placeholder="Write full extended specs markdown here... (content)"
-                  value={projectForm.content}
-                  onChange={(e) =>
-                    setProjectForm({ ...projectForm, content: e.target.value })
-                  }
-                  className="w-full px-4 py-2 rounded-xl border dark:border-neutral-700 dark:bg-neutral-950 text-sm font-mono"
-                />
+                <label className="block">
+                  <span className="block text-xs font-semibold text-neutral-600 dark:text-neutral-400 mb-1">
+                    Short description (shown on the project card)
+                  </span>
+                  <input
+                    type="text"
+                    placeholder="One or two sentences"
+                    value={projectForm.description}
+                    onChange={(e) =>
+                      setProjectForm({
+                        ...projectForm,
+                        description: e.target.value,
+                      })
+                    }
+                    required
+                    className="w-full px-4 py-2 rounded-xl border dark:border-neutral-700 dark:bg-neutral-950 text-sm"
+                  />
+                </label>
+                <label className="block">
+                  <span className="block text-xs font-semibold text-neutral-600 dark:text-neutral-400 mb-1">
+                    Details (Markdown)
+                  </span>
+                  <textarea
+                    rows="6"
+                    placeholder="Write the full project details in Markdown"
+                    value={projectForm.content}
+                    onChange={(e) =>
+                      setProjectForm({
+                        ...projectForm,
+                        content: e.target.value,
+                      })
+                    }
+                    className="w-full px-4 py-2 rounded-xl border dark:border-neutral-700 dark:bg-neutral-950 text-sm font-mono"
+                  />
+                </label>
 
                 <div className="flex gap-3">
                   <button
@@ -648,7 +729,7 @@ export default function AdminWorkspace({ initialData }) {
                     disabled={loading || uploadingImage}
                     className="px-6 py-2 bg-neutral-900 dark:bg-white text-white dark:text-neutral-900 rounded-xl text-sm font-bold hover:opacity-80 transition disabled:opacity-50"
                   >
-                    {editingId ? "Save Spec Changes" : "Add Project"}
+                    {editingId ? "Save changes" : "Add Project"}
                   </button>
                   {editingId && (
                     <button
@@ -666,9 +747,9 @@ export default function AdminWorkspace({ initialData }) {
             </div>
 
             <div className="bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 p-6 rounded-2xl shadow-sm max-h-[70vh] overflow-y-auto">
-              <h4 className="text-xs uppercase tracking-wider text-neutral-400 font-bold mb-4">
-                Uploaded Projects ({safeProjects.length})
-              </h4>
+              <h2 className="text-xs uppercase tracking-wider text-neutral-600 dark:text-neutral-400 font-bold mb-4">
+                Projects ({safeProjects.length})
+              </h2>
               {safeProjects.map((p) => (
                 <div
                   key={p._id}
@@ -678,14 +759,16 @@ export default function AdminWorkspace({ initialData }) {
                     <span className="font-semibold text-neutral-800 dark:text-neutral-200">
                       {p.title}
                     </span>
-                    <span className="text-[10px] text-neutral-400 font-mono capitalize">
+                    <span className="text-[10px] text-neutral-600 dark:text-neutral-400 font-mono capitalize">
                       {p.category}
                     </span>
                   </div>
                   <div className="flex gap-2.5">
                     <button
                       onClick={() => startEditing("projects", p)}
-                      className="text-blue-600 dark:text-blue-400 hover:underline"
+                      type="button"
+                      aria-label={`Edit ${p.title}`}
+                      className="text-blue-700 dark:text-blue-400 hover:underline"
                     >
                       Edit
                     </button>
@@ -693,7 +776,9 @@ export default function AdminWorkspace({ initialData }) {
                       onClick={() =>
                         executeItemDeletion("projects", p._id, "projects")
                       }
-                      className="text-rose-600 dark:text-rose-400 font-bold hover:underline"
+                      type="button"
+                      aria-label={`Delete ${p.title}`}
+                      className="text-rose-700 dark:text-rose-400 font-bold hover:underline"
                     >
                       Delete
                     </button>
@@ -708,9 +793,9 @@ export default function AdminWorkspace({ initialData }) {
         {activeTab === "skills" && (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div className="bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 p-6 rounded-2xl shadow-sm h-fit">
-              <h3 className="text-xl font-bold mb-4">
-                {editingId ? "Modify Competency Metric" : "Add A Skill"}
-              </h3>
+              <h1 className="text-xl font-bold mb-4">
+                {editingId ? "Edit skill" : "Add A Skill"}
+              </h1>
               <form
                 onSubmit={(e) => {
                   e.preventDefault();
@@ -724,23 +809,30 @@ export default function AdminWorkspace({ initialData }) {
                 }}
                 className="space-y-4"
               >
-                <input
-                  type="text"
-                  placeholder="e.g., Embedded C, KiCAD, RTOS"
-                  value={skillForm.name}
-                  onChange={(e) =>
-                    setSkillForm({ ...skillForm, name: e.target.value })
-                  }
-                  required
-                  className="w-full px-4 py-2 rounded-xl border dark:border-neutral-700 dark:bg-neutral-950 text-sm"
-                />
+                <label className="block">
+                  <span className="block text-xs font-semibold text-neutral-600 dark:text-neutral-400 mb-1">
+                    Skill name
+                  </span>
+                  <input
+                    type="text"
+                    placeholder="e.g. Embedded C"
+                    value={skillForm.name}
+                    onChange={(e) =>
+                      setSkillForm({ ...skillForm, name: e.target.value })
+                    }
+                    required
+                    className="w-full px-4 py-2 rounded-xl border dark:border-neutral-700 dark:bg-neutral-950 text-sm"
+                  />
+                </label>
                 <div>
                   <div className="flex justify-between text-xs font-bold mb-1">
-                    <span>Proficiency Matrix Level</span>
+                    <label htmlFor="skill-level">Proficiency level</label>
                     <span>{skillForm.percent}%</span>
                   </div>
                   <input
                     type="range"
+                    id="skill-level"
+                    aria-valuetext={`${skillForm.percent}%`}
                     min="0"
                     max="100"
                     value={skillForm.percent}
@@ -760,7 +852,7 @@ export default function AdminWorkspace({ initialData }) {
                     disabled={loading}
                     className="w-full py-2 bg-neutral-900 dark:bg-white text-white dark:text-neutral-900 rounded-xl text-sm font-bold hover:opacity-80 transition disabled:opacity-50"
                   >
-                    {editingId ? "Save Metric Changes" : "Add Skill"}
+                    {editingId ? "Save changes" : "Add Skill"}
                   </button>
                   {editingId && (
                     <button
@@ -776,9 +868,9 @@ export default function AdminWorkspace({ initialData }) {
             </div>
 
             <div className="bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 p-6 rounded-2xl shadow-sm">
-              <h4 className="text-xs uppercase tracking-wider text-neutral-400 font-bold mb-4">
-                Active Capabilities Toolbox ({safeSkills.length})
-              </h4>
+              <h2 className="text-xs uppercase tracking-wider text-neutral-600 dark:text-neutral-400 font-bold mb-4">
+                Skills ({safeSkills.length})
+              </h2>
               <div className="space-y-2 max-h-96 overflow-y-auto">
                 {safeSkills.map((s) => (
                   <div
@@ -787,14 +879,16 @@ export default function AdminWorkspace({ initialData }) {
                   >
                     <span>
                       <strong>{s.name}</strong>{" "}
-                      <span className="text-neutral-400 ml-1">
+                      <span className="text-neutral-600 dark:text-neutral-400 ml-1">
                         ({s.percent}%)
                       </span>
                     </span>
                     <div className="flex gap-2.5">
                       <button
                         onClick={() => startEditing("skills", s)}
-                        className="text-blue-600 dark:text-blue-400 hover:underline"
+                        type="button"
+                        aria-label={`Edit ${s.name}`}
+                        className="text-blue-700 dark:text-blue-400 hover:underline"
                       >
                         Edit
                       </button>
@@ -802,7 +896,9 @@ export default function AdminWorkspace({ initialData }) {
                         onClick={() =>
                           executeItemDeletion("skills", s._id, "skills")
                         }
-                        className="text-rose-600 dark:text-rose-400 font-medium hover:underline"
+                        type="button"
+                        aria-label={`Delete ${s.name}`}
+                        className="text-rose-700 dark:text-rose-400 font-medium hover:underline"
                       >
                         Delete
                       </button>
@@ -818,9 +914,9 @@ export default function AdminWorkspace({ initialData }) {
         {activeTab === "certs" && (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div className="bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 p-6 rounded-2xl shadow-sm h-fit">
-              <h3 className="text-xl font-bold mb-4">
-                {editingId ? "Modify Credential Records" : "Log Credential"}
-              </h3>
+              <h1 className="text-xl font-bold mb-4">
+                {editingId ? "Edit certification" : "Add certification"}
+              </h1>
               <form
                 onSubmit={(e) => {
                   e.preventDefault();
@@ -834,72 +930,94 @@ export default function AdminWorkspace({ initialData }) {
                 }}
                 className="space-y-4"
               >
-                <input
-                  type="text"
-                  placeholder="Certification Title Name"
-                  value={certForm.title}
-                  onChange={(e) =>
-                    setCertForm({ ...certForm, title: e.target.value })
-                  }
-                  required
-                  className="w-full px-4 py-2 rounded-xl border dark:border-neutral-700 dark:bg-neutral-950 text-sm"
-                />
-
-                <div className="grid grid-cols-2 gap-4">
+                <label className="block">
+                  <span className="block text-xs font-semibold text-neutral-600 dark:text-neutral-400 mb-1">
+                    Certification title
+                  </span>
                   <input
                     type="text"
-                    placeholder="Issuing Institution"
-                    value={certForm.issuer}
+                    placeholder="Certification title"
+                    value={certForm.title}
                     onChange={(e) =>
-                      setCertForm({ ...certForm, issuer: e.target.value })
+                      setCertForm({ ...certForm, title: e.target.value })
                     }
                     required
                     className="w-full px-4 py-2 rounded-xl border dark:border-neutral-700 dark:bg-neutral-950 text-sm"
                   />
+                </label>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <label className="block">
+                    <span className="block text-xs font-semibold text-neutral-600 dark:text-neutral-400 mb-1">
+                      Issuer
+                    </span>
+                    <input
+                      type="text"
+                      placeholder="Issuing organization"
+                      value={certForm.issuer}
+                      onChange={(e) =>
+                        setCertForm({ ...certForm, issuer: e.target.value })
+                      }
+                      required
+                      className="w-full px-4 py-2 rounded-xl border dark:border-neutral-700 dark:bg-neutral-950 text-sm"
+                    />
+                  </label>
+                  <label className="block">
+                    <span className="block text-xs font-semibold text-neutral-600 dark:text-neutral-400 mb-1">
+                      Date awarded
+                    </span>
+                    <input
+                      type="text"
+                      placeholder="e.g. May 2026"
+                      value={certForm.date}
+                      onChange={(e) =>
+                        setCertForm({ ...certForm, date: e.target.value })
+                      }
+                      className="w-full px-4 py-2 rounded-xl border dark:border-neutral-700 dark:bg-neutral-950 text-sm"
+                    />
+                  </label>
+                </div>
+
+                <label className="block">
+                  <span className="block text-xs font-semibold text-neutral-600 dark:text-neutral-400 mb-1">
+                    Verification link
+                  </span>
                   <input
-                    type="text"
-                    placeholder="Date Awarded"
-                    value={certForm.date}
+                    type="url"
+                    placeholder="https://…"
+                    value={certForm.link}
                     onChange={(e) =>
-                      setCertForm({ ...certForm, date: e.target.value })
+                      setCertForm({ ...certForm, link: e.target.value })
                     }
                     className="w-full px-4 py-2 rounded-xl border dark:border-neutral-700 dark:bg-neutral-950 text-sm"
                   />
-                </div>
-
-                <input
-                  type="url"
-                  placeholder="Public Registry Verification URL"
-                  value={certForm.link}
-                  onChange={(e) =>
-                    setCertForm({ ...certForm, link: e.target.value })
-                  }
-                  className="w-full px-4 py-2 rounded-xl border dark:border-neutral-700 dark:bg-neutral-950 text-sm"
-                />
+                </label>
 
                 <div className="p-4 bg-neutral-50 dark:bg-neutral-950/50 rounded-xl border border-dashed border-neutral-200 dark:border-neutral-700 text-xs">
-                  <span className="block font-bold text-neutral-400 uppercase tracking-wide mb-2">
+                  <span className="block font-bold text-neutral-600 dark:text-neutral-400 uppercase tracking-wide mb-2">
                     Badge / Certificate Image
                   </span>
                   <input
                     key={fileInputKey}
                     type="file"
                     accept="image/*"
+                    aria-label="Badge or certificate image"
                     onChange={(e) => handleCloudinaryUpload(e, "certs")}
                     disabled={uploadingImage}
                     className="block text-xs"
                   />
                   {uploadingImage && (
-                    <p className="mt-2 text-amber-600 animate-pulse font-medium">
-                      Streaming file directly to Cloudinary...
+                    <p className="mt-2 text-amber-700 dark:text-amber-400 animate-pulse font-medium">
+                      Uploading image…
                     </p>
                   )}
                   {certForm.image && (
                     <input
                       type="text"
                       readOnly
+                      aria-label="Uploaded image address"
                       value={certForm.image}
-                      className="w-full mt-2 p-2 bg-neutral-100 dark:bg-neutral-900 rounded border dark:border-neutral-800 text-neutral-500 font-mono text-[10px]"
+                      className="w-full mt-2 p-2 bg-neutral-100 dark:bg-neutral-900 rounded border dark:border-neutral-800 text-neutral-600 dark:text-neutral-400 font-mono text-[10px]"
                     />
                   )}
                 </div>
@@ -910,7 +1028,7 @@ export default function AdminWorkspace({ initialData }) {
                     disabled={loading || uploadingImage}
                     className="w-full py-2 bg-neutral-900 dark:bg-white text-white dark:text-neutral-900 rounded-xl text-sm font-bold hover:opacity-80 transition disabled:opacity-50"
                   >
-                    {editingId ? "Save Badge Changes" : "Add Credential"}
+                    {editingId ? "Save changes" : "Add certification"}
                   </button>
                   {editingId && (
                     <button
@@ -926,9 +1044,9 @@ export default function AdminWorkspace({ initialData }) {
             </div>
 
             <div className="bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 p-6 rounded-2xl shadow-sm">
-              <h4 className="text-xs uppercase tracking-wider text-neutral-400 font-bold mb-4">
-                Logged Credentials ({safeCerts.length})
-              </h4>
+              <h2 className="text-xs uppercase tracking-wider text-neutral-600 dark:text-neutral-400 font-bold mb-4">
+                Certifications ({safeCerts.length})
+              </h2>
               <div className="space-y-2 max-h-96 overflow-y-auto">
                 {safeCerts.map((c) => (
                   <div
@@ -939,14 +1057,16 @@ export default function AdminWorkspace({ initialData }) {
                       <span className="font-semibold line-clamp-1">
                         {c.title}
                       </span>
-                      <span className="text-[10px] text-neutral-400">
+                      <span className="text-[10px] text-neutral-600 dark:text-neutral-400">
                         {c.issuer}
                       </span>
                     </div>
                     <div className="flex gap-2.5 flex-shrink-0">
                       <button
                         onClick={() => startEditing("certs", c)}
-                        className="text-blue-600 dark:text-blue-400 hover:underline"
+                        type="button"
+                        aria-label={`Edit ${c.title}`}
+                        className="text-blue-700 dark:text-blue-400 hover:underline"
                       >
                         Edit
                       </button>
@@ -958,7 +1078,9 @@ export default function AdminWorkspace({ initialData }) {
                             "certifications",
                           )
                         }
-                        className="text-rose-600 dark:text-rose-400 font-medium hover:underline"
+                        type="button"
+                        aria-label={`Delete ${c.title}`}
+                        className="text-rose-700 dark:text-rose-400 font-medium hover:underline"
                       >
                         Delete
                       </button>
@@ -974,9 +1096,9 @@ export default function AdminWorkspace({ initialData }) {
         {activeTab === "experiences" && (
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             <div className="lg:col-span-2 bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 p-6 rounded-2xl shadow-sm">
-              <h3 className="text-xl font-bold mb-4">
-                {editingId ? "Modify Experience Record" : "Log New Experience"}
-              </h3>
+              <h1 className="text-xl font-bold mb-4">
+                {editingId ? "Edit experience" : "Add experience"}
+              </h1>
 
               <form
                 onSubmit={(e) => {
@@ -1019,10 +1141,14 @@ export default function AdminWorkspace({ initialData }) {
               >
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-[10px] font-bold uppercase text-neutral-400 mb-1">
+                    <label
+                      htmlFor="exp-role"
+                      className="block text-xs font-bold uppercase text-neutral-600 dark:text-neutral-400 mb-1"
+                    >
                       Job Title / Role
                     </label>
                     <input
+                      id="exp-role"
                       type="text"
                       placeholder="e.g. Firmware Engineering Intern"
                       value={experienceForm.role || ""}
@@ -1037,10 +1163,14 @@ export default function AdminWorkspace({ initialData }) {
                     />
                   </div>
                   <div>
-                    <label className="block text-[10px] font-bold uppercase text-neutral-400 mb-1">
+                    <label
+                      htmlFor="exp-company"
+                      className="block text-xs font-bold uppercase text-neutral-600 dark:text-neutral-400 mb-1"
+                    >
                       Company / Organization
                     </label>
                     <input
+                      id="exp-company"
                       type="text"
                       placeholder="e.g. NVIDIA"
                       value={experienceForm.company || ""}
@@ -1072,18 +1202,19 @@ export default function AdminWorkspace({ initialData }) {
                     />
                     <label
                       htmlFor="isCurrent"
-                      className="text-xs font-bold uppercase text-neutral-400 select-none"
+                      className="text-xs font-bold uppercase text-neutral-600 dark:text-neutral-400 select-none"
                     >
                       I currently work here (Present)
                     </label>
                   </div>
 
                   <div>
-                    <label className="block text-[10px] font-medium text-neutral-500 mb-1">
+                    <span className="block text-xs font-medium text-neutral-600 dark:text-neutral-400 mb-1">
                       Start Date
-                    </label>
+                    </span>
                     <div className="flex gap-2">
                       <select
+                        aria-label="Start month"
                         value={experienceForm.startMonth || "Jan"}
                         onChange={(e) =>
                           setExperienceForm({
@@ -1113,6 +1244,7 @@ export default function AdminWorkspace({ initialData }) {
                         ))}
                       </select>
                       <input
+                        aria-label="Start year"
                         type="number"
                         placeholder="Year"
                         value={experienceForm.startYear || "2026"}
@@ -1129,11 +1261,12 @@ export default function AdminWorkspace({ initialData }) {
 
                   {!experienceForm.isCurrent && (
                     <div className="col-span-2">
-                      <label className="block text-[10px] font-medium text-neutral-500 mb-1">
+                      <span className="block text-xs font-medium text-neutral-600 dark:text-neutral-400 mb-1">
                         End Date
-                      </label>
+                      </span>
                       <div className="flex gap-2">
                         <select
+                          aria-label="End month"
                           value={experienceForm.endMonth || "May"}
                           onChange={(e) =>
                             setExperienceForm({
@@ -1163,6 +1296,7 @@ export default function AdminWorkspace({ initialData }) {
                           ))}
                         </select>
                         <input
+                          aria-label="End year"
                           type="number"
                           placeholder="Year"
                           value={experienceForm.endYear || "2026"}
@@ -1181,10 +1315,14 @@ export default function AdminWorkspace({ initialData }) {
 
                 <div className="grid grid-cols-3 gap-4">
                   <div className="col-span-1">
-                    <label className="block text-[10px] font-bold uppercase text-neutral-400 mb-1">
+                    <label
+                      htmlFor="exp-setting"
+                      className="block text-xs font-bold uppercase text-neutral-600 dark:text-neutral-400 mb-1"
+                    >
                       Job Setting
                     </label>
                     <select
+                      id="exp-setting"
                       value={experienceForm.locationType || "On-site"}
                       onChange={(e) =>
                         setExperienceForm({
@@ -1200,10 +1338,14 @@ export default function AdminWorkspace({ initialData }) {
                     </select>
                   </div>
                   <div className="col-span-2">
-                    <label className="block text-[10px] font-bold uppercase text-neutral-400 mb-1">
-                      Geographic Location
+                    <label
+                      htmlFor="exp-location"
+                      className="block text-xs font-bold uppercase text-neutral-600 dark:text-neutral-400 mb-1"
+                    >
+                      Location
                     </label>
                     <input
+                      id="exp-location"
                       type="text"
                       placeholder="e.g. Cupertino, CA"
                       value={experienceForm.locationName || ""}
@@ -1219,10 +1361,14 @@ export default function AdminWorkspace({ initialData }) {
                 </div>
 
                 <div>
-                  <label className="block text-[10px] font-bold uppercase text-neutral-400 mb-1">
-                    Employment Type Classification
+                  <label
+                    htmlFor="exp-type"
+                    className="block text-xs font-bold uppercase text-neutral-600 dark:text-neutral-400 mb-1"
+                  >
+                    Employment type
                   </label>
                   <select
+                    id="exp-type"
                     value={experienceForm.type || "internship"}
                     onChange={(e) =>
                       setExperienceForm({
@@ -1232,18 +1378,22 @@ export default function AdminWorkspace({ initialData }) {
                     }
                     className="w-full px-4 py-2 rounded-xl border dark:border-neutral-700 dark:bg-neutral-950 text-sm"
                   >
-                    <option value="full-time">Full-time Job</option>
-                    <option value="part-time">Part-time Job</option>
-                    <option value="internship">Internship Spec</option>
-                    <option value="contract">Contract Assignment</option>
+                    <option value="full-time">Full-time</option>
+                    <option value="part-time">Part-time</option>
+                    <option value="internship">Internship</option>
+                    <option value="contract">Contract</option>
                   </select>
                 </div>
 
                 <div>
-                  <label className="block text-[10px] font-bold uppercase text-neutral-400 mb-1">
+                  <label
+                    htmlFor="exp-description"
+                    className="block text-xs font-bold uppercase text-neutral-600 dark:text-neutral-400 mb-1"
+                  >
                     Description & Bullet Points
                   </label>
                   <textarea
+                    id="exp-description"
                     rows="5"
                     placeholder="Engineered dynamic multi-threading layout maps using Mongoose pipelines..."
                     value={experienceForm.description || ""}
@@ -1264,7 +1414,7 @@ export default function AdminWorkspace({ initialData }) {
                     disabled={loading}
                     className="px-6 py-2 bg-neutral-900 dark:bg-white text-white dark:text-neutral-900 rounded-xl text-sm font-bold hover:opacity-80 transition disabled:opacity-50"
                   >
-                    {editingId ? "Save Experience Changes" : "Add Work History"}
+                    {editingId ? "Save changes" : "Add experience"}
                   </button>
                   {editingId && (
                     <button
@@ -1294,9 +1444,9 @@ export default function AdminWorkspace({ initialData }) {
             </div>
 
             <div className="bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 p-6 rounded-2xl shadow-sm max-h-[70vh] overflow-y-auto">
-              <h4 className="text-xs uppercase tracking-wider text-neutral-400 font-bold mb-4">
-                Career Timeline ({safeExperiences.length})
-              </h4>
+              <h2 className="text-xs uppercase tracking-wider text-neutral-600 dark:text-neutral-400 font-bold mb-4">
+                Experience ({safeExperiences.length})
+              </h2>
               <div className="space-y-1">
                 {safeExperiences.map((exp) => (
                   <div
@@ -1307,18 +1457,20 @@ export default function AdminWorkspace({ initialData }) {
                       <span className="font-semibold text-neutral-800 dark:text-neutral-200">
                         {exp.title || exp.role}
                       </span>
-                      <span className="text-[10px] text-neutral-400 font-mono mt-0.5">
+                      <span className="text-[10px] text-neutral-600 dark:text-neutral-400 font-mono mt-0.5">
                         {exp.company} •{" "}
                         <span className="capitalize">
                           {exp.type ? exp.type.replace("-", " ") : "Job"}
                         </span>
                       </span>
-                      <span className="text-[9px] text-neutral-500 tracking-tight font-mono mt-0.5">
+                      <span className="text-[9px] text-neutral-600 dark:text-neutral-400 tracking-tight font-mono mt-0.5">
                         {exp.startDate || exp.duration}
                       </span>
                     </div>
                     <div className="flex gap-2.5 flex-shrink-0">
                       <button
+                        type="button"
+                        aria-label={`Edit ${exp.title || exp.role}`}
                         onClick={() => {
                           const rawDuration =
                             exp.startDate || exp.duration || "";
@@ -1349,7 +1501,7 @@ export default function AdminWorkspace({ initialData }) {
                           setEditingId(exp._id);
                           setStatusMsg({
                             type: "success",
-                            text: `Loaded experience parameters for alterations.`,
+                            text: `Editing this experience.`,
                           });
                           setExperienceForm({
                             role: exp.title || exp.role || "",
@@ -1365,7 +1517,7 @@ export default function AdminWorkspace({ initialData }) {
                             description: exp.description || "",
                           });
                         }}
-                        className="text-blue-600 dark:text-blue-400 hover:underline"
+                        className="text-blue-700 dark:text-blue-400 hover:underline"
                       >
                         Edit
                       </button>
@@ -1377,7 +1529,9 @@ export default function AdminWorkspace({ initialData }) {
                             "experiences",
                           )
                         }
-                        className="text-rose-600 dark:text-rose-400 font-bold hover:underline"
+                        type="button"
+                        aria-label={`Delete ${exp.title || exp.role}`}
+                        className="text-rose-700 dark:text-rose-400 font-bold hover:underline"
                       >
                         Delete
                       </button>

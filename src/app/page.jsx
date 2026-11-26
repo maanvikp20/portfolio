@@ -18,6 +18,12 @@ const ICONS = {
   YouTube: FaYoutube,
 };
 
+const SECONDARY_LINKS = [
+  { label: "Blog", href: "/blog" },
+  { label: "Resume", href: "/resume.pdf", external: true },
+  { label: "Contact", href: "/portfolio#contact" },
+];
+
 // only show icons that have a real http(s) link
 const visibleSocials = socials.filter(
   (s) => ICONS[s.label] && /^https?:\/\//i.test(s.href),
@@ -37,9 +43,9 @@ const personJsonLd = {
 export default function Page() {
   return (
     <main
-      className="relative min-h-screen overflow-hidden 
-                 [--text-primary:#ffffff] [--text-secondary:rgba(255,255,255,0.75)] [--overlay-color:0,0,0] [--overlay-opacity:0.5]
-                 dark:[--text-primary:#000000] dark:[--text-secondary:rgba(0,0,0,0.75)] dark:[--overlay-color:255,255,255] dark:[--overlay-opacity:0.3]"
+      className="relative min-h-screen overflow-hidden
+                 [--text-primary:#ffffff] [--text-secondary:rgba(255,255,255,0.92)] [--text-inverse:#000000] [--overlay-color:0,0,0] [--overlay-opacity:0.6]
+                 dark:[--text-primary:#000000] dark:[--text-secondary:rgba(0,0,0,0.9)] dark:[--text-inverse:#ffffff] dark:[--overlay-color:255,255,255] dark:[--overlay-opacity:0.5]"
     >
       <script
         type="application/ld+json"
@@ -91,25 +97,51 @@ export default function Page() {
         </h1>
 
         <p
-          className="text-lg md:text-xl max-w-xl mb-16 leading-relaxed transition-colors duration-300"
+          className="text-lg md:text-xl max-w-xl mb-10 leading-relaxed transition-colors duration-300"
           style={{
             fontFamily: "var(--font-instrument-serif)",
             color: "var(--text-secondary)",
           }}
         >
-          an electrical engineering student building at the intersection of{" "}
-          hardware and software.{" "}
-          <Link
-            href="/portfolio"
-            className="underline underline-offset-4 cursor-pointer hover:opacity-70 transition"
-          >
-            learn more here →
-          </Link>
+          an electrical engineering student building at the intersection of
+          hardware and software.
         </p>
 
-        {/* Social Icons */}
+        {/* Where to go next */}
+        <nav aria-label="Primary" className="flex flex-wrap gap-3 mb-16">
+          <Link
+            href="/portfolio"
+            className="px-6 py-3 rounded-xl text-sm font-medium hover:opacity-80 transition"
+            style={{
+              backgroundColor: "var(--text-primary)",
+              color: "var(--text-inverse)",
+            }}
+          >
+            See my work →
+          </Link>
+          {SECONDARY_LINKS.map(({ label, href, external }) => (
+            <Link
+              key={label}
+              href={href}
+              {...(external
+                ? { target: "_blank", rel: "noopener noreferrer" }
+                : {})}
+              className="px-6 py-3 rounded-xl text-sm font-medium backdrop-blur hover:opacity-80 transition"
+              style={{
+                border: "1.5px solid var(--text-primary)",
+                color: "var(--text-primary)",
+              }}
+            >
+              {label}
+            </Link>
+          ))}
+        </nav>
+      </div>
+
+      {/* Footer */}
+      <footer className="absolute bottom-0 left-0 w-full pb-6 flex flex-col items-center gap-4">
         {visibleSocials.length > 0 && (
-          <div className="absolute bottom-10 left-1/2 -translate-x-1/2 flex gap-6">
+          <div className="flex gap-6">
             {visibleSocials.map(({ label, href }) => {
               const Icon = ICONS[label];
               return (
@@ -130,7 +162,10 @@ export default function Page() {
             })}
           </div>
         )}
-      </div>
+        <p className="text-xs" style={{ color: "var(--text-secondary)" }}>
+          © {SITE_NAME}
+        </p>
+      </footer>
     </main>
   );
 }

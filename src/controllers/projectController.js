@@ -15,6 +15,19 @@ export const getAllProjects = async () => {
   }));
 };
 
+// get the projects in one category (filtered by the database, not in JS)
+export const getProjectsByCategory = async (category) => {
+  await connectDB();
+
+  const projects = await Project.find({ category })
+    .sort({ createdAt: -1 })
+    .lean();
+  return projects.map((project) => ({
+    ...project,
+    _id: project._id.toString(),
+  }));
+};
+
 // get one project by category + slug (null if there is no match)
 export const getProjectBySlug = async (category, slug) => {
   await connectDB();

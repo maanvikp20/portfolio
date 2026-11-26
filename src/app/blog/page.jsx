@@ -1,8 +1,9 @@
 import Link from "next/link";
 import Navbar from "@/src/components/Navbar";
-import { getAllBlogs } from "@/src/controllers/blogController";
+import { getPublicBlogs } from "@/src/lib/publicData";
 import { excerptFrom } from "@/src/lib/markdown";
 import { buildMetadata } from "@/src/lib/seo";
+import { optimizeImage } from "@/src/lib/images";
 
 export const metadata = buildMetadata({
   title: "Writings",
@@ -15,7 +16,7 @@ export const metadata = buildMetadata({
 export const dynamic = "force-dynamic";
 
 export default async function BlogIndexPage() {
-  const rawBlogs = await getAllBlogs("published");
+  const rawBlogs = await getPublicBlogs("published");
   const blogs = JSON.parse(JSON.stringify(rawBlogs));
 
   return (
@@ -55,7 +56,9 @@ export default async function BlogIndexPage() {
                 >
                   {blog.coverImage && (
                     <img
-                      src={blog.coverImage}
+                      src={optimizeImage(blog.coverImage, 600)}
+                      loading="lazy"
+                      decoding="async"
                       alt=""
                       className="w-full md:w-48 h-32 object-cover rounded-xl opacity-90 group-hover:opacity-100 transition"
                     />

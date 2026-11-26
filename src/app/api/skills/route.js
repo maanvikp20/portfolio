@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { revalidateContent } from "@/src/lib/cache";
 import connectDB from "@/src/lib/mongodb";
 import Skill from "@/src/models/Skill";
 import { pick, requireAdmin, errorResponse } from "@/src/lib/routeHelpers";
@@ -16,6 +17,7 @@ export async function POST(req) {
     const data = pick(await req.json(), SKILL_FIELDS);
 
     const doc = await Skill.create(data);
+    revalidateContent();
     return NextResponse.json({ success: true, data: doc }, { status: 201 });
   } catch (error) {
     return errorResponse(error);
@@ -50,6 +52,7 @@ export async function PUT(req) {
         { status: 404 },
       );
 
+    revalidateContent();
     return NextResponse.json(
       { success: true, data: updatedDoc },
       { status: 200 },
@@ -82,6 +85,7 @@ export async function DELETE(req) {
         { status: 404 },
       );
 
+    revalidateContent();
     return NextResponse.json({ success: true }, { status: 200 });
   } catch (error) {
     return errorResponse(error);

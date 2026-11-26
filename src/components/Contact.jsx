@@ -160,9 +160,9 @@ export default function Contact() {
               fontFamily: "var(--font-instrument-serif)",
             }}
           >
-            Want To Connect,
+            Want to connect?
             <br />
-            Get In Touch
+            Get in touch
           </h2>
         </div>
 

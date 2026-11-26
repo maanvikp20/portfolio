@@ -1,6 +1,5 @@
 import { SITE_URL } from "@/src/lib/site";
-import { getAllBlogs } from "@/src/controllers/blogController";
-import { getAllProjects } from "@/src/controllers/projectController";
+import { getPublicBlogs, getPublicProjects } from "@/src/lib/publicData";
 
 // built on request (not at deploy time) so new posts and projects show up
 export const dynamic = "force-dynamic";
@@ -40,8 +39,8 @@ export default async function sitemap() {
   // if the database is unreachable, still serve the static pages
   try {
     const [blogs, projects] = await Promise.all([
-      getAllBlogs("published"),
-      getAllProjects(),
+      getPublicBlogs("published"),
+      getPublicProjects(),
     ]);
 
     for (const b of blogs) {

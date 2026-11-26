@@ -26,6 +26,8 @@
 }
 
 body {
+  /* Instrument Serif only ships a regular weight; stop browsers faking a blurry bold */
+  font-synthesis-weight: none;
   background-color: var(--bg-primary);
   color: var(--text-primary);
   transition:

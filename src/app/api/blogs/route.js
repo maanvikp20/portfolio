@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { revalidateContent } from "@/src/lib/cache";
 import connectDB from "@/src/lib/mongodb";
 import Blog from "@/src/models/Blog";
 import {
@@ -37,6 +38,7 @@ export async function POST(req) {
     data.author = auth.admin.userId;
 
     const doc = await Blog.create(data);
+    revalidateContent();
     return NextResponse.json({ success: true, data: doc }, { status: 201 });
   } catch (error) {
     return errorResponse(error);
@@ -78,6 +80,7 @@ export async function PUT(req) {
         { status: 404 },
       );
 
+    revalidateContent();
     return NextResponse.json(
       { success: true, data: updatedDoc },
       { status: 200 },
@@ -110,6 +113,7 @@ export async function DELETE(req) {
         { status: 404 },
       );
 
+    revalidateContent();
     return NextResponse.json({ success: true }, { status: 200 });
   } catch (error) {
     return errorResponse(error);

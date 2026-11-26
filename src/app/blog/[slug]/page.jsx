@@ -2,9 +2,10 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import Navbar from "@/src/components/Navbar";
 import Markdown from "@/src/components/Markdown";
-import { getBlogBySlug } from "@/src/controllers/blogController";
+import { getPublicBlog } from "@/src/lib/publicData";
 import { excerptFrom } from "@/src/lib/markdown";
 import { buildMetadata } from "@/src/lib/seo";
+import { optimizeImage } from "@/src/lib/images";
 
 // always render page to get latest blog content
 export const dynamic = "force-dynamic";
@@ -12,7 +13,7 @@ export const dynamic = "force-dynamic";
 export async function generateMetadata({ params }) {
   const { slug } = await params;
   try {
-    const blog = await getBlogBySlug(slug);
+    const blog = await getPublicBlog(slug);
     return buildMetadata({
       title: blog.title,
       description: blog.excerpt || excerptFrom(blog.content, 160),
@@ -37,7 +38,7 @@ export default async function BlogDetailPage({ params }) {
 
   let blog;
   try {
-    const rawBlog = await getBlogBySlug(slug);
+    const rawBlog = await getPublicBlog(slug);
     blog = JSON.parse(JSON.stringify(rawBlog));
   } catch {
     notFound();
@@ -99,7 +100,8 @@ export default async function BlogDetailPage({ params }) {
 
           {blog.coverImage && (
             <img
-              src={blog.coverImage}
+              src={optimizeImage(blog.coverImage, 1400)}
+              decoding="async"
               alt=""
               className="w-full h-96 object-cover rounded-2xl mb-10 shadow-sm"
             />

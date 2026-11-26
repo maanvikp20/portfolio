@@ -2,8 +2,9 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import Navbar from "@/src/components/Navbar";
 import Markdown from "@/src/components/Markdown";
-import { getProjectBySlug } from "@/src/controllers/projectController";
+import { getPublicProject } from "@/src/lib/publicData";
 import { buildMetadata } from "@/src/lib/seo";
+import { optimizeImage } from "@/src/lib/images";
 
 export const dynamic = "force-dynamic";
 
@@ -19,7 +20,7 @@ const isSafeUrl = (url) => typeof url === "string" && /^https?:\/\//i.test(url);
 export async function generateMetadata({ params }) {
   const { category, slug } = await params;
   try {
-    const project = await getProjectBySlug(category, slug);
+    const project = await getPublicProject(category, slug);
     if (!project)
       return { title: "Project not found", robots: { index: false } };
     return buildMetadata({
@@ -37,7 +38,7 @@ export default async function ProjectDetailPage({ params }) {
   // Extract url segments
   const { category, slug } = await params;
 
-  const project = await getProjectBySlug(category, slug);
+  const project = await getPublicProject(category, slug);
 
   if (!project) notFound();
 
@@ -95,7 +96,8 @@ export default async function ProjectDetailPage({ params }) {
               style={{ borderColor: "rgba(var(--overlay-color), 0.12)" }}
             >
               <img
-                src={project.coverImage}
+                src={optimizeImage(project.coverImage, 1400)}
+                decoding="async"
                 alt=""
                 className="w-full h-auto max-h-[480px] object-cover"
               />

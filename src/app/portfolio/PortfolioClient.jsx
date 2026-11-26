@@ -5,6 +5,7 @@ import Link from "next/link";
 import Navbar from "../../components/Navbar";
 import Contact from "../../components/Contact";
 import { excerptFrom } from "../../lib/markdown";
+import { optimizeImage } from "../../lib/images";
 
 // Reusable card for blog posts on the homepage
 function BlogCard({ blog, index }) {
@@ -23,7 +24,9 @@ function BlogCard({ blog, index }) {
       <div>
         {blog.coverImage && (
           <img
-            src={blog.coverImage}
+            src={optimizeImage(blog.coverImage, 800)}
+            loading="lazy"
+            decoding="async"
             alt=""
             className="w-full h-44 object-cover rounded-xl mb-4 opacity-90 group-hover:opacity-100 transition"
           />
@@ -98,7 +101,9 @@ function ProjectRow({ project, index, category }) {
       >
         {project.coverImage ? (
           <img
-            src={project.coverImage}
+            src={optimizeImage(project.coverImage, 800)}
+            loading="lazy"
+            decoding="async"
             alt=""
             className="w-full h-full object-cover grayscale hover:grayscale-0 transition duration-300"
           />
@@ -132,7 +137,7 @@ function ProjectRow({ project, index, category }) {
           className="text-sm hover:opacity-70 transition underline underline-offset-4"
           style={{ color: "var(--text-secondary)" }}
         >
-          Read More →
+          View project →
         </Link>
       </div>
     </motion.div>
@@ -216,7 +221,7 @@ export default function PortfolioClient({
         >
           Hi there! I&apos;m an Electrical
           <br />
-          Engineer and Developer!
+          Engineering Student and Developer!
         </motion.h1>
       </section>
 
@@ -251,19 +256,21 @@ export default function PortfolioClient({
                 color: "var(--text-secondary)",
               }}
             >
-              Hey there, I&apos;m{" "}
+              I&apos;m{" "}
               <span style={{ color: "var(--text-primary)", fontWeight: 600 }}>
                 Maanvik
               </span>
-              ! I&apos;m an electrical engineering student at the University of
-              Illinois Urbana-Champaign, passionate about building at the
-              intersection of hardware and software.
+              , an electrical engineering student at the University of Illinois
+              Urbana-Champaign who loves building where hardware and software
+              meet.
             </p>
           </div>
 
           <div className="md:w-2/5 flex justify-center">
             <img
               src="/profile.jpeg"
+              loading="lazy"
+              decoding="async"
               alt="Portrait of Maanvik Poddar"
               className="w-72 h-72 object-cover rounded-2xl shadow-sm"
               style={{ border: "1px solid rgba(var(--overlay-color), 0.25)" }}
@@ -293,8 +300,8 @@ export default function PortfolioClient({
               Latest Writings
             </h2>
             <p className="text-sm" style={{ color: "var(--text-secondary)" }}>
-              Thoughts on hardware engineering, embedded firmware architectural
-              pipelines, and design.
+              Notes on electronics, embedded firmware, and the things I&apos;m
+              building.
             </p>
           </div>
           <Link
@@ -375,8 +382,7 @@ export default function PortfolioClient({
                 className="text-sm opacity-80"
                 style={{ color: "var(--text-secondary)" }}
               >
-                No experience data provided. Populate historical logs via admin
-                layout panel.
+                Work experience coming soon.
               </p>
             ) : (
               experiences.map((exp, index) => (
@@ -475,24 +481,24 @@ export default function PortfolioClient({
             </h2>
           </div>
 
-          <div className="lg:w-3/4 grid grid-col-1 md:grid-cols-2 gap-12 lg:gap-16">
+          <div className="lg:w-3/4 grid grid-cols-1 md:grid-cols-2 gap-12 lg:gap-16">
             {/* Skills */}
             <div>
               <h3
                 className="text-xs uppercase tracking-widest font-bold mb-6 opacity-80"
                 style={{ color: "var(--text-secondary)" }}
               >
-                Core Engineering Competencies
+                Technical Skills
               </h3>
 
               <div className="flex flex-col gap-6">
                 {skills.length === 0
                   ? [
                       { name: "Embedded C", percent: 90 },
-                      { name: "KiCAD PCB Architecture", percent: 85 },
-                      { name: "Verilog / HDL Hardware Layouts", percent: 75 },
-                      { name: "Next.js & Frontend Tooling", percent: 80 },
-                      { name: "Python Engineering Scripts", percent: 85 },
+                      { name: "KiCad PCB design", percent: 85 },
+                      { name: "Verilog / HDL", percent: 75 },
+                      { name: "Next.js & frontend", percent: 80 },
+                      { name: "Python scripting", percent: 85 },
                     ].map((skill, idx) => (
                       <div key={idx} className="w-full">
                         <div className="flex justify-between items-center mb-1.5 text-sm">
@@ -565,7 +571,7 @@ export default function PortfolioClient({
                 className="text-xs uppercase tracking-widest font-bold mb-6 opacity-80"
                 style={{ color: "var(--text-secondary)" }}
               >
-                Verified Certifications
+                Certifications
               </h3>
 
               <div className="flex flex-col gap-4">
@@ -574,8 +580,7 @@ export default function PortfolioClient({
                     className="text-sm italic opacity-80"
                     style={{ color: "var(--text-secondary)" }}
                   >
-                    No certifications uploaded yet — update via the admin
-                    control panel.
+                    Certifications coming soon.
                   </p>
                 ) : (
                   certifications.map((cert, index) => (
